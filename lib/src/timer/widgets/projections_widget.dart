@@ -1,4 +1,3 @@
-import 'package:behmor_roast/src/roast/models/roast_log.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

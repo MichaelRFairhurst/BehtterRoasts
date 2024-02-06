@@ -43,5 +43,5 @@ final temperatureLogsProvider = StateProvider<List<TempLog>>(
 
 final roastLogsProvider = Provider<List<RoastLog>>((ref) {
   final temps = ref.watch(temperatureLogsProvider);
-  return RoastLogService().fromTempLogs(temps);
+  return RoastLogService().aggregate(temps, [], []);
 });

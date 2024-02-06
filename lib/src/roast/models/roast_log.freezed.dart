@@ -16,7 +16,10 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$RoastLog {
-  TempLog get tempLog => throw _privateConstructorUsedError;
+  Duration get time => throw _privateConstructorUsedError;
+  int? get temp => throw _privateConstructorUsedError;
+  Phase? get phase => throw _privateConstructorUsedError;
+  Control? get control => throw _privateConstructorUsedError;
   double? get rateOfRise => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -29,9 +32,12 @@ abstract class $RoastLogCopyWith<$Res> {
   factory $RoastLogCopyWith(RoastLog value, $Res Function(RoastLog) then) =
       _$RoastLogCopyWithImpl<$Res, RoastLog>;
   @useResult
-  $Res call({TempLog tempLog, double? rateOfRise});
-
-  $TempLogCopyWith<$Res> get tempLog;
+  $Res call(
+      {Duration time,
+      int? temp,
+      Phase? phase,
+      Control? control,
+      double? rateOfRise});
 }
 
 /// @nodoc
@@ -47,27 +53,34 @@ class _$RoastLogCopyWithImpl<$Res, $Val extends RoastLog>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? tempLog = null,
+    Object? time = null,
+    Object? temp = freezed,
+    Object? phase = freezed,
+    Object? control = freezed,
     Object? rateOfRise = freezed,
   }) {
     return _then(_value.copyWith(
-      tempLog: null == tempLog
-          ? _value.tempLog
-          : tempLog // ignore: cast_nullable_to_non_nullable
-              as TempLog,
+      time: null == time
+          ? _value.time
+          : time // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      temp: freezed == temp
+          ? _value.temp
+          : temp // ignore: cast_nullable_to_non_nullable
+              as int?,
+      phase: freezed == phase
+          ? _value.phase
+          : phase // ignore: cast_nullable_to_non_nullable
+              as Phase?,
+      control: freezed == control
+          ? _value.control
+          : control // ignore: cast_nullable_to_non_nullable
+              as Control?,
       rateOfRise: freezed == rateOfRise
           ? _value.rateOfRise
           : rateOfRise // ignore: cast_nullable_to_non_nullable
               as double?,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $TempLogCopyWith<$Res> get tempLog {
-    return $TempLogCopyWith<$Res>(_value.tempLog, (value) {
-      return _then(_value.copyWith(tempLog: value) as $Val);
-    });
   }
 }
 
@@ -78,10 +91,12 @@ abstract class _$$_RoastLogCopyWith<$Res> implements $RoastLogCopyWith<$Res> {
       __$$_RoastLogCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({TempLog tempLog, double? rateOfRise});
-
-  @override
-  $TempLogCopyWith<$Res> get tempLog;
+  $Res call(
+      {Duration time,
+      int? temp,
+      Phase? phase,
+      Control? control,
+      double? rateOfRise});
 }
 
 /// @nodoc
@@ -95,14 +110,29 @@ class __$$_RoastLogCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? tempLog = null,
+    Object? time = null,
+    Object? temp = freezed,
+    Object? phase = freezed,
+    Object? control = freezed,
     Object? rateOfRise = freezed,
   }) {
     return _then(_$_RoastLog(
-      tempLog: null == tempLog
-          ? _value.tempLog
-          : tempLog // ignore: cast_nullable_to_non_nullable
-              as TempLog,
+      time: null == time
+          ? _value.time
+          : time // ignore: cast_nullable_to_non_nullable
+              as Duration,
+      temp: freezed == temp
+          ? _value.temp
+          : temp // ignore: cast_nullable_to_non_nullable
+              as int?,
+      phase: freezed == phase
+          ? _value.phase
+          : phase // ignore: cast_nullable_to_non_nullable
+              as Phase?,
+      control: freezed == control
+          ? _value.control
+          : control // ignore: cast_nullable_to_non_nullable
+              as Control?,
       rateOfRise: freezed == rateOfRise
           ? _value.rateOfRise
           : rateOfRise // ignore: cast_nullable_to_non_nullable
@@ -114,16 +144,27 @@ class __$$_RoastLogCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_RoastLog implements _RoastLog {
-  const _$_RoastLog({required this.tempLog, this.rateOfRise});
+  const _$_RoastLog(
+      {required this.time,
+      this.temp,
+      this.phase,
+      this.control,
+      this.rateOfRise});
 
   @override
-  final TempLog tempLog;
+  final Duration time;
+  @override
+  final int? temp;
+  @override
+  final Phase? phase;
+  @override
+  final Control? control;
   @override
   final double? rateOfRise;
 
   @override
   String toString() {
-    return 'RoastLog(tempLog: $tempLog, rateOfRise: $rateOfRise)';
+    return 'RoastLog(time: $time, temp: $temp, phase: $phase, control: $control, rateOfRise: $rateOfRise)';
   }
 
   @override
@@ -131,13 +172,17 @@ class _$_RoastLog implements _RoastLog {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_RoastLog &&
-            (identical(other.tempLog, tempLog) || other.tempLog == tempLog) &&
+            (identical(other.time, time) || other.time == time) &&
+            (identical(other.temp, temp) || other.temp == temp) &&
+            (identical(other.phase, phase) || other.phase == phase) &&
+            (identical(other.control, control) || other.control == control) &&
             (identical(other.rateOfRise, rateOfRise) ||
                 other.rateOfRise == rateOfRise));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, tempLog, rateOfRise);
+  int get hashCode =>
+      Object.hash(runtimeType, time, temp, phase, control, rateOfRise);
 
   @JsonKey(ignore: true)
   @override
@@ -148,10 +193,20 @@ class _$_RoastLog implements _RoastLog {
 
 abstract class _RoastLog implements RoastLog {
   const factory _RoastLog(
-      {required final TempLog tempLog, final double? rateOfRise}) = _$_RoastLog;
+      {required final Duration time,
+      final int? temp,
+      final Phase? phase,
+      final Control? control,
+      final double? rateOfRise}) = _$_RoastLog;
 
   @override
-  TempLog get tempLog;
+  Duration get time;
+  @override
+  int? get temp;
+  @override
+  Phase? get phase;
+  @override
+  Control? get control;
   @override
   double? get rateOfRise;
   @override

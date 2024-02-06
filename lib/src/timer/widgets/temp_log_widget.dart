@@ -30,8 +30,8 @@ class TempLogWidget extends ConsumerWidget {
       ],
       rows: logs.map((log) => DataRow(
     	  cells: [
-    	    DataCell(TimestampWidget(log.tempLog.time)),
-    	    DataCell(Text('${log.tempLog.temp}°F')),
+    	    DataCell(TimestampWidget(log.time)),
+    	    DataCell(Text('${log.temp}°F')),
     	    DataCell(log.rateOfRise == null
     		  ? const Text('N/A')
     		  : Text('${log.rateOfRise!.toStringAsFixed(1)}°F/m')),

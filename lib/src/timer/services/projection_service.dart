@@ -9,11 +9,12 @@ class ProjectionService {
     double? currentTemp;
     double? temp30s;
     double? temp60s;
+    final tempLogs = roastLogs.where((log) => log.temp != null).toList();
 
-    if (elapsed != null && roastLogs.length > 1) {
-	  final temp = roastLogs.last.tempLog.temp;
-	  final ror = roastLogs.last.rateOfRise!;
-      final lastTime = roastLogs.last.tempLog.time;
+    if (elapsed != null && tempLogs.length > 1) {
+	  final temp = tempLogs.last.temp!;
+	  final ror = tempLogs.last.rateOfRise!;
+      final lastTime = tempLogs.last.time;
       final since = elapsed - lastTime;
       final sinceMinutes = since.inMilliseconds / 1000.0 / 60.0;
 
