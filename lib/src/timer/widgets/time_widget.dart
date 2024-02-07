@@ -1,19 +1,23 @@
+import 'package:behmor_roast/src/roast/models/phase_log.dart';
+import 'package:behmor_roast/src/roast/providers.dart';
+import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/timer/services/timer_service.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TimeWidget extends StatefulWidget {
+class TimeWidget extends ConsumerStatefulWidget {
   final TimerService timerService;
   const TimeWidget({required this.timerService, Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
+  TimeWidgetState createState() {
     return TimeWidgetState();
   }
 
 }
 
-class TimeWidgetState extends State<TimeWidget> with SingleTickerProviderStateMixin {
+class TimeWidgetState extends ConsumerState<TimeWidget> with SingleTickerProviderStateMixin {
 
   Duration? time;
 
@@ -33,13 +37,33 @@ class TimeWidgetState extends State<TimeWidget> with SingleTickerProviderStateMi
     if (time == null) {
       return const Text('Not roasting.');
     }
+
     return Row(
-	  mainAxisAlignment: MainAxisAlignment.end,
+	  //mainAxisAlignment: MainAxisAlignment.end,
 	  children: [
+        const SizedBox(width: 20),
+        ...developmentTimeParts(),
+        const Spacer(),
 	    const Text('Roast time: '),
 	    TimestampWidget.twitter(time!),
 	    const SizedBox(width: 20),
 	  ],
 	);
+  }
+
+  List<Widget> developmentTimeParts() {
+    final phases = ref.watch(phaseLogsProvider);
+    final firstCracks = phases.where((phase) => phase.phase == Phase.crack);
+    if (firstCracks.isEmpty) {
+      return [const Text('No target time until first crack.')];
+    }
+
+    final firstCrackEnd = firstCracks.last.time;
+    final now = widget.timerService.elapsed()!;
+    final development = (now.inMilliseconds / firstCrackEnd.inMilliseconds) - 1;
+
+    return [
+      Text('${(development*100).toStringAsFixed(1)}% development'),
+    ];
   }
 }

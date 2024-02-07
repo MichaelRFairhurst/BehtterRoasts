@@ -1,5 +1,7 @@
 import 'package:behmor_roast/src/roast/models/control_log.dart';
+import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
+import 'package:behmor_roast/src/util/widgets/crack_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,7 +10,6 @@ class ControlsWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ProviderListenable timerService;
     void Function() handle(Control control) {
       return () {
         final tService = ref.read(timerServiceProvider);
@@ -35,13 +36,19 @@ class ControlsWidget extends ConsumerWidget {
           ],
         ),
         ElevatedButton.icon(
-         icon: Icon(Icons.wb_sunny),
-         //icon: Icon(Icons.flare),
-         //icon: Icon(Icons.upcoming),
-         //icon: Icon(Icons.stream),
-         //icon: Icon(Icons.new_releases),
-         label: const Text('Log Crack'),
-         onPressed: () {},
+          icon: CrackIcon(),
+          //icon: const Icon(Icons.wb_sunny),
+          //icon: Icon(Icons.flare),
+          //icon: Icon(Icons.upcoming),
+          //icon: Icon(Icons.stream),
+          //icon: Icon(Icons.new_releases),
+          label: const Text('Log Crack'),
+          onPressed: () {
+			final tService = ref.read(timerServiceProvider);
+			final now = tService.elapsed()!;
+			final newLog = PhaseLog(time: now, phase: Phase.crack);
+			ref.read(phaseLogsProvider.notifier).update((logs) => logs.toList()..add(newLog));
+          },
         ),
       ],
     );

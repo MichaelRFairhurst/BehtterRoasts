@@ -2,17 +2,19 @@ import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:behmor_roast/src/roast/models/roast.dart';
 import 'package:behmor_roast/src/roast/models/roast_config.dart';
+import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class NewRoastPage extends StatefulWidget {
+class NewRoastPage extends ConsumerStatefulWidget {
   const NewRoastPage({Key? key}) : super(key: key);
 
   @override
   NewRoastPageState createState() => NewRoastPageState();
 }
 
-class NewRoastPageState extends State<NewRoastPage> {
+class NewRoastPageState extends ConsumerState<NewRoastPage> {
 
   final name = TextEditingController();
   final number = TextEditingController(text: '1');
@@ -105,6 +107,7 @@ class NewRoastPageState extends State<NewRoastPage> {
                         targetDevelopment: double.parse(devel.text),
                       ),
                     );
+                    ref.read(roastProvider.notifier).state = roast;
 				    context.go(Routes.timer, extra: roast);
                   }
                 },

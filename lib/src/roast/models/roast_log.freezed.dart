@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$RoastLog {
   Duration get time => throw _privateConstructorUsedError;
   int? get temp => throw _privateConstructorUsedError;
-  Phase? get phase => throw _privateConstructorUsedError;
+  RoastPhase? get phase => throw _privateConstructorUsedError;
   Control? get control => throw _privateConstructorUsedError;
   double? get rateOfRise => throw _privateConstructorUsedError;
 
@@ -35,7 +35,7 @@ abstract class $RoastLogCopyWith<$Res> {
   $Res call(
       {Duration time,
       int? temp,
-      Phase? phase,
+      RoastPhase? phase,
       Control? control,
       double? rateOfRise});
 }
@@ -71,7 +71,7 @@ class _$RoastLogCopyWithImpl<$Res, $Val extends RoastLog>
       phase: freezed == phase
           ? _value.phase
           : phase // ignore: cast_nullable_to_non_nullable
-              as Phase?,
+              as RoastPhase?,
       control: freezed == control
           ? _value.control
           : control // ignore: cast_nullable_to_non_nullable
@@ -94,7 +94,7 @@ abstract class _$$_RoastLogCopyWith<$Res> implements $RoastLogCopyWith<$Res> {
   $Res call(
       {Duration time,
       int? temp,
-      Phase? phase,
+      RoastPhase? phase,
       Control? control,
       double? rateOfRise});
 }
@@ -128,7 +128,7 @@ class __$$_RoastLogCopyWithImpl<$Res>
       phase: freezed == phase
           ? _value.phase
           : phase // ignore: cast_nullable_to_non_nullable
-              as Phase?,
+              as RoastPhase?,
       control: freezed == control
           ? _value.control
           : control // ignore: cast_nullable_to_non_nullable
@@ -156,7 +156,7 @@ class _$_RoastLog implements _RoastLog {
   @override
   final int? temp;
   @override
-  final Phase? phase;
+  final RoastPhase? phase;
   @override
   final Control? control;
   @override
@@ -195,7 +195,7 @@ abstract class _RoastLog implements RoastLog {
   const factory _RoastLog(
       {required final Duration time,
       final int? temp,
-      final Phase? phase,
+      final RoastPhase? phase,
       final Control? control,
       final double? rateOfRise}) = _$_RoastLog;
 
@@ -204,7 +204,7 @@ abstract class _RoastLog implements RoastLog {
   @override
   int? get temp;
   @override
-  Phase? get phase;
+  RoastPhase? get phase;
   @override
   Control? get control;
   @override

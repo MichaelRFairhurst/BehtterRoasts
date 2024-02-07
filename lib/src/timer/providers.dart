@@ -1,4 +1,5 @@
 import 'package:behmor_roast/src/roast/models/control_log.dart';
+import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
 import 'package:behmor_roast/src/roast/services/roast_log_service.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
@@ -46,8 +47,13 @@ final controlLogsProvider = StateProvider<List<ControlLog>>(
   (ref) => [],
 );
 
+final phaseLogsProvider = StateProvider<List<PhaseLog>>(
+  (ref) => [],
+);
+
 final roastLogsProvider = Provider<List<RoastLog>>((ref) {
   final temps = ref.watch(temperatureLogsProvider);
   final controls = ref.watch(controlLogsProvider);
-  return RoastLogService().aggregate(temps, [], controls);
+  final phases = ref.watch(phaseLogsProvider);
+  return RoastLogService().aggregate(temps, phases, controls);
 });

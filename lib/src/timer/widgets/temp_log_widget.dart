@@ -33,6 +33,11 @@ class TempLogWidget extends ConsumerWidget {
     	),
         DataColumn(
     	  label: Expanded(
+    	    child: Text('Phase'),
+    	  ),
+    	),
+        DataColumn(
+    	  label: Expanded(
     	    child: Text('Rate of Rise'),
     	  ),
     	),
@@ -50,6 +55,7 @@ class TempLogWidget extends ConsumerWidget {
             DataCell(Text('')),
             DataCell(Text('')),
             DataCell(Text('')),
+            DataCell(Text('')),
           ],
         ),
       ];
@@ -60,6 +66,7 @@ class TempLogWidget extends ConsumerWidget {
           DataCell(TimestampWidget(log.time)),
           tempCell(log),
           powerCell(log),
+          phaseCell(log),
           rorCell(log),
         ],
       )).toList();
@@ -79,6 +86,17 @@ class TempLogWidget extends ConsumerWidget {
     }
 
     return DataCell(Text(log.control.toString().replaceAll('Control.','').toUpperCase()));
+  }
+
+  DataCell phaseCell(RoastLog log) {
+    if (log.phase == RoastPhase.firstCrackStart) {
+      return const DataCell(Text('FC Start'));
+    }
+    if (log.phase == RoastPhase.firstCrackEnd) {
+      return const DataCell(Text('FC End'));
+	}
+
+    return const DataCell(Text(''));
   }
 
   DataCell rorCell(RoastLog log) {
