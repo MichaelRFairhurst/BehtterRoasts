@@ -10,6 +10,7 @@ class ProjectionsWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final projection = ref.watch(projectionProvider);
+    final projectionMap = getProjections(projection);
     return DataTable(
       columns: const [
         DataColumn(
@@ -20,13 +21,20 @@ class ProjectionsWidget extends ConsumerWidget {
         DataColumn(label: Text('')),
       ],
       rows: [
-        for (final entry in getProjections(projection).entries)
+        for (final entry in projectionMap.entries)
           DataRow(
-           cells: [
-             DataCell(Text(entry.key)),
-             DataCell(Text(entry.value)),
-           ],
-         ),
+            cells: [
+              DataCell(Text(entry.key)),
+              DataCell(Text(entry.value)),
+            ],
+          ),
+        if (projectionMap.isEmpty)
+          const DataRow(
+            cells: [
+              DataCell(Text('no projections available')),
+              DataCell(Text('')),
+            ],
+          ),
       ],
 	);
   }
@@ -34,7 +42,7 @@ class ProjectionsWidget extends ConsumerWidget {
   Map<String, String> getProjections(Projection projection) {
     final results = <String, String>{};
     if (projection.currentTemp != null) {
-      results['Current temp'] = '${(projection.currentTemp!).round()}°F';
+      results['Estimated current temp'] = '${(projection.currentTemp!).round()}°F';
 	}
     if (projection.temp30s != null) {
       results['Temp in 30s'] = '${(projection.temp30s!).round()}°F';

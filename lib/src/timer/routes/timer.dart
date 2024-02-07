@@ -23,36 +23,38 @@ class TimerPage extends ConsumerWidget {
       body: Column(
         children: [
           const ControlsWidget(),
-          Expanded(
+          const Expanded(
             child: CustomScrollView(
-            shrinkWrap: true,
-            slivers: [
-              const SliverToBoxAdapter(
-	            child: TempLogWidget(),
-              ),
-	          const SliverToBoxAdapter(
-	            child: ProjectionsWidget(),
-	          ),
-              if (showTempInput)
+              shrinkWrap: true,
+              slivers: [
                 SliverToBoxAdapter(
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(16.0),
-                    child: CheckTempWidget(
-                      label: logs.isEmpty ? 'Enter starting temperature:' : 'Enter current temperature',
-                      onSubmit: (val) {
-                        ref.read(temperatureLogsProvider.notifier)
-                          .update((logs) => logs.toList()..add(TempLog(
-                             temp: val, time: tService.elapsed()!)
-                        ));
-                        ref.read(showTempInputProvider.notifier).state = false;
-                      },
-                    ),
-                  ),
+	              child: TempLogWidget(),
                 ),
-            ],
+	            SliverToBoxAdapter(
+	              child: ProjectionsWidget(),
+	            ),
+                //if (showTempInput)
+                //  SliverToBoxAdapter(
+                //    child:
+                //  ),
+              ],
+            ),
           ),
-          ),
+          if (showTempInput)
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(16.0),
+              child: CheckTempWidget(
+                label: logs.isEmpty ? 'Enter starting temperature:' : 'Enter current temperature',
+                onSubmit: (val) {
+                  ref.read(temperatureLogsProvider.notifier)
+                    .update((logs) => logs.toList()..add(TempLog(
+                       temp: val, time: tService.elapsed()!)
+                  ));
+                  ref.read(showTempInputProvider.notifier).state = false;
+                },
+              ),
+            ),
         ],
       ),
       floatingActionButton: StreamBuilder(

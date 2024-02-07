@@ -14,7 +14,8 @@ class RoastLogService {
 
     TempLog? previousTemp;
 
-    final logs = <BaseLog>[...temps, ...phases, ...controls];
+    final logs = <BaseLog>[...temps, ...phases, ...controls]
+      ..sort((a, b) => a.time.compareTo(b.time));
 
     for (final log in logs) {
       if (log is TempLog) {
