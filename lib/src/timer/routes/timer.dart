@@ -1,5 +1,6 @@
 import 'package:behmor_roast/src/timer/models/temp_log.dart';
 import 'package:behmor_roast/src/timer/widgets/check_temp_widget.dart';
+import 'package:behmor_roast/src/timer/widgets/controls_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/projections_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/temp_log_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/time_widget.dart';
@@ -19,31 +20,39 @@ class TimerPage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text("Roast Controls"),
       ),
-      body: CustomScrollView(
-        slivers: [
-          const SliverToBoxAdapter(
-		    child: TempLogWidget(),
-          ),
-		  const SliverToBoxAdapter(
-		    child: ProjectionsWidget(),
-		  ),
-          if (showTempInput)
-            SliverToBoxAdapter(
-              child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(16.0),
-                child: CheckTempWidget(
-                  label: logs.isEmpty ? 'Enter starting temperature:' : 'Enter current temperature',
-                  onSubmit: (val) {
-                    ref.read(temperatureLogsProvider.notifier)
-                      .update((logs) => logs.toList()..add(TempLog(
-                         temp: val, time: tService.elapsed()!)
-                    ));
-                    ref.read(showTempInputProvider.notifier).state = false;
-                  },
-                ),
+      body: Column(
+        children: [
+          const ControlsWidget(),
+          Expanded(
+            child: CustomScrollView(
+            shrinkWrap: true,
+            slivers: [
+              const SliverToBoxAdapter(
+	            child: TempLogWidget(),
               ),
-            ),
+	          const SliverToBoxAdapter(
+	            child: ProjectionsWidget(),
+	          ),
+              if (showTempInput)
+                SliverToBoxAdapter(
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(16.0),
+                    child: CheckTempWidget(
+                      label: logs.isEmpty ? 'Enter starting temperature:' : 'Enter current temperature',
+                      onSubmit: (val) {
+                        ref.read(temperatureLogsProvider.notifier)
+                          .update((logs) => logs.toList()..add(TempLog(
+                             temp: val, time: tService.elapsed()!)
+                        ));
+                        ref.read(showTempInputProvider.notifier).state = false;
+                      },
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          ),
         ],
       ),
       floatingActionButton: StreamBuilder(
