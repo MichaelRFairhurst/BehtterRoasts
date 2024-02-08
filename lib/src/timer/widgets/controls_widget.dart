@@ -1,6 +1,7 @@
 import 'package:behmor_roast/src/roast/models/control_log.dart';
 import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
+import 'package:behmor_roast/src/timer/widgets/control_button.dart';
 import 'package:behmor_roast/src/util/widgets/crack_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,33 +11,20 @@ class ControlsWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    void Function() handle(Control control) {
-      return () {
-        final tService = ref.read(timerServiceProvider);
-        final now = tService.elapsed() ?? const Duration(seconds: 0);
-        final newLog = ControlLog(
-          time: now,
-          control: control
-        );
-
-        ref.read(controlLogsProvider.notifier).update((ls) => ls.toList()..add(newLog));
-      };
-    }
-
     return Column(
       children: [
         Wrap(
-          children: [
-            button('P1', handle(Control.p1)),
-            button('P2', handle(Control.p2)),
-            button('P3', handle(Control.p3)),
-            button('P4', handle(Control.p4)),
-            button('P5', handle(Control.p5)),
-            button('D', handle(Control.d)),
+          children: const [
+            ControlButton(control: Control.p1),
+            ControlButton(control: Control.p2),
+            ControlButton(control: Control.p3),
+            ControlButton(control: Control.p4),
+            ControlButton(control: Control.p5),
+            ControlButton(control: Control.d),
           ],
         ),
         ElevatedButton.icon(
-          icon: CrackIcon(),
+          icon: const CrackIcon(),
           //icon: const Icon(Icons.wb_sunny),
           //icon: Icon(Icons.flare),
           //icon: Icon(Icons.upcoming),
