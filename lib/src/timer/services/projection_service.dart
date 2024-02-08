@@ -31,7 +31,7 @@ class ProjectionService {
       temp60s = currentTemp + ror;
 
 	  final overheatMinutes = (_overheatTemp - currentTemp) / ror;
-	  if (ror > 0 && overheatMinutes < 3.0) {
+	  if (ror > 0 && overheatMinutes < 3.0 && overheatMinutes > 0) {
 		timeToOverheat = Duration(seconds: (overheatMinutes * 60).round());
 	  }
 
