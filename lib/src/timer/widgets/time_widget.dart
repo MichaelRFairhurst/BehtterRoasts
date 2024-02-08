@@ -54,6 +54,10 @@ class TimeWidgetState extends ConsumerState<TimeWidget> with SingleTickerProvide
   List<Widget> developmentTimeParts() {
     final phases = ref.watch(phaseLogsProvider);
     final roast = ref.watch(roastProvider);
+	if (!phases.any((phase) => phase.phase == Phase.dryEnd)) {
+      return [const Text('Waiting for dry end.')];
+	}
+
     final firstCracks = phases.where((phase) => phase.phase == Phase.crack);
     if (firstCracks.isEmpty) {
       return [const Text('Waiting for first crack.')];

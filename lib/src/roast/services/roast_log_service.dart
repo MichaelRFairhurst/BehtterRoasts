@@ -38,7 +38,9 @@ class RoastLogService {
       }
 
       if (log is PhaseLog) {
-	    if (identical(log, firstCrackStart)) {
+		if (log.phase == Phase.dryEnd) {
+          result.add(RoastLog(time: log.time, phase: RoastPhase.dryEnd));
+	    } else if (identical(log, firstCrackStart)) {
           result.add(RoastLog(time: log.time, phase: RoastPhase.firstCrackStart));
 	    } else if (identical(log, firstCrackEnd)) {
           result.add(RoastLog(time: log.time, phase: RoastPhase.firstCrackEnd));

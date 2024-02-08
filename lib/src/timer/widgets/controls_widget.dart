@@ -11,6 +11,8 @@ class ControlsWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+	final phaseLogs = ref.watch(phaseLogsProvider);
+
     return Column(
       children: [
         Wrap(
@@ -23,20 +25,37 @@ class ControlsWidget extends ConsumerWidget {
             ControlButton(control: Control.d),
           ],
         ),
-        ElevatedButton.icon(
-          icon: const CrackIcon(),
-          //icon: const Icon(Icons.wb_sunny),
-          //icon: Icon(Icons.flare),
-          //icon: Icon(Icons.upcoming),
-          //icon: Icon(Icons.stream),
-          //icon: Icon(Icons.new_releases),
-          label: const Text('Log Crack'),
-          onPressed: () {
-			final tService = ref.read(timerServiceProvider);
-			final now = tService.elapsed()!;
-			final newLog = PhaseLog(time: now, phase: Phase.crack);
-			ref.read(phaseLogsProvider.notifier).update((logs) => logs.toList()..add(newLog));
-          },
+		Wrap(
+		  children: [
+		    if (!phaseLogs.any((p) => p.phase == Phase.dryEnd))
+              ElevatedButton.icon(
+                icon: const Icon(Icons.air),
+                //icon: const Icon(Icons.scatter_plot),
+                label: const Text('Dry end'),
+                onPressed: () {
+		      	  final tService = ref.read(timerServiceProvider);
+		      	  final now = tService.elapsed()!;
+		      	  final newLog = PhaseLog(time: now, phase: Phase.dryEnd);
+		      	  ref.read(phaseLogsProvider.notifier).update((logs) => logs.toList()..add(newLog));
+                },
+              ),
+		    if (phaseLogs.any((p) => p.phase == Phase.dryEnd))
+              ElevatedButton.icon(
+                icon: const CrackIcon(),
+                //icon: const Icon(Icons.wb_sunny),
+                //icon: Icon(Icons.flare),
+                //icon: Icon(Icons.upcoming),
+                //icon: Icon(Icons.stream),
+                //icon: Icon(Icons.new_releases),
+                label: const Text('Log Crack'),
+                onPressed: () {
+		      	  final tService = ref.read(timerServiceProvider);
+		      	  final now = tService.elapsed()!;
+		      	  final newLog = PhaseLog(time: now, phase: Phase.crack);
+		      	  ref.read(phaseLogsProvider.notifier).update((logs) => logs.toList()..add(newLog));
+                },
+              ),
+          ],
         ),
       ],
     );

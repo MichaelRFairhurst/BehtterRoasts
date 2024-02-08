@@ -89,6 +89,9 @@ class TempLogWidget extends ConsumerWidget {
   }
 
   DataCell phaseCell(RoastLog log) {
+    if (log.phase == RoastPhase.dryEnd) {
+      return const DataCell(Text('Dry End'));
+    }
     if (log.phase == RoastPhase.firstCrackStart) {
       return const DataCell(Text('FC Start'));
     }
