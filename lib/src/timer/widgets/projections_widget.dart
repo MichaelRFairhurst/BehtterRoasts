@@ -57,6 +57,9 @@ class ProjectionsWidget extends ConsumerWidget {
     if (projection.timeRemaining != null) {
       results['Time Remaining'] = TimestampWidget.twitter(projection.timeRemaining!);
 	}
+    if (projection.timeToOverheat != null) {
+      results['Time To Overheat'] = TimestampWidget.twitter(projection.timeToOverheat!);
+	}
 	return results;
   }
 }
