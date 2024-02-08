@@ -53,9 +53,10 @@ class TimeWidgetState extends ConsumerState<TimeWidget> with SingleTickerProvide
 
   List<Widget> developmentTimeParts() {
     final phases = ref.watch(phaseLogsProvider);
+    final roast = ref.watch(roastProvider);
     final firstCracks = phases.where((phase) => phase.phase == Phase.crack);
     if (firstCracks.isEmpty) {
-      return [const Text('No target time until first crack.')];
+      return [const Text('Waiting for first crack.')];
     }
 
     final firstCrackEnd = firstCracks.last.time;
@@ -63,7 +64,7 @@ class TimeWidgetState extends ConsumerState<TimeWidget> with SingleTickerProvide
     final development = (now.inMilliseconds / firstCrackEnd.inMilliseconds) - 1;
 
     return [
-      Text('${(development*100).toStringAsFixed(1)}% development'),
+      Text('${(development*100).toStringAsFixed(1)}/${roast!.config.targetDevelopment}% development'),
     ];
   }
 }
