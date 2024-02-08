@@ -104,7 +104,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                       weightOut: double.parse(weight.text),
                       config: RoastConfig(
                         tempInterval: 30,
-                        targetDevelopment: double.parse(devel.text),
+                        targetDevelopment: double.parse(devel.text) / 100,
                       ),
                     );
                     ref.read(roastProvider.notifier).state = roast;

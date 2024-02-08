@@ -16,6 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Projection {
+  Duration? get roastTime => throw _privateConstructorUsedError;
+  Duration? get timeRemaining => throw _privateConstructorUsedError;
   double? get currentTemp => throw _privateConstructorUsedError;
   double? get temp30s => throw _privateConstructorUsedError;
   double? get temp60s => throw _privateConstructorUsedError;
@@ -31,7 +33,12 @@ abstract class $ProjectionCopyWith<$Res> {
           Projection value, $Res Function(Projection) then) =
       _$ProjectionCopyWithImpl<$Res, Projection>;
   @useResult
-  $Res call({double? currentTemp, double? temp30s, double? temp60s});
+  $Res call(
+      {Duration? roastTime,
+      Duration? timeRemaining,
+      double? currentTemp,
+      double? temp30s,
+      double? temp60s});
 }
 
 /// @nodoc
@@ -47,11 +54,21 @@ class _$ProjectionCopyWithImpl<$Res, $Val extends Projection>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? roastTime = freezed,
+    Object? timeRemaining = freezed,
     Object? currentTemp = freezed,
     Object? temp30s = freezed,
     Object? temp60s = freezed,
   }) {
     return _then(_value.copyWith(
+      roastTime: freezed == roastTime
+          ? _value.roastTime
+          : roastTime // ignore: cast_nullable_to_non_nullable
+              as Duration?,
+      timeRemaining: freezed == timeRemaining
+          ? _value.timeRemaining
+          : timeRemaining // ignore: cast_nullable_to_non_nullable
+              as Duration?,
       currentTemp: freezed == currentTemp
           ? _value.currentTemp
           : currentTemp // ignore: cast_nullable_to_non_nullable
@@ -76,7 +93,12 @@ abstract class _$$_ProjectionCopyWith<$Res>
       __$$_ProjectionCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({double? currentTemp, double? temp30s, double? temp60s});
+  $Res call(
+      {Duration? roastTime,
+      Duration? timeRemaining,
+      double? currentTemp,
+      double? temp30s,
+      double? temp60s});
 }
 
 /// @nodoc
@@ -90,11 +112,21 @@ class __$$_ProjectionCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? roastTime = freezed,
+    Object? timeRemaining = freezed,
     Object? currentTemp = freezed,
     Object? temp30s = freezed,
     Object? temp60s = freezed,
   }) {
     return _then(_$_Projection(
+      roastTime: freezed == roastTime
+          ? _value.roastTime
+          : roastTime // ignore: cast_nullable_to_non_nullable
+              as Duration?,
+      timeRemaining: freezed == timeRemaining
+          ? _value.timeRemaining
+          : timeRemaining // ignore: cast_nullable_to_non_nullable
+              as Duration?,
       currentTemp: freezed == currentTemp
           ? _value.currentTemp
           : currentTemp // ignore: cast_nullable_to_non_nullable
@@ -115,10 +147,16 @@ class __$$_ProjectionCopyWithImpl<$Res>
 
 class _$_Projection implements _Projection {
   const _$_Projection(
-      {required this.currentTemp,
+      {required this.roastTime,
+      required this.timeRemaining,
+      required this.currentTemp,
       required this.temp30s,
       required this.temp60s});
 
+  @override
+  final Duration? roastTime;
+  @override
+  final Duration? timeRemaining;
   @override
   final double? currentTemp;
   @override
@@ -128,7 +166,7 @@ class _$_Projection implements _Projection {
 
   @override
   String toString() {
-    return 'Projection(currentTemp: $currentTemp, temp30s: $temp30s, temp60s: $temp60s)';
+    return 'Projection(roastTime: $roastTime, timeRemaining: $timeRemaining, currentTemp: $currentTemp, temp30s: $temp30s, temp60s: $temp60s)';
   }
 
   @override
@@ -136,6 +174,10 @@ class _$_Projection implements _Projection {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Projection &&
+            (identical(other.roastTime, roastTime) ||
+                other.roastTime == roastTime) &&
+            (identical(other.timeRemaining, timeRemaining) ||
+                other.timeRemaining == timeRemaining) &&
             (identical(other.currentTemp, currentTemp) ||
                 other.currentTemp == currentTemp) &&
             (identical(other.temp30s, temp30s) || other.temp30s == temp30s) &&
@@ -143,7 +185,8 @@ class _$_Projection implements _Projection {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, currentTemp, temp30s, temp60s);
+  int get hashCode => Object.hash(
+      runtimeType, roastTime, timeRemaining, currentTemp, temp30s, temp60s);
 
   @JsonKey(ignore: true)
   @override
@@ -154,10 +197,16 @@ class _$_Projection implements _Projection {
 
 abstract class _Projection implements Projection {
   const factory _Projection(
-      {required final double? currentTemp,
+      {required final Duration? roastTime,
+      required final Duration? timeRemaining,
+      required final double? currentTemp,
       required final double? temp30s,
       required final double? temp60s}) = _$_Projection;
 
+  @override
+  Duration? get roastTime;
+  @override
+  Duration? get timeRemaining;
   @override
   double? get currentTemp;
   @override

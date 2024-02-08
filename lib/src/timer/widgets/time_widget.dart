@@ -61,10 +61,13 @@ class TimeWidgetState extends ConsumerState<TimeWidget> with SingleTickerProvide
 
     final firstCrackEnd = firstCracks.last.time;
     final now = widget.timerService.elapsed()!;
-    final development = (now.inMilliseconds / firstCrackEnd.inMilliseconds) - 1;
+    final development = (now - firstCrackEnd).inMilliseconds / now.inMilliseconds;
+
+    final develFmt = (development * 100).toStringAsFixed(1);
+    final targetFmt = (roast!.config.targetDevelopment * 100).toStringAsFixed(1);
 
     return [
-      Text('${(development*100).toStringAsFixed(1)}/${roast!.config.targetDevelopment}% development'),
+      Text('$develFmt/$targetFmt% development'),
     ];
   }
 }

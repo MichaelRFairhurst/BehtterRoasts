@@ -1,4 +1,5 @@
 import 'package:behmor_roast/src/timer/models/projection.dart';
+import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
@@ -25,7 +26,7 @@ class ProjectionsWidget extends ConsumerWidget {
           DataRow(
             cells: [
               DataCell(Text(entry.key)),
-              DataCell(Text(entry.value)),
+              DataCell(entry.value),
             ],
           ),
         if (projectionMap.isEmpty)
@@ -39,16 +40,22 @@ class ProjectionsWidget extends ConsumerWidget {
 	);
   }
 
-  Map<String, String> getProjections(Projection projection) {
-    final results = <String, String>{};
+  Map<String, Widget> getProjections(Projection projection) {
+    final results = <String, Widget>{};
     if (projection.currentTemp != null) {
-      results['Estimated current temp'] = '${(projection.currentTemp!).round()}°F';
+      results['Estimated current temp'] = Text('${(projection.currentTemp!).round()}°F');
 	}
     if (projection.temp30s != null) {
-      results['Temp in 30s'] = '${(projection.temp30s!).round()}°F';
+      results['Temp in 30s'] = Text('${(projection.temp30s!).round()}°F');
 	}
     if (projection.temp60s != null) {
-      results['Temp in 60s'] = '${(projection.temp60s!).round()}°F';
+      results['Temp in 60s'] = Text('${(projection.temp60s!).round()}°F');
+	}
+    if (projection.roastTime != null) {
+      results['Roast Time'] = TimestampWidget(projection.roastTime!);
+	}
+    if (projection.timeRemaining != null) {
+      results['Time Remaining'] = TimestampWidget.twitter(projection.timeRemaining!);
 	}
 	return results;
   }

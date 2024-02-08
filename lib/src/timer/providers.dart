@@ -1,6 +1,7 @@
 import 'package:behmor_roast/src/roast/models/control_log.dart';
 import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
+import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/services/roast_log_service.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
 import 'package:behmor_roast/src/timer/models/temp_log.dart';
@@ -34,9 +35,10 @@ final projectionServiceProvider = Provider((_) {
 
 final projectionProvider = Provider<Projection>((ref) {
   final service = ref.watch(projectionServiceProvider);
+  final config = ref.watch(roastProvider)!.config;
   final logs = ref.watch(roastLogsProvider);
   final elapsed = ref.watch(secondsProvider);
-  return service.createProjections(roastLogs: logs, elapsed: elapsed.value);
+  return service.createProjections(roastLogs: logs, roastConfig: config, elapsed: elapsed.value);
 });
 
 final temperatureLogsProvider = StateProvider<List<TempLog>>(
