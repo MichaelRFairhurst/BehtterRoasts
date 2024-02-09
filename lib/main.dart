@@ -16,7 +16,7 @@ class BehmorRoastApp extends StatelessWidget {
     return ProviderScope(
       child: MaterialApp.router(
         title: 'Behmor Roaster',
-        theme: appTheme,
+        theme: RoastAppTheme.materialTheme,
         routerConfig: router,
         debugShowCheckedModeBanner: false,
       ),

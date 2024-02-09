@@ -1,55 +1,75 @@
 import 'package:flutter/material.dart';
 
-final appTheme = ThemeData(
-  brightness: Brightness.dark,
-  fontFamily: 'Roboto',
-  colorScheme: const ColorScheme.dark().copyWith(
-    primary: Colors.purple,
-    secondary: Colors.grey,
-  ),
-  bottomAppBarTheme: BottomAppBarTheme(
-    color: Colors.grey[800],
-  ),
-  appBarTheme: const AppBarTheme(
-    //backgroundColor: Colors.white,
-    //foregroundColor: Colors.black,
-  ),
-  //textTheme: ThemeData.light().textTheme.copyWith(
-  //      bodyText2: const TextStyle(
-  //        fontWeight: FontWeight.w600,
-  //      ),
-  //    ),
-  //dialogTheme: DialogTheme(
-  //  shape: RoundedRectangleBorder(
-  //    borderRadius: BorderRadius.circular(16),
-  //  ),
-  //),
-  outlinedButtonTheme: OutlinedButtonThemeData(
-    style: OutlinedButton.styleFrom(
-      backgroundColor: Colors.black,
-      foregroundColor: Colors.white,
+class RoastAppTheme {
+
+  //static const lilac = Color(0xFF9787B5);
+  static const lilac = Color(0xFFA08DB5);
+  static const indigo = Color(0xFFACBEE3);
+  static const crema = Color(0xFFDED8D3);
+  static const cremaLight = Color(0xFFFAF5F0);
+  static const capuccino = Color(0xFF3B312A);
+  static const capuccinoLight = Color(0xFF4B413A);
+  static const metal = Color(0xFF606466);
+  static const metalDark = Color(0xFF494F52);
+  static const metalLight = Color(0xFFA9A7AB);
+  static const lime = Color(0xFFC8E6D6);
+
+  static final keypadButtonTheme = ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+        foregroundColor: capuccino,
+        backgroundColor: crema,
+		shadowColor: capuccino,
+        elevation: 1.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: const BorderSide(color: Colors.black, width: 1.0),
+        ),
+	),
+  );
+
+  static final materialTheme = ThemeData(
+    brightness: Brightness.light,
+    fontFamily: 'Roboto',
+    colorScheme: const ColorScheme.light().copyWith(
+      primary: capuccino,
+      secondary: indigo,
+	  tertiary: indigo,
+	  surface: cremaLight,
     ),
-  ),
-  //elevatedButtonTheme: ElevatedButtonThemeData(
-  //  style: ElevatedButton.styleFrom(
-  //    maximumSize: const Size(1000, 48),
-  //    minimumSize: const Size(0, 48),
-  //    padding: const EdgeInsets.all(8),
-  //    primary: Colors.white,
-  //    onPrimary: Colors.black,
-  //    elevation: 1.0,
-  //    shape: RoundedRectangleBorder(
-  //      borderRadius: BorderRadius.circular(24),
-  //      side: const BorderSide(color: Colors.black, width: 1.0),
-  //    ),
-  //  ),
-  //),
-  //floatingActionButtonTheme: FloatingActionButtonThemeData(
-  //  backgroundColor: Colors.grey,
-  //  foregroundColor: Colors.white,
-  //  elevation: 0.0,
-  //  iconSize: 15,
-  //  // TODO: why does it require a size of 40 to match ElevatedButton's height of 48?
-  //  smallSizeConstraints: BoxConstraints.tight(const Size(40, 40)),
-  //),
-);
+    bottomAppBarTheme: const BottomAppBarTheme(
+      color: lime,
+	  elevation: 4.0,
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+      ),
+    ),
+	canvasColor: cremaLight,
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        foregroundColor: capuccino,
+        backgroundColor: lilac,
+		side: const BorderSide(
+		  color: metal,
+		  width: 0.0,
+		),
+		shadowColor: capuccino,
+        elevation: 1.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: const BorderSide(color: Colors.black, width: 1.0),
+        ),
+      ),
+    ),
+    //floatingActionButtonTheme: FloatingActionButtonThemeData(
+    //  backgroundColor: Colors.grey,
+    //  foregroundColor: Colors.white,
+    //  elevation: 0.0,
+    //  iconSize: 15,
+    //  // TODO: why does it require a size of 40 to match ElevatedButton's height of 48?
+    //  smallSizeConstraints: BoxConstraints.tight(const Size(40, 40)),
+    //),
+  );
+}

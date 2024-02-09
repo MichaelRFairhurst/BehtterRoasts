@@ -1,3 +1,4 @@
+import 'package:behmor_roast/src/config/theme.dart';
 import 'package:flutter/material.dart';
 
 class CheckTempWidget extends StatefulWidget {
@@ -33,7 +34,9 @@ class CheckTempWidgetState extends State<CheckTempWidget> {
 		  margin: const EdgeInsets.symmetric(horizontal: 4.0),
 		  padding: const EdgeInsets.all(8.0),
 		  decoration: BoxDecoration(
-		    color: Theme.of(context).colorScheme.secondary,
+		    //color: RoastAppTheme.cremaLight,
+		    //color: RoastAppTheme.metal,
+		    color: Colors.white,
 		    borderRadius: BorderRadius.circular(8.0),
 		  ),
 	      child: Text(state.toString()),
@@ -97,6 +100,7 @@ class CheckTempWidgetState extends State<CheckTempWidget> {
   Widget buildButton({required String label, required void Function() onPressed}) {
 	return ElevatedButton(
 	  onPressed: onPressed,
+	  style: RoastAppTheme.keypadButtonTheme.style,
 	  child: Text(label),
 	);
   }
