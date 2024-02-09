@@ -14,10 +14,15 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+Bean _$BeanFromJson(Map<String, dynamic> json) {
+  return _Bean.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Bean {
   String get name => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $BeanCopyWith<Bean> get copyWith => throw _privateConstructorUsedError;
 }
@@ -84,9 +89,11 @@ class __$$_BeanCopyWithImpl<$Res> extends _$BeanCopyWithImpl<$Res, _$_Bean>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_Bean implements _Bean {
   const _$_Bean({required this.name});
+
+  factory _$_Bean.fromJson(Map<String, dynamic> json) => _$$_BeanFromJson(json);
 
   @override
   final String name;
@@ -104,6 +111,7 @@ class _$_Bean implements _Bean {
             (identical(other.name, name) || other.name == name));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, name);
 
@@ -112,10 +120,19 @@ class _$_Bean implements _Bean {
   @pragma('vm:prefer-inline')
   _$$_BeanCopyWith<_$_Bean> get copyWith =>
       __$$_BeanCopyWithImpl<_$_Bean>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_BeanToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Bean implements Bean {
   const factory _Bean({required final String name}) = _$_Bean;
+
+  factory _Bean.fromJson(Map<String, dynamic> json) = _$_Bean.fromJson;
 
   @override
   String get name;

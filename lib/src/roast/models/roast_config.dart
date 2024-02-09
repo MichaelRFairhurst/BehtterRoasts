@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'roast_config.freezed.dart';
+part 'roast_config.g.dart';
 
 @Freezed()
 class RoastConfig with _$RoastConfig {
@@ -8,4 +9,6 @@ class RoastConfig with _$RoastConfig {
     required int tempInterval,
     required double targetDevelopment,
   }) = _RoastConfig;
+
+  factory RoastConfig.fromJson(Map<String, dynamic> json) => _$RoastConfigFromJson(json);
 }

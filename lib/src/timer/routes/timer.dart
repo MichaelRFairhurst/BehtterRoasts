@@ -1,4 +1,5 @@
 import 'package:behmor_roast/src/config/theme.dart';
+import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/timer/models/temp_log.dart';
 import 'package:behmor_roast/src/timer/widgets/check_temp_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/controls_widget.dart';
@@ -32,6 +33,7 @@ class TimerPage extends ConsumerWidget {
         icon: const Icon(Icons.save),
         label: const Text('Save'),
         onPressed: () {
+          ref.read(roastServiceProvider).add(ref.read(roastProvider)!);
         },
       );
 	}

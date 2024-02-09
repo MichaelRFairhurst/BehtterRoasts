@@ -14,11 +14,16 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+RoastConfig _$RoastConfigFromJson(Map<String, dynamic> json) {
+  return _RoastConfig.fromJson(json);
+}
+
 /// @nodoc
 mixin _$RoastConfig {
   int get tempInterval => throw _privateConstructorUsedError;
   double get targetDevelopment => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $RoastConfigCopyWith<RoastConfig> get copyWith =>
       throw _privateConstructorUsedError;
@@ -101,10 +106,13 @@ class __$$_RoastConfigCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_RoastConfig implements _RoastConfig {
   const _$_RoastConfig(
       {required this.tempInterval, required this.targetDevelopment});
+
+  factory _$_RoastConfig.fromJson(Map<String, dynamic> json) =>
+      _$$_RoastConfigFromJson(json);
 
   @override
   final int tempInterval;
@@ -127,6 +135,7 @@ class _$_RoastConfig implements _RoastConfig {
                 other.targetDevelopment == targetDevelopment));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, tempInterval, targetDevelopment);
 
@@ -135,12 +144,22 @@ class _$_RoastConfig implements _RoastConfig {
   @pragma('vm:prefer-inline')
   _$$_RoastConfigCopyWith<_$_RoastConfig> get copyWith =>
       __$$_RoastConfigCopyWithImpl<_$_RoastConfig>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_RoastConfigToJson(
+      this,
+    );
+  }
 }
 
 abstract class _RoastConfig implements RoastConfig {
   const factory _RoastConfig(
       {required final int tempInterval,
       required final double targetDevelopment}) = _$_RoastConfig;
+
+  factory _RoastConfig.fromJson(Map<String, dynamic> json) =
+      _$_RoastConfig.fromJson;
 
   @override
   int get tempInterval;

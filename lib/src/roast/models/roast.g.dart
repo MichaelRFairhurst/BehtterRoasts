@@ -1,0 +1,23 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'roast.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$_Roast _$$_RoastFromJson(Map<String, dynamic> json) => _$_Roast(
+      bean: Bean.fromJson(json['bean'] as Map<String, dynamic>),
+      config: RoastConfig.fromJson(json['config'] as Map<String, dynamic>),
+      roastNumber: json['roastNumber'] as int,
+      weightIn: (json['weightIn'] as num).toDouble(),
+      weightOut: (json['weightOut'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$$_RoastToJson(_$_Roast instance) => <String, dynamic>{
+      'bean': instance.bean.toJson(),
+      'config': instance.config.toJson(),
+      'roastNumber': instance.roastNumber,
+      'weightIn': instance.weightIn,
+      'weightOut': instance.weightOut,
+    };

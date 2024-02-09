@@ -14,6 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+Roast _$RoastFromJson(Map<String, dynamic> json) {
+  return _Roast.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Roast {
   Bean get bean => throw _privateConstructorUsedError;
@@ -22,6 +26,7 @@ mixin _$Roast {
   double get weightIn => throw _privateConstructorUsedError;
   double get weightOut => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $RoastCopyWith<Roast> get copyWith => throw _privateConstructorUsedError;
 }
@@ -162,7 +167,7 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_Roast implements _Roast {
   const _$_Roast(
       {required this.bean,
@@ -170,6 +175,9 @@ class _$_Roast implements _Roast {
       required this.roastNumber,
       required this.weightIn,
       required this.weightOut});
+
+  factory _$_Roast.fromJson(Map<String, dynamic> json) =>
+      _$$_RoastFromJson(json);
 
   @override
   final Bean bean;
@@ -202,6 +210,7 @@ class _$_Roast implements _Roast {
                 other.weightOut == weightOut));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, bean, config, roastNumber, weightIn, weightOut);
@@ -211,6 +220,13 @@ class _$_Roast implements _Roast {
   @pragma('vm:prefer-inline')
   _$$_RoastCopyWith<_$_Roast> get copyWith =>
       __$$_RoastCopyWithImpl<_$_Roast>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_RoastToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Roast implements Roast {
@@ -220,6 +236,8 @@ abstract class _Roast implements Roast {
       required final int roastNumber,
       required final double weightIn,
       required final double weightOut}) = _$_Roast;
+
+  factory _Roast.fromJson(Map<String, dynamic> json) = _$_Roast.fromJson;
 
   @override
   Bean get bean;
