@@ -12,6 +12,7 @@ class ControlsWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 	final phaseLogs = ref.watch(phaseLogsProvider);
+	final running = ref.watch(timerRunningProvider).value ?? false;
 
     return Column(
       children: [
@@ -32,7 +33,7 @@ class ControlsWidget extends ConsumerWidget {
                 icon: const Icon(Icons.air),
                 //icon: const Icon(Icons.scatter_plot),
                 label: const Text('Dry end'),
-                onPressed: () {
+                onPressed: !running ? null : () {
 		      	  final tService = ref.read(timerServiceProvider);
 		      	  final now = tService.elapsed()!;
 		      	  final newLog = PhaseLog(time: now, phase: Phase.dryEnd);
@@ -48,27 +49,28 @@ class ControlsWidget extends ConsumerWidget {
                 //icon: Icon(Icons.stream),
                 //icon: Icon(Icons.new_releases),
                 label: const Text('Log Crack'),
-                onPressed: () {
+                onPressed: !running ? null : () {
 		      	  final tService = ref.read(timerServiceProvider);
 		      	  final now = tService.elapsed()!;
 		      	  final newLog = PhaseLog(time: now, phase: Phase.crack);
 		      	  ref.read(phaseLogsProvider.notifier).update((logs) => logs.toList()..add(newLog));
                 },
               ),
-          ],
+		    if (phaseLogs.any((p) => p.phase == Phase.crack))
+              ElevatedButton.icon(
+                icon: const Icon(Icons.check),
+                label: const Text('Finish'),
+                onPressed: !running ? null : () {
+		      	  final tService = ref.read(timerServiceProvider);
+				  tService.stop();
+                },
+              ),
+          ].map((widget) => Container(
+		    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+			child: widget,
+		  )).toList(),
         ),
       ],
-    );
-  }
-
-  Widget button(String text, void Function() onpressed) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        shape: const CircleBorder(),
-        minimumSize: const Size(30, 30),
-      ),
-      onPressed: onpressed,
-      child: Text(text),
     );
   }
 }

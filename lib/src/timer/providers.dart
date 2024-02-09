@@ -18,6 +18,11 @@ final secondsProvider = StreamProvider<Duration>((ref) {
   return tService.seconds;
 });
 
+final timerRunningProvider = StreamProvider<bool>((ref) {
+  final tService = ref.watch(timerServiceProvider);
+  return tService.running;
+});
+
 final checkTempStreamProvider = StreamProvider<void>((ref) {
   final tService = ref.watch(timerServiceProvider);
   return tService.checkTemp;

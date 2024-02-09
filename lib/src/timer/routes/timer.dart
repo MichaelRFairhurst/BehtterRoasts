@@ -14,8 +14,27 @@ class TimerPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tService = ref.watch(timerServiceProvider);
+    final running = ref.watch(timerRunningProvider).value ?? false;
     final showTempInput = ref.watch(showTempInputProvider);
     final logs = ref.watch(roastLogsProvider);
+
+    Widget? fab;
+	if (!running && tService.elapsed() == null) {
+      fab = FloatingActionButton(
+        child: const Icon(Icons.play_circle),
+        onPressed: () {
+          tService.start();
+        },
+      );
+	} else if (!running) {
+      fab = ElevatedButton.icon(
+        icon: const Icon(Icons.save),
+        label: const Text('Save'),
+        onPressed: () {
+        },
+      );
+	}
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Roast Controls"),
@@ -33,10 +52,6 @@ class TimerPage extends ConsumerWidget {
 	            SliverToBoxAdapter(
 	              child: ProjectionsWidget(),
 	            ),
-                //if (showTempInput)
-                //  SliverToBoxAdapter(
-                //    child:
-                //  ),
               ],
             ),
           ),
@@ -57,22 +72,7 @@ class TimerPage extends ConsumerWidget {
             ),
         ],
       ),
-      floatingActionButton: StreamBuilder(
-        stream: tService.running,
-        initialData: false,
-        builder: (context, snapshot) {
-          if (snapshot.data == true) {
-            return Container();
-          }
-
-          return FloatingActionButton(
-            child: const Icon(Icons.play_circle),
-            onPressed: () {
-              tService.start();
-            },
-          );
-        },
-      ),
+      floatingActionButton: fab,
       bottomNavigationBar: BottomAppBar(
         child: Container(
           height: 50,

@@ -14,18 +14,21 @@ class ControlButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controls = ref.watch(controlLogsProvider);
+    final running = ref.watch(timerRunningProvider).value ?? false;
 
     final pwrLevel = controls
         .cast<ControlLog?>()
         .lastWhere((c) => c?.control != Control.d, orElse: () => null)
         ?.control;
 
+    final disabled = !running || pwrLevel == control;
+
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
         minimumSize: const Size(30, 30),
       ),
-      onPressed: pwrLevel == control
+      onPressed: disabled
           ? null
           : () {
               final tService = ref.read(timerServiceProvider);
