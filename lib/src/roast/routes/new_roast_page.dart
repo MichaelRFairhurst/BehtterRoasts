@@ -28,9 +28,6 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
 
   @override
   Widget build(BuildContext context) {
-           final InputDecoration effectiveDecoration = const InputDecoration()
-               .applyDefaults(Theme.of(context).inputDecorationTheme);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Start a New Roast"),
@@ -50,7 +47,6 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
 				    color: RoastAppTheme.materialTheme.errorColor,
 					fontSize: 12.0,
 				  ),
-				  //style: effectiveDecoration.labelStyle!.copyWith(fontSize: 12.0),
 				),
 			  BeanSelect(
 			    selectedBean: selectedBean,
