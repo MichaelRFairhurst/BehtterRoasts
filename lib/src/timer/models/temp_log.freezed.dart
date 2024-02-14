@@ -14,11 +14,16 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+TempLog _$TempLogFromJson(Map<String, dynamic> json) {
+  return _TempLog.fromJson(json);
+}
+
 /// @nodoc
 mixin _$TempLog {
   Duration get time => throw _privateConstructorUsedError;
   int get temp => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $TempLogCopyWith<TempLog> get copyWith => throw _privateConstructorUsedError;
 }
@@ -97,9 +102,12 @@ class __$$_TempLogCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_TempLog implements _TempLog {
   const _$_TempLog({required this.time, required this.temp});
+
+  factory _$_TempLog.fromJson(Map<String, dynamic> json) =>
+      _$$_TempLogFromJson(json);
 
   @override
   final Duration time;
@@ -120,6 +128,7 @@ class _$_TempLog implements _TempLog {
             (identical(other.temp, temp) || other.temp == temp));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, time, temp);
 
@@ -128,11 +137,20 @@ class _$_TempLog implements _TempLog {
   @pragma('vm:prefer-inline')
   _$$_TempLogCopyWith<_$_TempLog> get copyWith =>
       __$$_TempLogCopyWithImpl<_$_TempLog>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_TempLogToJson(
+      this,
+    );
+  }
 }
 
 abstract class _TempLog implements TempLog {
   const factory _TempLog(
       {required final Duration time, required final int temp}) = _$_TempLog;
+
+  factory _TempLog.fromJson(Map<String, dynamic> json) = _$_TempLog.fromJson;
 
   @override
   Duration get time;

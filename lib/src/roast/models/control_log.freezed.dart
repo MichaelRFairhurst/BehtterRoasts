@@ -14,11 +14,16 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+ControlLog _$ControlLogFromJson(Map<String, dynamic> json) {
+  return _ControlLog.fromJson(json);
+}
+
 /// @nodoc
 mixin _$ControlLog {
   Duration get time => throw _privateConstructorUsedError;
   Control get control => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $ControlLogCopyWith<ControlLog> get copyWith =>
       throw _privateConstructorUsedError;
@@ -101,9 +106,12 @@ class __$$_ControlLogCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_ControlLog implements _ControlLog {
   const _$_ControlLog({required this.time, required this.control});
+
+  factory _$_ControlLog.fromJson(Map<String, dynamic> json) =>
+      _$$_ControlLogFromJson(json);
 
   @override
   final Duration time;
@@ -124,6 +132,7 @@ class _$_ControlLog implements _ControlLog {
             (identical(other.control, control) || other.control == control));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, time, control);
 
@@ -132,12 +141,22 @@ class _$_ControlLog implements _ControlLog {
   @pragma('vm:prefer-inline')
   _$$_ControlLogCopyWith<_$_ControlLog> get copyWith =>
       __$$_ControlLogCopyWithImpl<_$_ControlLog>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_ControlLogToJson(
+      this,
+    );
+  }
 }
 
 abstract class _ControlLog implements ControlLog {
   const factory _ControlLog(
       {required final Duration time,
       required final Control control}) = _$_ControlLog;
+
+  factory _ControlLog.fromJson(Map<String, dynamic> json) =
+      _$_ControlLog.fromJson;
 
   @override
   Duration get time;

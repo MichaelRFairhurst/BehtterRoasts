@@ -33,7 +33,16 @@ class TimerPage extends ConsumerWidget {
         icon: const Icon(Icons.save),
         label: const Text('Save'),
         onPressed: () {
-          ref.read(roastServiceProvider).add(ref.read(roastProvider)!);
+		  final roast = ref.read(roastProvider);
+		  final tempLogs = ref.read(temperatureLogsProvider);
+		  final controlLogs = ref.read(controlLogsProvider);
+		  final phaseLogs = ref.read(phaseLogsProvider);
+		  final toAdd = roast!.copyWith(
+		    tempLogs: tempLogs,
+			controlLogs: controlLogs,
+			phaseLogs: phaseLogs
+		  );
+          ref.read(roastServiceProvider).add(toAdd);
         },
       );
 	}

@@ -14,11 +14,16 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+PhaseLog _$PhaseLogFromJson(Map<String, dynamic> json) {
+  return _PhaseLog.fromJson(json);
+}
+
 /// @nodoc
 mixin _$PhaseLog {
   Duration get time => throw _privateConstructorUsedError;
   Phase get phase => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $PhaseLogCopyWith<PhaseLog> get copyWith =>
       throw _privateConstructorUsedError;
@@ -99,9 +104,12 @@ class __$$_PhaseLogCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_PhaseLog implements _PhaseLog {
   const _$_PhaseLog({required this.time, required this.phase});
+
+  factory _$_PhaseLog.fromJson(Map<String, dynamic> json) =>
+      _$$_PhaseLogFromJson(json);
 
   @override
   final Duration time;
@@ -122,6 +130,7 @@ class _$_PhaseLog implements _PhaseLog {
             (identical(other.phase, phase) || other.phase == phase));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, time, phase);
 
@@ -130,11 +139,20 @@ class _$_PhaseLog implements _PhaseLog {
   @pragma('vm:prefer-inline')
   _$$_PhaseLogCopyWith<_$_PhaseLog> get copyWith =>
       __$$_PhaseLogCopyWithImpl<_$_PhaseLog>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_PhaseLogToJson(
+      this,
+    );
+  }
 }
 
 abstract class _PhaseLog implements PhaseLog {
   const factory _PhaseLog(
       {required final Duration time, required final Phase phase}) = _$_PhaseLog;
+
+  factory _PhaseLog.fromJson(Map<String, dynamic> json) = _$_PhaseLog.fromJson;
 
   @override
   Duration get time;

@@ -25,6 +25,9 @@ mixin _$Roast {
   int get roastNumber => throw _privateConstructorUsedError;
   double get weightIn => throw _privateConstructorUsedError;
   double get weightOut => throw _privateConstructorUsedError;
+  List<TempLog> get tempLogs => throw _privateConstructorUsedError;
+  List<ControlLog> get controlLogs => throw _privateConstructorUsedError;
+  List<PhaseLog> get phaseLogs => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,7 +44,10 @@ abstract class $RoastCopyWith<$Res> {
       RoastConfig config,
       int roastNumber,
       double weightIn,
-      double weightOut});
+      double weightOut,
+      List<TempLog> tempLogs,
+      List<ControlLog> controlLogs,
+      List<PhaseLog> phaseLogs});
 
   $RoastConfigCopyWith<$Res> get config;
 }
@@ -64,6 +70,9 @@ class _$RoastCopyWithImpl<$Res, $Val extends Roast>
     Object? roastNumber = null,
     Object? weightIn = null,
     Object? weightOut = null,
+    Object? tempLogs = null,
+    Object? controlLogs = null,
+    Object? phaseLogs = null,
   }) {
     return _then(_value.copyWith(
       beanId: null == beanId
@@ -86,6 +95,18 @@ class _$RoastCopyWithImpl<$Res, $Val extends Roast>
           ? _value.weightOut
           : weightOut // ignore: cast_nullable_to_non_nullable
               as double,
+      tempLogs: null == tempLogs
+          ? _value.tempLogs
+          : tempLogs // ignore: cast_nullable_to_non_nullable
+              as List<TempLog>,
+      controlLogs: null == controlLogs
+          ? _value.controlLogs
+          : controlLogs // ignore: cast_nullable_to_non_nullable
+              as List<ControlLog>,
+      phaseLogs: null == phaseLogs
+          ? _value.phaseLogs
+          : phaseLogs // ignore: cast_nullable_to_non_nullable
+              as List<PhaseLog>,
     ) as $Val);
   }
 
@@ -109,7 +130,10 @@ abstract class _$$_RoastCopyWith<$Res> implements $RoastCopyWith<$Res> {
       RoastConfig config,
       int roastNumber,
       double weightIn,
-      double weightOut});
+      double weightOut,
+      List<TempLog> tempLogs,
+      List<ControlLog> controlLogs,
+      List<PhaseLog> phaseLogs});
 
   @override
   $RoastConfigCopyWith<$Res> get config;
@@ -129,6 +153,9 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
     Object? roastNumber = null,
     Object? weightIn = null,
     Object? weightOut = null,
+    Object? tempLogs = null,
+    Object? controlLogs = null,
+    Object? phaseLogs = null,
   }) {
     return _then(_$_Roast(
       beanId: null == beanId
@@ -151,6 +178,18 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
           ? _value.weightOut
           : weightOut // ignore: cast_nullable_to_non_nullable
               as double,
+      tempLogs: null == tempLogs
+          ? _value._tempLogs
+          : tempLogs // ignore: cast_nullable_to_non_nullable
+              as List<TempLog>,
+      controlLogs: null == controlLogs
+          ? _value._controlLogs
+          : controlLogs // ignore: cast_nullable_to_non_nullable
+              as List<ControlLog>,
+      phaseLogs: null == phaseLogs
+          ? _value._phaseLogs
+          : phaseLogs // ignore: cast_nullable_to_non_nullable
+              as List<PhaseLog>,
     ));
   }
 }
@@ -163,7 +202,13 @@ class _$_Roast implements _Roast {
       required this.config,
       required this.roastNumber,
       required this.weightIn,
-      required this.weightOut});
+      required this.weightOut,
+      final List<TempLog> tempLogs = const [],
+      final List<ControlLog> controlLogs = const [],
+      final List<PhaseLog> phaseLogs = const []})
+      : _tempLogs = tempLogs,
+        _controlLogs = controlLogs,
+        _phaseLogs = phaseLogs;
 
   factory _$_Roast.fromJson(Map<String, dynamic> json) =>
       _$$_RoastFromJson(json);
@@ -178,10 +223,36 @@ class _$_Roast implements _Roast {
   final double weightIn;
   @override
   final double weightOut;
+  final List<TempLog> _tempLogs;
+  @override
+  @JsonKey()
+  List<TempLog> get tempLogs {
+    if (_tempLogs is EqualUnmodifiableListView) return _tempLogs;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tempLogs);
+  }
+
+  final List<ControlLog> _controlLogs;
+  @override
+  @JsonKey()
+  List<ControlLog> get controlLogs {
+    if (_controlLogs is EqualUnmodifiableListView) return _controlLogs;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_controlLogs);
+  }
+
+  final List<PhaseLog> _phaseLogs;
+  @override
+  @JsonKey()
+  List<PhaseLog> get phaseLogs {
+    if (_phaseLogs is EqualUnmodifiableListView) return _phaseLogs;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_phaseLogs);
+  }
 
   @override
   String toString() {
-    return 'Roast(beanId: $beanId, config: $config, roastNumber: $roastNumber, weightIn: $weightIn, weightOut: $weightOut)';
+    return 'Roast(beanId: $beanId, config: $config, roastNumber: $roastNumber, weightIn: $weightIn, weightOut: $weightOut, tempLogs: $tempLogs, controlLogs: $controlLogs, phaseLogs: $phaseLogs)';
   }
 
   @override
@@ -196,13 +267,26 @@ class _$_Roast implements _Roast {
             (identical(other.weightIn, weightIn) ||
                 other.weightIn == weightIn) &&
             (identical(other.weightOut, weightOut) ||
-                other.weightOut == weightOut));
+                other.weightOut == weightOut) &&
+            const DeepCollectionEquality().equals(other._tempLogs, _tempLogs) &&
+            const DeepCollectionEquality()
+                .equals(other._controlLogs, _controlLogs) &&
+            const DeepCollectionEquality()
+                .equals(other._phaseLogs, _phaseLogs));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, beanId, config, roastNumber, weightIn, weightOut);
+      runtimeType,
+      beanId,
+      config,
+      roastNumber,
+      weightIn,
+      weightOut,
+      const DeepCollectionEquality().hash(_tempLogs),
+      const DeepCollectionEquality().hash(_controlLogs),
+      const DeepCollectionEquality().hash(_phaseLogs));
 
   @JsonKey(ignore: true)
   @override
@@ -224,7 +308,10 @@ abstract class _Roast implements Roast {
       required final RoastConfig config,
       required final int roastNumber,
       required final double weightIn,
-      required final double weightOut}) = _$_Roast;
+      required final double weightOut,
+      final List<TempLog> tempLogs,
+      final List<ControlLog> controlLogs,
+      final List<PhaseLog> phaseLogs}) = _$_Roast;
 
   factory _Roast.fromJson(Map<String, dynamic> json) = _$_Roast.fromJson;
 
@@ -238,6 +325,12 @@ abstract class _Roast implements Roast {
   double get weightIn;
   @override
   double get weightOut;
+  @override
+  List<TempLog> get tempLogs;
+  @override
+  List<ControlLog> get controlLogs;
+  @override
+  List<PhaseLog> get phaseLogs;
   @override
   @JsonKey(ignore: true)
   _$$_RoastCopyWith<_$_Roast> get copyWith =>
