@@ -20,7 +20,7 @@ Roast _$RoastFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Roast {
-  Bean get bean => throw _privateConstructorUsedError;
+  String get beanId => throw _privateConstructorUsedError;
   RoastConfig get config => throw _privateConstructorUsedError;
   int get roastNumber => throw _privateConstructorUsedError;
   double get weightIn => throw _privateConstructorUsedError;
@@ -37,13 +37,12 @@ abstract class $RoastCopyWith<$Res> {
       _$RoastCopyWithImpl<$Res, Roast>;
   @useResult
   $Res call(
-      {Bean bean,
+      {String beanId,
       RoastConfig config,
       int roastNumber,
       double weightIn,
       double weightOut});
 
-  $BeanCopyWith<$Res> get bean;
   $RoastConfigCopyWith<$Res> get config;
 }
 
@@ -60,17 +59,17 @@ class _$RoastCopyWithImpl<$Res, $Val extends Roast>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? bean = null,
+    Object? beanId = null,
     Object? config = null,
     Object? roastNumber = null,
     Object? weightIn = null,
     Object? weightOut = null,
   }) {
     return _then(_value.copyWith(
-      bean: null == bean
-          ? _value.bean
-          : bean // ignore: cast_nullable_to_non_nullable
-              as Bean,
+      beanId: null == beanId
+          ? _value.beanId
+          : beanId // ignore: cast_nullable_to_non_nullable
+              as String,
       config: null == config
           ? _value.config
           : config // ignore: cast_nullable_to_non_nullable
@@ -92,14 +91,6 @@ class _$RoastCopyWithImpl<$Res, $Val extends Roast>
 
   @override
   @pragma('vm:prefer-inline')
-  $BeanCopyWith<$Res> get bean {
-    return $BeanCopyWith<$Res>(_value.bean, (value) {
-      return _then(_value.copyWith(bean: value) as $Val);
-    });
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
   $RoastConfigCopyWith<$Res> get config {
     return $RoastConfigCopyWith<$Res>(_value.config, (value) {
       return _then(_value.copyWith(config: value) as $Val);
@@ -114,14 +105,12 @@ abstract class _$$_RoastCopyWith<$Res> implements $RoastCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {Bean bean,
+      {String beanId,
       RoastConfig config,
       int roastNumber,
       double weightIn,
       double weightOut});
 
-  @override
-  $BeanCopyWith<$Res> get bean;
   @override
   $RoastConfigCopyWith<$Res> get config;
 }
@@ -135,17 +124,17 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? bean = null,
+    Object? beanId = null,
     Object? config = null,
     Object? roastNumber = null,
     Object? weightIn = null,
     Object? weightOut = null,
   }) {
     return _then(_$_Roast(
-      bean: null == bean
-          ? _value.bean
-          : bean // ignore: cast_nullable_to_non_nullable
-              as Bean,
+      beanId: null == beanId
+          ? _value.beanId
+          : beanId // ignore: cast_nullable_to_non_nullable
+              as String,
       config: null == config
           ? _value.config
           : config // ignore: cast_nullable_to_non_nullable
@@ -170,7 +159,7 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
 @JsonSerializable()
 class _$_Roast implements _Roast {
   const _$_Roast(
-      {required this.bean,
+      {required this.beanId,
       required this.config,
       required this.roastNumber,
       required this.weightIn,
@@ -180,7 +169,7 @@ class _$_Roast implements _Roast {
       _$$_RoastFromJson(json);
 
   @override
-  final Bean bean;
+  final String beanId;
   @override
   final RoastConfig config;
   @override
@@ -192,7 +181,7 @@ class _$_Roast implements _Roast {
 
   @override
   String toString() {
-    return 'Roast(bean: $bean, config: $config, roastNumber: $roastNumber, weightIn: $weightIn, weightOut: $weightOut)';
+    return 'Roast(beanId: $beanId, config: $config, roastNumber: $roastNumber, weightIn: $weightIn, weightOut: $weightOut)';
   }
 
   @override
@@ -200,7 +189,7 @@ class _$_Roast implements _Roast {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Roast &&
-            (identical(other.bean, bean) || other.bean == bean) &&
+            (identical(other.beanId, beanId) || other.beanId == beanId) &&
             (identical(other.config, config) || other.config == config) &&
             (identical(other.roastNumber, roastNumber) ||
                 other.roastNumber == roastNumber) &&
@@ -212,8 +201,8 @@ class _$_Roast implements _Roast {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, bean, config, roastNumber, weightIn, weightOut);
+  int get hashCode => Object.hash(
+      runtimeType, beanId, config, roastNumber, weightIn, weightOut);
 
   @JsonKey(ignore: true)
   @override
@@ -231,7 +220,7 @@ class _$_Roast implements _Roast {
 
 abstract class _Roast implements Roast {
   const factory _Roast(
-      {required final Bean bean,
+      {required final String beanId,
       required final RoastConfig config,
       required final int roastNumber,
       required final double weightIn,
@@ -240,7 +229,7 @@ abstract class _Roast implements Roast {
   factory _Roast.fromJson(Map<String, dynamic> json) = _$_Roast.fromJson;
 
   @override
-  Bean get bean;
+  String get beanId;
   @override
   RoastConfig get config;
   @override

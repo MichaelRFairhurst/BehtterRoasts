@@ -1,8 +1,10 @@
 import 'package:behmor_roast/src/config/routes.dart';
+import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:behmor_roast/src/roast/models/roast.dart';
 import 'package:behmor_roast/src/roast/models/roast_config.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
+import 'package:behmor_roast/src/roast/widgets/bean_select.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -16,14 +18,19 @@ class NewRoastPage extends ConsumerStatefulWidget {
 
 class NewRoastPageState extends ConsumerState<NewRoastPage> {
 
-  final name = TextEditingController();
   final number = TextEditingController(text: '1');
   final weight = TextEditingController(text: '300');
   final devel = TextEditingController(text: '20');
   final roastFormKey = GlobalKey<FormState>();
 
+  Bean? selectedBean;
+  bool beanErr = false;
+
   @override
   Widget build(BuildContext context) {
+           final InputDecoration effectiveDecoration = const InputDecoration()
+               .applyDefaults(Theme.of(context).inputDecorationTheme);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Start a New Roast"),
@@ -36,17 +43,23 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Text('Bean Name'),
-              TextFormField(
-                controller: name,
-                validator: (value) {
-                  if (value?.trim() == '') {
-                    return 'Enter a bean name.';
-                  }
-
-                  return null;
-                }
-              ),
+			  if (beanErr)
+				Text(
+				  'Select a bean:',
+				  style: RoastAppTheme.materialTheme.textTheme.caption!.copyWith(
+				    color: RoastAppTheme.materialTheme.errorColor,
+					fontSize: 12.0,
+				  ),
+				  //style: effectiveDecoration.labelStyle!.copyWith(fontSize: 12.0),
+				),
+			  BeanSelect(
+			    selectedBean: selectedBean,
+				onChanged: (bean) {
+				  setState(() {
+					selectedBean = bean;
+				  });
+				},
+			  ),
               const SizedBox(height: 10),
               const Text('Roast number'),
               TextFormField(
@@ -96,9 +109,20 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                 icon: const Icon(Icons.play_circle),
                 label: const Text('Begin roast'),
                 onPressed: () {
-                  if (roastFormKey.currentState!.validate()) {
+				  final formValid = roastFormKey.currentState!.validate();
+				  if (selectedBean == null) {
+					setState(() {
+					  beanErr = true;
+					});
+				  } else {
+					setState(() {
+					  beanErr = false;
+					});
+				  }
+
+                  if (!beanErr && formValid) {
                     final roast = Roast(
-                      bean: Bean(name: name.text),
+                      beanId: selectedBean!.id!,
                       roastNumber: int.parse(number.text),
                       weightIn: double.parse(weight.text),
                       weightOut: double.parse(weight.text),

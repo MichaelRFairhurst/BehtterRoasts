@@ -20,6 +20,8 @@ Bean _$BeanFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Bean {
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String? get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -32,7 +34,9 @@ abstract class $BeanCopyWith<$Res> {
   factory $BeanCopyWith(Bean value, $Res Function(Bean) then) =
       _$BeanCopyWithImpl<$Res, Bean>;
   @useResult
-  $Res call({String name});
+  $Res call(
+      {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
+      String name});
 }
 
 /// @nodoc
@@ -48,9 +52,14 @@ class _$BeanCopyWithImpl<$Res, $Val extends Bean>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? name = null,
   }) {
     return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -65,7 +74,9 @@ abstract class _$$_BeanCopyWith<$Res> implements $BeanCopyWith<$Res> {
       __$$_BeanCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String name});
+  $Res call(
+      {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
+      String name});
 }
 
 /// @nodoc
@@ -77,9 +88,14 @@ class __$$_BeanCopyWithImpl<$Res> extends _$BeanCopyWithImpl<$Res, _$_Bean>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? name = null,
   }) {
     return _then(_$_Bean(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -91,16 +107,21 @@ class __$$_BeanCopyWithImpl<$Res> extends _$BeanCopyWithImpl<$Res, _$_Bean>
 /// @nodoc
 @JsonSerializable()
 class _$_Bean implements _Bean {
-  const _$_Bean({required this.name});
+  const _$_Bean(
+      {@JsonKey(includeFromJson: false, includeToJson: false) this.id,
+      required this.name});
 
   factory _$_Bean.fromJson(Map<String, dynamic> json) => _$$_BeanFromJson(json);
 
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final String? id;
   @override
   final String name;
 
   @override
   String toString() {
-    return 'Bean(name: $name)';
+    return 'Bean(id: $id, name: $name)';
   }
 
   @override
@@ -108,12 +129,13 @@ class _$_Bean implements _Bean {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Bean &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name);
+  int get hashCode => Object.hash(runtimeType, id, name);
 
   @JsonKey(ignore: true)
   @override
@@ -130,10 +152,15 @@ class _$_Bean implements _Bean {
 }
 
 abstract class _Bean implements Bean {
-  const factory _Bean({required final String name}) = _$_Bean;
+  const factory _Bean(
+      {@JsonKey(includeFromJson: false, includeToJson: false) final String? id,
+      required final String name}) = _$_Bean;
 
   factory _Bean.fromJson(Map<String, dynamic> json) = _$_Bean.fromJson;
 
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String? get id;
   @override
   String get name;
   @override

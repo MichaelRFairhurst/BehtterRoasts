@@ -9,7 +9,7 @@ class RoastHistoryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-	final roasts = ref.watch(roastsProvider);
+	final roasts = ref.watch(beansProvider);
 
 	return Scaffold(
       appBar: AppBar(
@@ -24,7 +24,7 @@ class RoastHistoryPage extends ConsumerWidget {
 			    margin: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
 			    child: Container(
 				  padding: const EdgeInsets.all(8.0),
-				  child: Text(items[i].bean.name)
+				  child: Text(items[i].name)
 				),
 			  );
 	        }
