@@ -1,10 +1,10 @@
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
-import 'package:behmor_roast/src/timer/models/temp_log.dart';
+import 'package:behmor_roast/src/roast/models/temp_log.dart';
+import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/check_temp_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/controls_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/projections_widget.dart';
-import 'package:behmor_roast/src/timer/widgets/temp_log_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/time_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

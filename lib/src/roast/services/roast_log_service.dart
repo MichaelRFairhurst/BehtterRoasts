@@ -2,7 +2,7 @@ import 'package:behmor_roast/src/roast/models/base_log.dart';
 import 'package:behmor_roast/src/roast/models/control_log.dart';
 import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
-import 'package:behmor_roast/src/timer/models/temp_log.dart';
+import 'package:behmor_roast/src/roast/models/temp_log.dart';
 
 class RoastLogService {
   List<RoastLog> aggregate(

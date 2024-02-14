@@ -1,6 +1,6 @@
 import 'package:behmor_roast/src/roast/models/control_log.dart';
 import 'package:behmor_roast/src/roast/models/phase_log.dart';
-import 'package:behmor_roast/src/timer/models/temp_log.dart';
+import 'package:behmor_roast/src/roast/models/temp_log.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:behmor_roast/src/roast/models/roast_config.dart';
 
