@@ -23,8 +23,20 @@ class RoastHistoryPage extends ConsumerWidget {
 	      	  return Card(
 			    margin: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
 			    child: Container(
-				  padding: const EdgeInsets.all(8.0),
-				  child: Text(items[i].name)
+				  padding: const EdgeInsets.all(12.0),
+				  child: Row(
+				    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+				    children: [
+				      Text(items[i].name),
+				      ElevatedButton.icon(
+					    icon: const Icon(Icons.visibility),
+						label: const Text('View Roasts'),
+						onPressed: () {
+						  context.push(Routes.roastReview);
+						},
+					  ),
+					],
+				  ),
 				),
 			  );
 	        }

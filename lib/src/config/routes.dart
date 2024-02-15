@@ -1,10 +1,12 @@
 import 'package:behmor_roast/src/roast/routes/roast_history.dart';
+import 'package:behmor_roast/src/roast/routes/roast_review_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:behmor_roast/src/timer/routes/timer.dart';
 import 'package:behmor_roast/src/roast/routes/new_roast_page.dart';
 
 class Routes {
   static const roastHistory = '/roastHistory';
+  static const roastReview = '/roastReview';
   static const newRoast = '/newRoast';
   static const timer = '/timer';
 
@@ -30,6 +32,10 @@ final router = GoRouter(
     GoRoute(
       path: Routes.roastHistory,
       builder: (context, state) => const RoastHistoryPage()
+    ),
+    GoRoute(
+      path: Routes.roastReview,
+      builder: (context, state) => const RoastReviewPage()
     ),
     GoRoute(
       path: Routes.timer,
