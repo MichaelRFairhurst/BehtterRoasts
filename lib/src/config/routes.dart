@@ -6,20 +6,13 @@ import 'package:behmor_roast/src/roast/routes/new_roast_page.dart';
 
 class Routes {
   static const roastHistory = '/roastHistory';
-  static const roastReview = '/roastReview';
   static const newRoast = '/newRoast';
   static const timer = '/timer';
 
-  /*
-  static final routes = <String, Widget Function(BuildContext)>{
-    newRoast: (context) {
-      return const NewRoastPage();
-    },
-    timer: (context) {
-      return const TimerPage();
-    },
-  };
-  */
+  static const beanIdPart = 'beanId';
+  static const roastReviewPart = '/roastReview';
+  static const roastReviewConfigPath = '$roastReviewPart/:$beanIdPart';
+  static String roastReview(String beanId) => '$roastReviewPart/$beanId';
 }
 
 final router = GoRouter(
@@ -34,17 +27,14 @@ final router = GoRouter(
       builder: (context, state) => const RoastHistoryPage()
     ),
     GoRoute(
-      path: Routes.roastReview,
-      builder: (context, state) => const RoastReviewPage()
+      path: Routes.roastReviewConfigPath,
+      builder: (context, state) {
+		return RoastReviewPage(beanId: state.pathParameters[Routes.beanIdPart]!);
+	  },
     ),
     GoRoute(
       path: Routes.timer,
       builder: (context, state) => const TimerPage()
     ),
-    /*GoRoute(
-      path: Routes.systemDetails(':systemName'),
-      builder: (context, state)
-        => SystemsDetailPage(systemName: state.pathParameters['systemName']!),
-    ),*/
   ],
 );

@@ -32,7 +32,7 @@ class RoastHistoryPage extends ConsumerWidget {
 					    icon: const Icon(Icons.visibility),
 						label: const Text('View Roasts'),
 						onPressed: () {
-						  context.push(Routes.roastReview);
+						  context.push(Routes.roastReview(items[i].id!));
 						},
 					  ),
 					],

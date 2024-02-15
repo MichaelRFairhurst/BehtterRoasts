@@ -11,4 +11,9 @@ class RoastService {
   Future<void> add(Roast roast) {
 	return FirebaseFirestore.instance.collection(_roastdb).add(roast.toJson());
   }
+
+  Stream<List<Roast>> roastsForBean(String beanId) => FirebaseFirestore.instance.collection(_roastdb).where('beanId', isEqualTo: beanId).snapshots().map((record) {
+	return record.docs.map((doc) => Roast.fromJson(doc.data())).toList();
+  });
+
 }

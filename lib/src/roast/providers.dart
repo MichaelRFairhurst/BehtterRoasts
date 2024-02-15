@@ -16,6 +16,11 @@ final roastsProvider = StreamProvider<List<Roast>>((ref) {
   return roastService.roasts;
 });
 
+final roastsForBeanProvider = StreamProvider.family<List<Roast>, String>((ref, beanId) {
+  final roastService = ref.watch(roastServiceProvider);
+  return roastService.roastsForBean(beanId);
+});
+
 final beanServiceProvider = Provider<BeanService>((ref) => BeanService());
 
 final beansProvider = StreamProvider<List<Bean>>((ref) {

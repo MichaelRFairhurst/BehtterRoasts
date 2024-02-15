@@ -5,7 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RoastReviewPage extends ConsumerStatefulWidget {
 
-  const RoastReviewPage({super.key});
+  const RoastReviewPage({
+    required this.beanId,
+	super.key,
+  });
+
+  final String beanId;
 
   @override
   RoastReviewPageState createState() => RoastReviewPageState();
@@ -16,12 +21,16 @@ class RoastReviewPageState extends ConsumerState<RoastReviewPage> {
 
   @override
   Widget build(BuildContext context) {
-	final roasts = ref.watch(roastsProvider).value ?? [];
+	final roasts = ref.watch(roastsForBeanProvider(widget.beanId)).value ?? [];
+	final bean = ref.watch(beansProvider).value?.singleWhere((bean) => bean.id == widget.beanId);
 	final roastLogService = ref.watch(roastLogServiceProvider);
+	if (bean == null) {
+	  return Container();
+	}
 
 	return Scaffold(
 	  appBar: AppBar(
-	    title: const Text('Roast Review'),
+	    title: Text('Roasts (${bean.name})'),
 	  ),
 	  body: PageView(
 	    controller: pageController,
