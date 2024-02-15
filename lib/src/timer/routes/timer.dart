@@ -68,14 +68,16 @@ class TimerPage extends ConsumerWidget {
 			margin: const EdgeInsets.only(bottom: 4.0),
 		    child: const ControlsWidget(),
 		  ),
-          const Expanded(
+          Expanded(
             child: CustomScrollView(
               shrinkWrap: true,
               slivers: [
                 SliverToBoxAdapter(
-	              child: TempLogWidget(),
+	              child: TempLogWidget(
+				    logs: logs,
+				  ),
                 ),
-	            SliverToBoxAdapter(
+	            const SliverToBoxAdapter(
 	              child: ProjectionsWidget(),
 	            ),
               ],

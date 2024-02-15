@@ -1,16 +1,19 @@
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 
 class TempLogWidget extends ConsumerWidget {
 
-  const TempLogWidget({Key? key}) : super(key: key);
+  const TempLogWidget({
+	required this.logs,
+	super.key,
+  });
+
+  final List<RoastLog> logs;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final logs = ref.watch(roastLogsProvider);
     return DataTable(
       dataRowHeight: 20,
       columnSpacing: 10,
