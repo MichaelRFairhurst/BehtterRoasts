@@ -22,10 +22,37 @@ class RoastReviewPage extends ConsumerStatefulWidget {
 
 class RoastReviewPageState extends ConsumerState<RoastReviewPage> {
   final pageController = PageController();
+  bool showPrev = false;
+  bool showNext = false;
+  List<Roast> roasts = const [];
+
+  @override
+  void initState() {
+	super.initState();
+
+    pageController.addListener(pageControllerUpdate);
+  }
+
+  @override
+  void dispose() {
+	super.dispose();
+	pageController.dispose();
+  }
+
+  void pageControllerUpdate() {
+	setState(() {
+	  showPrev = pageController.page != 0;
+	  showNext = pageController.page! < roasts.length - 1;
+	});
+  }
 
   @override
   Widget build(BuildContext context) {
 	final roasts = ref.watch(roastsForBeanProvider(widget.beanId)).value ?? [];
+	if (roasts.length > this.roasts.length) {
+	  showNext = roasts.length > 1;
+	}
+	this.roasts = roasts;
 	final bean = ref.watch(beansProvider).value?.singleWhere((bean) => bean.id == widget.beanId);
 	final roastLogService = ref.watch(roastLogServiceProvider);
 	if (bean == null) {
@@ -39,6 +66,46 @@ class RoastReviewPageState extends ConsumerState<RoastReviewPage> {
 	  body: PageView(
 	    controller: pageController,
 		children: getRoastPages(bean, roasts, roastLogService),
+	  ),
+	  floatingActionButton: Stack(
+	    children: [
+		  Align(
+		    alignment: Alignment.bottomLeft,
+			child: Container(
+			  padding: const EdgeInsets.only(left: 30),
+			  child: AnimatedOpacity(
+			    duration: const Duration(milliseconds: 150),
+			    opacity: showPrev ? 1.0 : 0.0,
+			    child: FloatingActionButton(
+				  heroTag: 'fab2',
+				  onPressed: () {
+					pageController.previousPage(
+					  duration: const Duration(milliseconds: 200),
+					  curve: Curves.easeInOut,
+					);
+				  },
+				  child: const Icon(Icons.navigate_before),
+				),
+			  ),
+			),
+		  ),
+		  Align(
+		    alignment: Alignment.bottomRight,
+			child: AnimatedOpacity(
+			  duration: const Duration(milliseconds: 150),
+			  opacity: showNext ? 1.0 : 0.0,
+			  child: FloatingActionButton(
+				onPressed: () {
+				  pageController.nextPage(
+					duration: const Duration(milliseconds: 200),
+					curve: Curves.easeInOut,
+				  );
+				},
+				child: const Icon(Icons.navigate_next),
+			  ),
+			),
+		  ),
+		],
 	  ),
 	);
   }
