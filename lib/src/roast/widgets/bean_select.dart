@@ -1,3 +1,4 @@
+import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:flutter/material.dart';
@@ -45,14 +46,15 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
 			  }
 			)),
 			ElevatedButton(
-			  child: const Icon(Icons.check),
+			  style: RoastAppTheme.limeButtonTheme.style,
 			  onPressed: () async {
 				if (newBeanForm.currentState!.validate()) {
 				  final bean = await ref.read(beanServiceProvider).add(Bean(name: newBeanName.text));
 				  addNew = false;
                   widget.onChanged(bean);
 				}
-			  }
+			  },
+			  child: const Icon(Icons.check),
 			),
 		  ],
 		),
@@ -73,6 +75,7 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
 		ElevatedButton.icon(
 		  label: const Text('Add new bean'),
 		  icon: const Icon(Icons.add),
+		  style: RoastAppTheme.limeButtonTheme.style,
 		  onPressed: () {
 			setState(() {
 			  addNew = true;

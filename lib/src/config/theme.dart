@@ -27,6 +27,15 @@ class RoastAppTheme {
 	),
   );
 
+  static final limeButtonTheme = ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+        foregroundColor: capuccino,
+        backgroundColor: lime,
+		shadowColor: capuccino,
+        elevation: 1.0,
+	),
+  );
+
   static final materialTheme = ThemeData.localize(
     ThemeData(
 	  brightness: Brightness.light,
