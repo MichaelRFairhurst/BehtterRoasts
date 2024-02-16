@@ -4,7 +4,7 @@ class TimerService {
   DateTime? _startTime;
   DateTime? _stopTime;
   final _running = StreamController<bool>()..add(false);
-  final _checkTemp = StreamController<void>.broadcast();
+  final _checkTemp = StreamController<Duration>.broadcast();
   final _seconds = StreamController<Duration>.broadcast();
 
   void start() {
@@ -24,7 +24,7 @@ class TimerService {
 
   void fireCheckTempIntervals() async {
     while (_stopTime == null) {
-      _checkTemp.add(null);
+      _checkTemp.add(elapsed()!);
       // TODO: don't drift
       await Future.delayed(const Duration(seconds: 15));
     }
@@ -48,6 +48,6 @@ class TimerService {
   }
 
   Stream<bool> get running => _running.stream;
-  Stream<void> get checkTemp => _checkTemp.stream;
+  Stream<Duration> get checkTemp => _checkTemp.stream;
   Stream<Duration> get seconds => _seconds.stream;
 }

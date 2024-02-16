@@ -17,7 +17,7 @@ class TimerPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final tService = ref.watch(timerServiceProvider);
     final running = ref.watch(timerRunningProvider).value ?? false;
-    final showTempInput = ref.watch(showTempInputProvider);
+    final showTempInputTime = ref.watch(showTempInputTimeProvider);
     final logs = ref.watch(roastLogsProvider);
 
     Widget? fab;
@@ -83,13 +83,12 @@ class TimerPage extends ConsumerWidget {
               ],
             ),
           ),
-          if (showTempInput)
+          if (showTempInputTime != null)
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(16.0),
 		      decoration: const BoxDecoration(
 			    color: RoastAppTheme.metalLight,
-			    //border: Border(top: BorderSide(color: RoastAppTheme.capuccinoLight, width: 1.0)),
 			    boxShadow: [BoxShadow(
 			      color: RoastAppTheme.capuccino,
 			      offset: Offset(0, 0),
@@ -98,12 +97,13 @@ class TimerPage extends ConsumerWidget {
 			  ),
               child: CheckTempWidget(
                 label: logs.isEmpty ? 'Enter starting temperature:' : 'Enter current temperature',
+				shownTime: showTempInputTime,
                 onSubmit: (time, temp) {
                   ref.read(temperatureLogsProvider.notifier)
                     .update((logs) => logs.toList()..add(TempLog(
                        temp: temp, time: time)
                   ));
-                  ref.read(showTempInputProvider.notifier).state = false;
+                  ref.read(showTempInputTimeProvider.notifier).state = null;
                 },
               ),
             ),

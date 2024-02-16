@@ -23,15 +23,15 @@ final timerRunningProvider = StreamProvider<bool>((ref) {
   return tService.running;
 });
 
-final checkTempStreamProvider = StreamProvider<void>((ref) {
+final checkTempStreamProvider = StreamProvider<Duration>((ref) {
   final tService = ref.watch(timerServiceProvider);
   return tService.checkTemp;
 });
 
-final showTempInputProvider = StateProvider<bool>((ref) {
+final showTempInputTimeProvider = StateProvider<Duration?>((ref) {
   // This watch induces regular updates to set state to true.
   // We use `hasValue` so that it begins false.
-  return ref.watch(checkTempStreamProvider).hasValue;
+  return ref.watch(checkTempStreamProvider).value;
 });
 
 final projectionServiceProvider = Provider((_) {

@@ -5,11 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CheckTempWidget extends ConsumerStatefulWidget {
   const CheckTempWidget({
-    required this.onSubmit,
+    required this.shownTime,
     required this.label,
-	Key? key
-  }) : super(key: key);
+    required this.onSubmit,
+	super.key,
+  });
 
+  final Duration shownTime;
   final String label;
   final void Function(Duration, int) onSubmit;
 
