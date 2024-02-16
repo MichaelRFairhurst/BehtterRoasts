@@ -1,4 +1,8 @@
+import 'package:behmor_roast/src/config/theme.dart';
+import 'package:behmor_roast/src/roast/models/bean.dart';
+import 'package:behmor_roast/src/roast/models/roast.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
+import 'package:behmor_roast/src/roast/services/roast_log_service.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,23 +34,46 @@ class RoastReviewPageState extends ConsumerState<RoastReviewPage> {
 
 	return Scaffold(
 	  appBar: AppBar(
-	    title: Text('Roasts (${bean.name})'),
+	    title: Text('Roasts for ${bean.name}'),
 	  ),
 	  body: PageView(
 	    controller: pageController,
-		children: roasts.map((roast) {
-		  return Container(
-		    alignment: Alignment.center,
-		    child: TempLogWidget(
+		children: getRoastPages(bean, roasts, roastLogService),
+	  ),
+	);
+  }
+
+  List<Widget> getRoastPages(Bean bean, List<Roast> roasts, RoastLogService roastLogService) {
+	if (roasts.isEmpty) {
+	  return const [noRoastsPage];
+	}
+
+    return roasts.map((roast) => singleRoastPage(bean, roast, roastLogService)).toList();
+  }
+
+  Widget singleRoastPage(Bean bean, Roast roast, RoastLogService roastLogService) {
+	return Column(
+	  children: [
+	    Text(
+		  'Roast #${roast.roastNumber}',
+		  style: RoastAppTheme.materialTheme.textTheme.subtitle1,
+		),
+		Expanded(
+		  child: SingleChildScrollView(
+			child: TempLogWidget(
 			  logs: roastLogService.aggregate(
-			    roast.tempLogs,
+				roast.tempLogs,
 				roast.phaseLogs,
 				roast.controlLogs,
 			  ),
 			),
-		  );
-		}).toList(),
-	  ),
+		  ),
+		),
+	  ],
 	);
   }
+
+  static const noRoastsPage = Center(
+	child: Text('No roasts yet.'),
+  );
 }

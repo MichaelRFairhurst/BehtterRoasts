@@ -27,7 +27,9 @@ class RoastHistoryPage extends ConsumerWidget {
 				  child: Row(
 				    mainAxisAlignment: MainAxisAlignment.spaceBetween,
 				    children: [
-				      Text(items[i].name),
+				      Flexible(
+					    child: Text(items[i].name),
+					  ),
 				      ElevatedButton.icon(
 					    icon: const Icon(Icons.visibility),
 						label: const Text('View Roasts'),
