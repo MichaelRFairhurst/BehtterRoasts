@@ -27,49 +27,44 @@ class RoastAppTheme {
 	),
   );
 
-  static final materialTheme = ThemeData(
-    brightness: Brightness.light,
-    fontFamily: 'Roboto',
-    colorScheme: const ColorScheme.light().copyWith(
-      primary: capuccino,
-      secondary: indigo,
-	  tertiary: indigo,
-	  surface: cremaLight,
-    ),
-    bottomAppBarTheme: const BottomAppBarTheme(
-      color: lime,
-	  elevation: 4.0,
-    ),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-      ),
-    ),
-	canvasColor: cremaLight,
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        foregroundColor: capuccino,
-        backgroundColor: lilac,
-		side: const BorderSide(
-		  color: metal,
-		  width: 0.0,
+  static final materialTheme = ThemeData.localize(
+    ThemeData(
+	  brightness: Brightness.light,
+	  fontFamily: 'Roboto',
+	  colorScheme: const ColorScheme.light().copyWith(
+		primary: capuccino,
+		secondary: indigo,
+		tertiary: indigo,
+		surface: cremaLight,
+	  ),
+	  bottomAppBarTheme: const BottomAppBarTheme(
+		color: lime,
+		elevation: 4.0,
+	  ),
+	  outlinedButtonTheme: OutlinedButtonThemeData(
+		style: OutlinedButton.styleFrom(
+		  backgroundColor: Colors.black,
+		  foregroundColor: Colors.white,
 		),
-		shadowColor: capuccino,
-        elevation: 1.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-          side: const BorderSide(color: Colors.black, width: 1.0),
-        ),
-      ),
-    ),
-    //floatingActionButtonTheme: FloatingActionButtonThemeData(
-    //  backgroundColor: Colors.grey,
-    //  foregroundColor: Colors.white,
-    //  elevation: 0.0,
-    //  iconSize: 15,
-    //  // TODO: why does it require a size of 40 to match ElevatedButton's height of 48?
-    //  smallSizeConstraints: BoxConstraints.tight(const Size(40, 40)),
-    //),
+	  ),
+	  canvasColor: cremaLight,
+	  elevatedButtonTheme: ElevatedButtonThemeData(
+		style: ElevatedButton.styleFrom(
+		  foregroundColor: capuccino,
+		  backgroundColor: lilac,
+		  side: const BorderSide(
+			color: metal,
+			width: 0.0,
+		  ),
+		  shadowColor: capuccino,
+		  elevation: 1.0,
+		  shape: RoundedRectangleBorder(
+			borderRadius: BorderRadius.circular(24),
+			side: const BorderSide(color: Colors.black, width: 1.0),
+		  ),
+		),
+	  ),
+	),
+	Typography.material2021().geometryThemeFor(ScriptCategory.englishLike),
   );
 }
