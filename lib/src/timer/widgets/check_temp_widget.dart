@@ -1,7 +1,9 @@
 import 'package:behmor_roast/src/config/theme.dart';
+import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CheckTempWidget extends StatefulWidget {
+class CheckTempWidget extends ConsumerStatefulWidget {
   const CheckTempWidget({
     required this.onSubmit,
     required this.label,
@@ -9,13 +11,13 @@ class CheckTempWidget extends StatefulWidget {
   }) : super(key: key);
 
   final String label;
-  final void Function(int) onSubmit;
+  final void Function(Duration, int) onSubmit;
 
   @override
   CheckTempWidgetState createState() => CheckTempWidgetState();
 }
 
-class CheckTempWidgetState extends State<CheckTempWidget> {
+class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
   int state = 0;
 
   @override
@@ -57,7 +59,8 @@ class CheckTempWidgetState extends State<CheckTempWidget> {
 		  buildButton(
 		    label: "Done",
 		    onPressed: () {
-			  widget.onSubmit(state);
+			  final now = ref.read(timerServiceProvider).elapsed()!;
+			  widget.onSubmit(now, state);
 			},
 	      ),
 		]),
