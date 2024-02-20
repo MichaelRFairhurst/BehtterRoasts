@@ -36,7 +36,7 @@ class ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSta
 
   @override
   Widget build(BuildContext context) {
-    final pillPadding = widget.style.pillPadding ?? widget.style.padding / 2;
+    final pillPadding = widget.style.pillPadding;
 	return CustomPaint(
 	  painter: ToggleSwitchPainter(
 		context: context,
@@ -52,6 +52,8 @@ class ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSta
 			  onTap: () {
 				animationCtrl.reverse();
 			  },
+			  onHorizontalDragUpdate: onHorizontalDragUpdate,
+			  onHorizontalDragEnd: onHorizontalDragEnd,
 			  child: Padding(
 				padding: pillPadding,
 				child: widget.optionLeft,
@@ -62,6 +64,8 @@ class ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSta
 			  onTap: () {
 				animationCtrl.forward();
 			  },
+			  onHorizontalDragUpdate: onHorizontalDragUpdate,
+			  onHorizontalDragEnd: onHorizontalDragEnd,
 			  child: Padding(
 				padding: pillPadding.flipped,
 				child: widget.optionRight,
@@ -84,6 +88,22 @@ class ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSta
 	  color: widget.style.pillColor,
 	),
   );
+
+  void onHorizontalDragUpdate(DragUpdateDetails details) {
+	final leftObject = (((context.findRenderObject() as RenderCustomPaint).child as RenderPadding).child as RenderFlex).firstChild!;
+	animationCtrl.value += details.primaryDelta! / leftObject.size.width;
+  }
+
+  void onHorizontalDragEnd(DragEndDetails details) {
+	final leftObject = (((context.findRenderObject() as RenderCustomPaint).child as RenderPadding).child as RenderFlex).firstChild!;
+
+	final flicked = animationCtrl.value + details.primaryVelocity! / leftObject.size.width;
+	if (flicked < 0.5) {
+	  animationCtrl.reverse();
+	} else {
+	  animationCtrl.forward();
+	}
+  }
 }
 
 class ToggleSwitchPainter extends CustomPainter {
@@ -117,13 +137,17 @@ class ToggleSwitchPainter extends CustomPainter {
     final bottom = max(leftBox.paintBounds.height, rightBox.paintBounds.height)
 	    + style.padding.top;
 
+    final rect = RRect.fromLTRBR(left, top, right, bottom, style.pillRadius);
+
+    final shadowPath = Path()..addRRect(rect);
+    canvas.drawShadow(shadowPath, style.pillShadowColor, style.pillElevation, false);
+
 	final paint = Paint()
 	  ..color = style.pillColor
 	  ..style = PaintingStyle.fill
 	  ..strokeWidth = 10;
 
-	canvas.drawRRect(RRect.fromLTRBR(left, top, right, bottom,
-	    style.pillRadius), paint);
+	canvas.drawRRect(rect, paint);
   }
 
   void paintBackground(Canvas canvas, Size size) {

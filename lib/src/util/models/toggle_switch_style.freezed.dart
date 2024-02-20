@@ -19,10 +19,12 @@ mixin _$ToggleSwitchStyle {
   Color get backgroundColor => throw _privateConstructorUsedError;
   Color get pillColor => throw _privateConstructorUsedError;
   EdgeInsets get padding => throw _privateConstructorUsedError;
-  EdgeInsets? get pillPadding => throw _privateConstructorUsedError;
+  EdgeInsets get pillPadding => throw _privateConstructorUsedError;
   double get gap => throw _privateConstructorUsedError;
   Radius get backgroundRadius => throw _privateConstructorUsedError;
   Radius get pillRadius => throw _privateConstructorUsedError;
+  Color get pillShadowColor => throw _privateConstructorUsedError;
+  double get pillElevation => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ToggleSwitchStyleCopyWith<ToggleSwitchStyle> get copyWith =>
@@ -39,10 +41,12 @@ abstract class $ToggleSwitchStyleCopyWith<$Res> {
       {Color backgroundColor,
       Color pillColor,
       EdgeInsets padding,
-      EdgeInsets? pillPadding,
+      EdgeInsets pillPadding,
       double gap,
       Radius backgroundRadius,
-      Radius pillRadius});
+      Radius pillRadius,
+      Color pillShadowColor,
+      double pillElevation});
 }
 
 /// @nodoc
@@ -61,10 +65,12 @@ class _$ToggleSwitchStyleCopyWithImpl<$Res, $Val extends ToggleSwitchStyle>
     Object? backgroundColor = null,
     Object? pillColor = null,
     Object? padding = null,
-    Object? pillPadding = freezed,
+    Object? pillPadding = null,
     Object? gap = null,
     Object? backgroundRadius = null,
     Object? pillRadius = null,
+    Object? pillShadowColor = null,
+    Object? pillElevation = null,
   }) {
     return _then(_value.copyWith(
       backgroundColor: null == backgroundColor
@@ -79,10 +85,10 @@ class _$ToggleSwitchStyleCopyWithImpl<$Res, $Val extends ToggleSwitchStyle>
           ? _value.padding
           : padding // ignore: cast_nullable_to_non_nullable
               as EdgeInsets,
-      pillPadding: freezed == pillPadding
+      pillPadding: null == pillPadding
           ? _value.pillPadding
           : pillPadding // ignore: cast_nullable_to_non_nullable
-              as EdgeInsets?,
+              as EdgeInsets,
       gap: null == gap
           ? _value.gap
           : gap // ignore: cast_nullable_to_non_nullable
@@ -95,6 +101,14 @@ class _$ToggleSwitchStyleCopyWithImpl<$Res, $Val extends ToggleSwitchStyle>
           ? _value.pillRadius
           : pillRadius // ignore: cast_nullable_to_non_nullable
               as Radius,
+      pillShadowColor: null == pillShadowColor
+          ? _value.pillShadowColor
+          : pillShadowColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      pillElevation: null == pillElevation
+          ? _value.pillElevation
+          : pillElevation // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -111,10 +125,12 @@ abstract class _$$_ToggleSwitchStyleCopyWith<$Res>
       {Color backgroundColor,
       Color pillColor,
       EdgeInsets padding,
-      EdgeInsets? pillPadding,
+      EdgeInsets pillPadding,
       double gap,
       Radius backgroundRadius,
-      Radius pillRadius});
+      Radius pillRadius,
+      Color pillShadowColor,
+      double pillElevation});
 }
 
 /// @nodoc
@@ -131,10 +147,12 @@ class __$$_ToggleSwitchStyleCopyWithImpl<$Res>
     Object? backgroundColor = null,
     Object? pillColor = null,
     Object? padding = null,
-    Object? pillPadding = freezed,
+    Object? pillPadding = null,
     Object? gap = null,
     Object? backgroundRadius = null,
     Object? pillRadius = null,
+    Object? pillShadowColor = null,
+    Object? pillElevation = null,
   }) {
     return _then(_$_ToggleSwitchStyle(
       backgroundColor: null == backgroundColor
@@ -149,10 +167,10 @@ class __$$_ToggleSwitchStyleCopyWithImpl<$Res>
           ? _value.padding
           : padding // ignore: cast_nullable_to_non_nullable
               as EdgeInsets,
-      pillPadding: freezed == pillPadding
+      pillPadding: null == pillPadding
           ? _value.pillPadding
           : pillPadding // ignore: cast_nullable_to_non_nullable
-              as EdgeInsets?,
+              as EdgeInsets,
       gap: null == gap
           ? _value.gap
           : gap // ignore: cast_nullable_to_non_nullable
@@ -165,6 +183,14 @@ class __$$_ToggleSwitchStyleCopyWithImpl<$Res>
           ? _value.pillRadius
           : pillRadius // ignore: cast_nullable_to_non_nullable
               as Radius,
+      pillShadowColor: null == pillShadowColor
+          ? _value.pillShadowColor
+          : pillShadowColor // ignore: cast_nullable_to_non_nullable
+              as Color,
+      pillElevation: null == pillElevation
+          ? _value.pillElevation
+          : pillElevation // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -175,11 +201,14 @@ class _$_ToggleSwitchStyle implements _ToggleSwitchStyle {
   const _$_ToggleSwitchStyle(
       {required this.backgroundColor,
       required this.pillColor,
-      this.padding = const EdgeInsets.all(4.0),
-      this.pillPadding,
+      this.padding = const EdgeInsets.all(3.0),
+      this.pillPadding =
+          const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
       this.gap = 4.0,
-      this.backgroundRadius = const Radius.circular(12.0),
-      this.pillRadius = const Radius.circular(8.0)});
+      this.backgroundRadius = const Radius.circular(64.0),
+      this.pillRadius = const Radius.circular(32.0),
+      this.pillShadowColor = const Color(0xFF202020),
+      this.pillElevation = 4.0});
 
   @override
   final Color backgroundColor;
@@ -189,7 +218,8 @@ class _$_ToggleSwitchStyle implements _ToggleSwitchStyle {
   @JsonKey()
   final EdgeInsets padding;
   @override
-  final EdgeInsets? pillPadding;
+  @JsonKey()
+  final EdgeInsets pillPadding;
   @override
   @JsonKey()
   final double gap;
@@ -199,10 +229,16 @@ class _$_ToggleSwitchStyle implements _ToggleSwitchStyle {
   @override
   @JsonKey()
   final Radius pillRadius;
+  @override
+  @JsonKey()
+  final Color pillShadowColor;
+  @override
+  @JsonKey()
+  final double pillElevation;
 
   @override
   String toString() {
-    return 'ToggleSwitchStyle(backgroundColor: $backgroundColor, pillColor: $pillColor, padding: $padding, pillPadding: $pillPadding, gap: $gap, backgroundRadius: $backgroundRadius, pillRadius: $pillRadius)';
+    return 'ToggleSwitchStyle(backgroundColor: $backgroundColor, pillColor: $pillColor, padding: $padding, pillPadding: $pillPadding, gap: $gap, backgroundRadius: $backgroundRadius, pillRadius: $pillRadius, pillShadowColor: $pillShadowColor, pillElevation: $pillElevation)';
   }
 
   @override
@@ -221,12 +257,25 @@ class _$_ToggleSwitchStyle implements _ToggleSwitchStyle {
             (identical(other.backgroundRadius, backgroundRadius) ||
                 other.backgroundRadius == backgroundRadius) &&
             (identical(other.pillRadius, pillRadius) ||
-                other.pillRadius == pillRadius));
+                other.pillRadius == pillRadius) &&
+            (identical(other.pillShadowColor, pillShadowColor) ||
+                other.pillShadowColor == pillShadowColor) &&
+            (identical(other.pillElevation, pillElevation) ||
+                other.pillElevation == pillElevation));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, backgroundColor, pillColor,
-      padding, pillPadding, gap, backgroundRadius, pillRadius);
+  int get hashCode => Object.hash(
+      runtimeType,
+      backgroundColor,
+      pillColor,
+      padding,
+      pillPadding,
+      gap,
+      backgroundRadius,
+      pillRadius,
+      pillShadowColor,
+      pillElevation);
 
   @JsonKey(ignore: true)
   @override
@@ -241,10 +290,12 @@ abstract class _ToggleSwitchStyle implements ToggleSwitchStyle {
       {required final Color backgroundColor,
       required final Color pillColor,
       final EdgeInsets padding,
-      final EdgeInsets? pillPadding,
+      final EdgeInsets pillPadding,
       final double gap,
       final Radius backgroundRadius,
-      final Radius pillRadius}) = _$_ToggleSwitchStyle;
+      final Radius pillRadius,
+      final Color pillShadowColor,
+      final double pillElevation}) = _$_ToggleSwitchStyle;
 
   @override
   Color get backgroundColor;
@@ -253,13 +304,17 @@ abstract class _ToggleSwitchStyle implements ToggleSwitchStyle {
   @override
   EdgeInsets get padding;
   @override
-  EdgeInsets? get pillPadding;
+  EdgeInsets get pillPadding;
   @override
   double get gap;
   @override
   Radius get backgroundRadius;
   @override
   Radius get pillRadius;
+  @override
+  Color get pillShadowColor;
+  @override
+  double get pillElevation;
   @override
   @JsonKey(ignore: true)
   _$$_ToggleSwitchStyleCopyWith<_$_ToggleSwitchStyle> get copyWith =>
