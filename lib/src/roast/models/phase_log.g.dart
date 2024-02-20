@@ -20,4 +20,5 @@ Map<String, dynamic> _$$_PhaseLogToJson(_$_PhaseLog instance) =>
 const _$PhaseEnumMap = {
   Phase.dryEnd: 'dryEnd',
   Phase.crack: 'crack',
+  Phase.done: 'done',
 };

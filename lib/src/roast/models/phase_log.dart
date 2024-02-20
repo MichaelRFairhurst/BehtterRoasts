@@ -7,6 +7,7 @@ part 'phase_log.g.dart';
 enum Phase {
   dryEnd,
   crack,
+  done,
 }
 
 @Freezed()

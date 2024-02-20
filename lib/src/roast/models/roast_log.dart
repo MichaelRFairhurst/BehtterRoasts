@@ -7,6 +7,7 @@ enum RoastPhase {
   dryEnd,
   firstCrackStart,
   firstCrackEnd,
+  done,
 }
 
 @Freezed()

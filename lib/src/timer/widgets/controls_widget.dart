@@ -63,6 +63,9 @@ class ControlsWidget extends ConsumerWidget {
                 onPressed: !running ? null : () {
 		      	  final tService = ref.read(timerServiceProvider);
 				  tService.stop();
+		      	  final now = tService.elapsed()!;
+		      	  final newLog = PhaseLog(time: now, phase: Phase.done);
+		      	  ref.read(phaseLogsProvider.notifier).update((logs) => logs.toList()..add(newLog));
                 },
               ),
           ].map((widget) => Container(
