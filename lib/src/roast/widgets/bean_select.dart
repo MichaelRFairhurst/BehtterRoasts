@@ -56,6 +56,16 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
 			  },
 			  child: const Icon(Icons.check),
 			),
+			const SizedBox(width: 4.0),
+			ElevatedButton(
+			  style: RoastAppTheme.cancelButtonTheme.style,
+			  onPressed: () {
+				setState(() {
+				  addNew = false;
+				});
+			  },
+			  child: const Icon(Icons.cancel),
+			),
 		  ],
 		),
 	  );
@@ -77,6 +87,7 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
 		  icon: const Icon(Icons.add),
 		  style: RoastAppTheme.limeButtonTheme.style,
 		  onPressed: () {
+			widget.onChanged(null);
 			setState(() {
 			  addNew = true;
 			});

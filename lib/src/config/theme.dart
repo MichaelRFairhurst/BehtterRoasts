@@ -13,6 +13,7 @@ class RoastAppTheme {
   static const metalDark = Color(0xFF494F52);
   static const metalLight = Color(0xFFA9A7AB);
   static const lime = Color(0xFFC8E6D6);
+  static const errorColor = Color(0xFFB85544);
 
   static final tinyButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
@@ -49,6 +50,15 @@ class RoastAppTheme {
 	),
   );
 
+  static final cancelButtonTheme = ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+        backgroundColor: errorColor,
+        foregroundColor: capuccino,
+		shadowColor: capuccino,
+        elevation: 1.0,
+	),
+  );
+
   static final materialTheme = ThemeData.localize(
     ThemeData(
 	  brightness: Brightness.light,
@@ -58,6 +68,7 @@ class RoastAppTheme {
 		secondary: indigo,
 		tertiary: indigo,
 		surface: cremaLight,
+		error: errorColor,
 	  ),
 	  bottomAppBarTheme: const BottomAppBarTheme(
 		color: lime,
