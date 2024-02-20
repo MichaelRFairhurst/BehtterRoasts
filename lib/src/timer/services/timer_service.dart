@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter_beep/flutter_beep.dart';
+
 class TimerService {
   DateTime? _startTime;
   DateTime? _stopTime;
@@ -24,6 +26,7 @@ class TimerService {
 
   void fireCheckTempIntervals() async {
     while (_stopTime == null) {
+	  FlutterBeep.beep();
       _checkTemp.add(elapsed()!);
       // TODO: don't drift
       await Future.delayed(const Duration(seconds: 15));
