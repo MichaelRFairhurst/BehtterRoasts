@@ -14,6 +14,19 @@ class RoastAppTheme {
   static const metalLight = Color(0xFFA9A7AB);
   static const lime = Color(0xFFC8E6D6);
 
+  static final tinyButtonTheme = ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+        foregroundColor: capuccino,
+        backgroundColor: metalLight,
+		shadowColor: capuccino,
+        elevation: 1.0,
+		fixedSize: const Size(12, 12),
+		minimumSize: const Size(12, 12),
+		maximumSize: const Size(12, 12),
+		padding: const EdgeInsets.all(2.0),
+	),
+  );
+
   static final keypadButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
         foregroundColor: capuccino,

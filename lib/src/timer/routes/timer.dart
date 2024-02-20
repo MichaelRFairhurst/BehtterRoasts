@@ -96,12 +96,11 @@ class TimerPage extends ConsumerWidget {
 			    )],
 			  ),
               child: CheckTempWidget(
-                label: logs.isEmpty ? 'Enter starting temperature:' : 'Enter current temperature',
 				shownTime: showTempInputTime,
                 onSubmit: (time, temp) {
                   ref.read(temperatureLogsProvider.notifier)
                     .update((logs) => logs.toList()..add(TempLog(
-                       temp: temp, time: showTempInputTime)
+                       temp: temp, time: time)
                   ));
                   ref.read(showTempInputTimeProvider.notifier).state = null;
                 },

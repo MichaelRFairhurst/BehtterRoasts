@@ -1,5 +1,6 @@
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
+import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 import 'package:behmor_roast/src/util/widgets/toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,13 +8,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CheckTempWidget extends ConsumerStatefulWidget {
   const CheckTempWidget({
     required this.shownTime,
-    required this.label,
     required this.onSubmit,
 	super.key,
   });
 
   final Duration shownTime;
-  final String label;
   final void Function(Duration, int) onSubmit;
 
   @override
@@ -22,34 +21,69 @@ class CheckTempWidget extends ConsumerStatefulWidget {
 
 class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
   int state = 0;
+  bool useShownTime = true;
+  Duration? overrideTime;
 
   @override
   Widget build(BuildContext context) {
     const baseDigits = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+	final seconds = overrideTime ?? ref.watch(secondsProvider).value!;
 
     return Column(
 	  crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-	    Container(
-		  padding: const EdgeInsets.all(8.0),
-	      child: Text(widget.label),
-		),
 		Row(
 		  children: [
-		    Text('blah'),
-			ToggleSwitch(
-			  optionLeft: Text('0:30'),
-			  optionRight: Text('0:33.'),
+		    const SizedBox(width: 4.0),
+		    const Expanded(
+			  child: Text('Enter Temperature'),
 			),
+			const Text('Time: '),
+			ToggleSwitch<Duration>(
+			  widgetLeft: TimestampWidget(widget.shownTime),
+			  valueLeft: widget.shownTime,
+			  widgetRight: Row(
+			    mainAxisSize: MainAxisSize.min,
+			    children: [
+				  TimestampWidget(seconds),
+				  if (overrideTime != null)
+					SizedBox(
+					  width: 16,
+					  height: 16,
+					  child: ElevatedButton(
+						style: RoastAppTheme.tinyButtonTheme.style,
+						onPressed: () {
+						  setState(() {
+							if (useShownTime) {
+							  overrideTime = null;
+							} else {
+							  overrideTime = ref.read(timerServiceProvider).elapsed()!;
+							}
+						  });
+						},
+						child: const Icon(Icons.refresh, size: 12),
+					  ),
+					),
+				],
+			  ),
+			  valueRight: seconds,
+              onToggle: (value) {
+                setState(() {
+				  useShownTime = value == widget.shownTime;
+				  if (!useShownTime) {
+					overrideTime = value;
+				  }
+				});
+			  },
+			),
+			const SizedBox(width: 4.0),
 		  ],
 		),
-		const SizedBox(height: 4.0),
+		const SizedBox(height: 6.0),
 	    Container(
 		  margin: const EdgeInsets.symmetric(horizontal: 4.0),
 		  padding: const EdgeInsets.all(8.0),
 		  decoration: BoxDecoration(
-		    //color: RoastAppTheme.cremaLight,
-		    //color: RoastAppTheme.metal,
 		    color: Colors.white,
 		    borderRadius: BorderRadius.circular(8.0),
 		  ),
@@ -71,8 +105,8 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
 		  buildButton(
 		    label: "Done",
 		    onPressed: () {
-			  final now = ref.read(timerServiceProvider).elapsed()!;
-			  widget.onSubmit(now, state);
+			  final time = useShownTime ? widget.shownTime : overrideTime!;
+			  widget.onSubmit(time, state);
 			},
 	      ),
 		]),
@@ -106,6 +140,7 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
 	  label: digit.toString(),
 	  onPressed: () {
 	    setState(() {
+		  overrideTime = ref.read(timerServiceProvider).elapsed()!;
 	      state = state * 10 + digit;
 	    });
 	  },
