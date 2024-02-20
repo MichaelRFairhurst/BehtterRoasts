@@ -36,28 +36,39 @@ class ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSta
 
   @override
   Widget build(BuildContext context) {
+    final pillPadding = widget.style.pillPadding ?? widget.style.padding / 2;
 	return CustomPaint(
 	  painter: ToggleSwitchPainter(
-	    context: context,
+		context: context,
 		animation: animationCtrl,
 		style: widget.style,
 	  ),
-	  child: Row(
-		mainAxisSize: MainAxisSize.min,
-		children: [
-		  GestureDetector(
-		    onTap: () {
-			  animationCtrl.reverse();
-			},
-		    child: widget.optionLeft,
-		  ),
-		  GestureDetector(
-		    onTap: () {
-			  animationCtrl.forward();
-			},
-		    child: widget.optionRight,
-		  ),
-		]
+	  child: Padding(
+		padding: widget.style.padding,
+		child: Row(
+		  mainAxisSize: MainAxisSize.min,
+		  children: [
+			GestureDetector(
+			  onTap: () {
+				animationCtrl.reverse();
+			  },
+			  child: Padding(
+				padding: pillPadding,
+				child: widget.optionLeft,
+			  ),
+			),
+			SizedBox(width: widget.style.gap),
+			GestureDetector(
+			  onTap: () {
+				animationCtrl.forward();
+			  },
+			  child: Padding(
+				padding: pillPadding.flipped,
+				child: widget.optionRight,
+			  ),
+			),
+		  ],
+		),
 	  ),
 	);
   }
@@ -93,22 +104,26 @@ class ToggleSwitchPainter extends CustomPainter {
   }
 
   void paintPill(Canvas canvas, Size size) {
-	final leftBox = findWidgetLeftBox();
-	final rightBox = findWidgetRightBox();
+	final leftBox = findWidgetLeftObj();
+	final rightBox = findWidgetRightObj();
 
-    final left = animation.value * (size.width - rightBox.paintBounds.right);
+    final left = animation.value * (size.width - rightBox.paintBounds.right - style.padding.right - style.padding.left)
+	    + style.padding.left;
     final right = leftBox.paintBounds.right
-	    + (size.width - leftBox.paintBounds.right) * animation.value;
+	    + (size.width - leftBox.paintBounds.right - style.padding.left - style.padding.right) * animation.value
+	    + style.padding.left;
 
-    final height = max(leftBox.paintBounds.height, rightBox.paintBounds.height);
+	final top = style.padding.top;
+    final bottom = max(leftBox.paintBounds.height, rightBox.paintBounds.height)
+	    + style.padding.top;
 
 	final paint = Paint()
 	  ..color = style.pillColor
 	  ..style = PaintingStyle.fill
 	  ..strokeWidth = 10;
 
-	canvas.drawRRect(RRect.fromLTRBR(left, 0, right, height,
-	    const Radius.circular(8)), paint);
+	canvas.drawRRect(RRect.fromLTRBR(left, top, right, bottom,
+	    style.pillRadius), paint);
   }
 
   void paintBackground(Canvas canvas, Size size) {
@@ -117,7 +132,7 @@ class ToggleSwitchPainter extends CustomPainter {
 	  ..style = PaintingStyle.fill
 	  ..strokeWidth = 10;
 	canvas.drawRRect(RRect.fromLTRBR(0, 0, size.width, size.height,
-	    const Radius.circular(8)), paint);
+	    style.backgroundRadius), paint);
   }
 
   @override
@@ -126,8 +141,10 @@ class ToggleSwitchPainter extends CustomPainter {
   }
 
   RenderCustomPaint findRenderObject() => context.findRenderObject() as RenderCustomPaint;
+  RenderPadding findPaddingObj() => findRenderObject().child as RenderPadding;
+  RenderFlex findFlexObj() => findPaddingObj().child as RenderFlex;
 
-  RenderBox findWidgetLeftBox() => (findRenderObject().child as RenderFlex).firstChild as RenderBox;
-  RenderBox findWidgetRightBox() => (findRenderObject().child as RenderFlex).lastChild as RenderBox;
+  RenderBox findWidgetLeftObj() => findFlexObj().firstChild as RenderBox;
+  RenderBox findWidgetRightObj() => findFlexObj().lastChild as RenderBox;
 
 }

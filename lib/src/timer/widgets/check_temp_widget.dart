@@ -1,5 +1,6 @@
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
+import 'package:behmor_roast/src/util/widgets/toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -32,6 +33,15 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
 	    Container(
 		  padding: const EdgeInsets.all(8.0),
 	      child: Text(widget.label),
+		),
+		Row(
+		  children: [
+		    Text('blah'),
+			ToggleSwitch(
+			  optionLeft: Text('0:30'),
+			  optionRight: Text('0:33.'),
+			),
+		  ],
 		),
 		const SizedBox(height: 4.0),
 	    Container(

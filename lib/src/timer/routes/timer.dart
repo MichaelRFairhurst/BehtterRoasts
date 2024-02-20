@@ -101,7 +101,7 @@ class TimerPage extends ConsumerWidget {
                 onSubmit: (time, temp) {
                   ref.read(temperatureLogsProvider.notifier)
                     .update((logs) => logs.toList()..add(TempLog(
-                       temp: temp, time: time)
+                       temp: temp, time: showTempInputTime)
                   ));
                   ref.read(showTempInputTimeProvider.notifier).state = null;
                 },
