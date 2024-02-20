@@ -4,23 +4,29 @@ import 'package:behmor_roast/src/util/models/toggle_switch_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class ToggleSwitch extends StatefulWidget {
+class ToggleSwitch<T> extends StatefulWidget {
   const ToggleSwitch({
-	required this.optionLeft,
-	required this.optionRight,
+	required this.widgetLeft,
+	required this.valueLeft,
+	required this.widgetRight,
+	required this.valueRight,
+	required this.onToggle,
 	this.style = ToggleSwitchStyle.defaults,
 	super.key,
   });
 
-  final Widget optionLeft;
-  final Widget optionRight;
+  final Widget widgetLeft;
+  final Widget widgetRight;
+  final T valueLeft;
+  final T valueRight;
   final ToggleSwitchStyle style;
+  final void Function(T) onToggle;
 
   @override
-  ToggleSwitchState createState() => ToggleSwitchState();
+  ToggleSwitchState<T> createState() => ToggleSwitchState<T>();
 }
 
-class ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderStateMixin {
+class ToggleSwitchState<T> extends State<ToggleSwitch<T>> with SingleTickerProviderStateMixin {
 
   late AnimationController animationCtrl;
 
@@ -49,32 +55,38 @@ class ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSta
 		  mainAxisSize: MainAxisSize.min,
 		  children: [
 			GestureDetector(
-			  onTap: () {
-				animationCtrl.reverse();
-			  },
+			  onTap: chooseLeft,
 			  onHorizontalDragUpdate: onHorizontalDragUpdate,
 			  onHorizontalDragEnd: onHorizontalDragEnd,
 			  child: Padding(
 				padding: pillPadding,
-				child: widget.optionLeft,
+				child: widget.widgetLeft,
 			  ),
 			),
 			SizedBox(width: widget.style.gap),
 			GestureDetector(
-			  onTap: () {
-				animationCtrl.forward();
-			  },
+			  onTap: chooseRight,
 			  onHorizontalDragUpdate: onHorizontalDragUpdate,
 			  onHorizontalDragEnd: onHorizontalDragEnd,
 			  child: Padding(
 				padding: pillPadding.flipped,
-				child: widget.optionRight,
+				child: widget.widgetRight,
 			  ),
 			),
 		  ],
 		),
 	  ),
 	);
+  }
+
+  void chooseLeft() {
+	animationCtrl.reverse();
+	widget.onToggle(widget.valueLeft);
+  }
+
+  void chooseRight() {
+	animationCtrl.forward();
+	widget.onToggle(widget.valueRight);
   }
 
   Widget background() => Container(
@@ -99,9 +111,9 @@ class ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSta
 
 	final flicked = animationCtrl.value + details.primaryVelocity! / leftObject.size.width;
 	if (flicked < 0.5) {
-	  animationCtrl.reverse();
+	  chooseLeft();
 	} else {
-	  animationCtrl.forward();
+	  chooseRight();
 	}
   }
 }
