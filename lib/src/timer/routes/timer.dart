@@ -22,15 +22,18 @@ class TimerPage extends ConsumerWidget {
 
     Widget? fab;
 	if (!running && tService.elapsed() == null) {
-      fab = FloatingActionButton(
-        child: const Icon(Icons.play_circle),
+      fab = ElevatedButton.icon(
+	    style: RoastAppTheme.largeButtonTheme.style,
+        icon: const Icon(Icons.local_fire_department_sharp, size: 28.0),
+        label: const Text('Start'),
         onPressed: () {
           tService.start();
         },
       );
 	} else if (!running) {
       fab = ElevatedButton.icon(
-        icon: const Icon(Icons.save),
+	    style: RoastAppTheme.largeButtonTheme.style,
+        icon: const Icon(Icons.cloud_upload, size: 28.0),
         label: const Text('Save'),
         onPressed: () {
 		  final roast = ref.read(roastProvider);
@@ -84,7 +87,7 @@ class TimerPage extends ConsumerWidget {
               ],
             ),
           ),
-          if (showTempInputTime != null)
+          if (showTempInputTime != null && running)
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(16.0),

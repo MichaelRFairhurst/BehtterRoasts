@@ -50,6 +50,7 @@ class RoastHistoryPage extends ConsumerWidget {
 	    error: (e, st) => Container(),
 	  ),
 	  floatingActionButton: ElevatedButton.icon(
+	    style: RoastAppTheme.largeButtonTheme.style,
         icon: const Icon(Icons.add),
         label: const Text('New Roast'),
         onPressed: () {

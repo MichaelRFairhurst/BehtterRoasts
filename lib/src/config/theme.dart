@@ -28,6 +28,21 @@ class RoastAppTheme {
 	),
   );
 
+  static final largeButtonTheme = ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+        foregroundColor: capuccino,
+        backgroundColor: lilac,
+		shadowColor: capuccino,
+        elevation: 5.0,
+		minimumSize: const Size(64, 48),
+		padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14.0),
+		shape: RoundedRectangleBorder(
+		  borderRadius: BorderRadius.circular(32),
+		),
+		textStyle: materialTheme.textTheme.titleMedium,
+	),
+  );
+
   static final keypadButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
         foregroundColor: capuccino,

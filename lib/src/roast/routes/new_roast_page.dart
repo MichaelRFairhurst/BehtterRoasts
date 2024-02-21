@@ -102,8 +102,8 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
               ),
               const Spacer(),
               ElevatedButton.icon(
-                icon: const Icon(Icons.play_circle),
-                label: const Text('Begin roast'),
+                label: const Icon(Icons.navigate_next),
+                icon: const Text('Begin roast'),
                 onPressed: () {
 				  final formValid = roastFormKey.currentState!.validate();
 				  if (selectedBean == null) {
