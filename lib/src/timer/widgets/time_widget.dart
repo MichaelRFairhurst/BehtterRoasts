@@ -6,54 +6,33 @@ import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TimeWidget extends ConsumerStatefulWidget {
-  final TimerService timerService;
-  const TimeWidget({required this.timerService, Key? key}) : super(key: key);
+class TimeWidget extends ConsumerWidget {
+  const TimeWidget({super.key});
 
   @override
-  TimeWidgetState createState() {
-    return TimeWidgetState();
-  }
+  Widget build(BuildContext context, WidgetRef ref) {
+	final time = ref.watch(secondsProvider).value;
 
-}
-
-class TimeWidgetState extends ConsumerState<TimeWidget> with SingleTickerProviderStateMixin {
-
-  Duration? time;
-
-  @override
-  void initState() {
-    super.initState();
-
-    createTicker((_) {
-      setState(() {
-        time = widget.timerService.elapsed();
-      });
-    }).start();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     if (time == null) {
       return const Text('Not roasting.');
     }
 
     return Row(
-	  //mainAxisAlignment: MainAxisAlignment.end,
 	  children: [
         const SizedBox(width: 20),
-        ...developmentTimeParts(),
+        ...developmentTimeParts(ref),
         const Spacer(),
 	    const Text('Roast time: '),
-	    TimestampWidget.twitter(time!),
+	    TimestampWidget.twitter(time),
 	    const SizedBox(width: 20),
 	  ],
 	);
   }
 
-  List<Widget> developmentTimeParts() {
+  List<Widget> developmentTimeParts(WidgetRef ref) {
     final phases = ref.watch(phaseLogsProvider);
     final roast = ref.watch(roastProvider);
+    final tService = ref.watch(timerServiceProvider);
 	if (!phases.any((phase) => phase.phase == Phase.dryEnd)) {
       return [const Text('Waiting for dry end.')];
 	}
@@ -64,7 +43,7 @@ class TimeWidgetState extends ConsumerState<TimeWidget> with SingleTickerProvide
     }
 
     final firstCrackEnd = firstCracks.last.time;
-    final now = widget.timerService.elapsed()!;
+    final now = tService.elapsed()!;
     final development = (now - firstCrackEnd).inMilliseconds / now.inMilliseconds;
 
     final develFmt = (development * 100).toStringAsFixed(1);

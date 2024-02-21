@@ -113,7 +113,7 @@ class TimerPage extends ConsumerWidget {
         child: Container(
           height: 50,
           alignment: Alignment.center,
-          child: TimeWidget(timerService: tService),
+          child: const TimeWidget(),
         ),
       ),
     );
