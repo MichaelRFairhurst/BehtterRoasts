@@ -12,6 +12,7 @@ _$_Roast _$$_RoastFromJson(Map<String, dynamic> json) => _$_Roast(
       roastNumber: json['roastNumber'] as int,
       weightIn: (json['weightIn'] as num).toDouble(),
       weightOut: (json['weightOut'] as num).toDouble(),
+      roasted: DateTime.parse(json['roasted'] as String),
       tempLogs: (json['tempLogs'] as List<dynamic>?)
               ?.map((e) => TempLog.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -32,6 +33,7 @@ Map<String, dynamic> _$$_RoastToJson(_$_Roast instance) => <String, dynamic>{
       'roastNumber': instance.roastNumber,
       'weightIn': instance.weightIn,
       'weightOut': instance.weightOut,
+      'roasted': instance.roasted.toIso8601String(),
       'tempLogs': instance.tempLogs.map((e) => e.toJson()).toList(),
       'controlLogs': instance.controlLogs.map((e) => e.toJson()).toList(),
       'phaseLogs': instance.phaseLogs.map((e) => e.toJson()).toList(),

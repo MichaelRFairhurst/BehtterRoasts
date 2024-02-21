@@ -38,6 +38,7 @@ class TimerPage extends ConsumerWidget {
 		  final controlLogs = ref.read(controlLogsProvider);
 		  final phaseLogs = ref.read(phaseLogsProvider);
 		  final toAdd = roast!.copyWith(
+		    roasted: tService.startTime!,
 		    tempLogs: tempLogs,
 			controlLogs: controlLogs,
 			phaseLogs: phaseLogs

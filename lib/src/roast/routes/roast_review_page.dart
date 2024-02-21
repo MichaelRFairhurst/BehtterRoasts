@@ -6,6 +6,7 @@ import 'package:behmor_roast/src/roast/services/roast_log_service.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class RoastReviewPage extends ConsumerStatefulWidget {
 
@@ -119,10 +120,15 @@ class RoastReviewPageState extends ConsumerState<RoastReviewPage> {
   }
 
   Widget singleRoastPage(Bean bean, Roast roast, RoastLogService roastLogService) {
+	final dateFormat = DateFormat.yMd();
 	return Column(
 	  children: [
 	    Text(
 		  'Roast #${roast.roastNumber}',
+		  style: RoastAppTheme.materialTheme.textTheme.subtitle1,
+		),
+	    Text(
+		  'Roasted: ${dateFormat.format(roast.roasted)}',
 		  style: RoastAppTheme.materialTheme.textTheme.subtitle1,
 		),
 		Expanded(

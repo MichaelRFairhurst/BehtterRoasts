@@ -15,6 +15,7 @@ class Roast with _$Roast {
     required int roastNumber,
     required double weightIn,
     required double weightOut,
+	required DateTime roasted,
 	@Default([])
 	List<TempLog> tempLogs,
 	@Default([])

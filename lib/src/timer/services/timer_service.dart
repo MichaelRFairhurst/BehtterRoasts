@@ -50,4 +50,5 @@ class TimerService {
   Stream<bool> get running => _running.stream;
   Stream<Duration> get checkTemp => _checkTemp.stream;
   Stream<Duration> get seconds => _seconds.stream;
+  DateTime? get startTime => _startTime;
 }

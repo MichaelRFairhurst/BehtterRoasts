@@ -25,6 +25,7 @@ mixin _$Roast {
   int get roastNumber => throw _privateConstructorUsedError;
   double get weightIn => throw _privateConstructorUsedError;
   double get weightOut => throw _privateConstructorUsedError;
+  DateTime get roasted => throw _privateConstructorUsedError;
   List<TempLog> get tempLogs => throw _privateConstructorUsedError;
   List<ControlLog> get controlLogs => throw _privateConstructorUsedError;
   List<PhaseLog> get phaseLogs => throw _privateConstructorUsedError;
@@ -45,6 +46,7 @@ abstract class $RoastCopyWith<$Res> {
       int roastNumber,
       double weightIn,
       double weightOut,
+      DateTime roasted,
       List<TempLog> tempLogs,
       List<ControlLog> controlLogs,
       List<PhaseLog> phaseLogs});
@@ -70,6 +72,7 @@ class _$RoastCopyWithImpl<$Res, $Val extends Roast>
     Object? roastNumber = null,
     Object? weightIn = null,
     Object? weightOut = null,
+    Object? roasted = null,
     Object? tempLogs = null,
     Object? controlLogs = null,
     Object? phaseLogs = null,
@@ -95,6 +98,10 @@ class _$RoastCopyWithImpl<$Res, $Val extends Roast>
           ? _value.weightOut
           : weightOut // ignore: cast_nullable_to_non_nullable
               as double,
+      roasted: null == roasted
+          ? _value.roasted
+          : roasted // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       tempLogs: null == tempLogs
           ? _value.tempLogs
           : tempLogs // ignore: cast_nullable_to_non_nullable
@@ -131,6 +138,7 @@ abstract class _$$_RoastCopyWith<$Res> implements $RoastCopyWith<$Res> {
       int roastNumber,
       double weightIn,
       double weightOut,
+      DateTime roasted,
       List<TempLog> tempLogs,
       List<ControlLog> controlLogs,
       List<PhaseLog> phaseLogs});
@@ -153,6 +161,7 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
     Object? roastNumber = null,
     Object? weightIn = null,
     Object? weightOut = null,
+    Object? roasted = null,
     Object? tempLogs = null,
     Object? controlLogs = null,
     Object? phaseLogs = null,
@@ -178,6 +187,10 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
           ? _value.weightOut
           : weightOut // ignore: cast_nullable_to_non_nullable
               as double,
+      roasted: null == roasted
+          ? _value.roasted
+          : roasted // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       tempLogs: null == tempLogs
           ? _value._tempLogs
           : tempLogs // ignore: cast_nullable_to_non_nullable
@@ -203,6 +216,7 @@ class _$_Roast implements _Roast {
       required this.roastNumber,
       required this.weightIn,
       required this.weightOut,
+      required this.roasted,
       final List<TempLog> tempLogs = const [],
       final List<ControlLog> controlLogs = const [],
       final List<PhaseLog> phaseLogs = const []})
@@ -223,6 +237,8 @@ class _$_Roast implements _Roast {
   final double weightIn;
   @override
   final double weightOut;
+  @override
+  final DateTime roasted;
   final List<TempLog> _tempLogs;
   @override
   @JsonKey()
@@ -252,7 +268,7 @@ class _$_Roast implements _Roast {
 
   @override
   String toString() {
-    return 'Roast(beanId: $beanId, config: $config, roastNumber: $roastNumber, weightIn: $weightIn, weightOut: $weightOut, tempLogs: $tempLogs, controlLogs: $controlLogs, phaseLogs: $phaseLogs)';
+    return 'Roast(beanId: $beanId, config: $config, roastNumber: $roastNumber, weightIn: $weightIn, weightOut: $weightOut, roasted: $roasted, tempLogs: $tempLogs, controlLogs: $controlLogs, phaseLogs: $phaseLogs)';
   }
 
   @override
@@ -268,6 +284,7 @@ class _$_Roast implements _Roast {
                 other.weightIn == weightIn) &&
             (identical(other.weightOut, weightOut) ||
                 other.weightOut == weightOut) &&
+            (identical(other.roasted, roasted) || other.roasted == roasted) &&
             const DeepCollectionEquality().equals(other._tempLogs, _tempLogs) &&
             const DeepCollectionEquality()
                 .equals(other._controlLogs, _controlLogs) &&
@@ -284,6 +301,7 @@ class _$_Roast implements _Roast {
       roastNumber,
       weightIn,
       weightOut,
+      roasted,
       const DeepCollectionEquality().hash(_tempLogs),
       const DeepCollectionEquality().hash(_controlLogs),
       const DeepCollectionEquality().hash(_phaseLogs));
@@ -309,6 +327,7 @@ abstract class _Roast implements Roast {
       required final int roastNumber,
       required final double weightIn,
       required final double weightOut,
+      required final DateTime roasted,
       final List<TempLog> tempLogs,
       final List<ControlLog> controlLogs,
       final List<PhaseLog> phaseLogs}) = _$_Roast;
@@ -325,6 +344,8 @@ abstract class _Roast implements Roast {
   double get weightIn;
   @override
   double get weightOut;
+  @override
+  DateTime get roasted;
   @override
   List<TempLog> get tempLogs;
   @override

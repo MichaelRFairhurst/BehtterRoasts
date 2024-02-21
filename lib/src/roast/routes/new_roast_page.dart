@@ -119,6 +119,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                   if (!beanErr && formValid) {
                     final roast = Roast(
                       beanId: selectedBean!.id!,
+					  roasted: DateTime.now(), // Replaced later.
                       roastNumber: int.parse(number.text),
                       weightIn: double.parse(weight.text),
                       weightOut: double.parse(weight.text),
