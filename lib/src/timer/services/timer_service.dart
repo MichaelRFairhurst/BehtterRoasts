@@ -12,24 +12,21 @@ class TimerService {
   void start() {
     _startTime = DateTime.now();
     _running.add(true);
-	fireSeconds();
-	fireCheckTempIntervals();
+	_fireSeconds();
   }
 
-  void fireSeconds() async {
+  void _fireSeconds() async {
     while (_stopTime == null) {
-      _seconds.add(elapsed()!);
-      // TODO: don't drift
-      await Future.delayed(const Duration(seconds: 1));
-    }
-  }
+	  final now = elapsed()!;
+      _seconds.add(now);
 
-  void fireCheckTempIntervals() async {
-    while (_stopTime == null) {
-	  FlutterBeep.beep();
-      _checkTemp.add(elapsed()!);
-      // TODO: don't drift
-      await Future.delayed(const Duration(seconds: 15));
+      if (now.inSeconds % 15 == 0) {
+		FlutterBeep.beep();
+		_checkTemp.add(now);
+	  }
+
+      final millisToNext = 1000 - (now.inMilliseconds % 1000);
+      await Future.delayed(Duration(milliseconds: millisToNext));
     }
   }
 
