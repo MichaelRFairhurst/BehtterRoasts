@@ -129,7 +129,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                       ),
                     );
                     ref.read(roastProvider.notifier).state = roast;
-				    context.go(Routes.timer, extra: roast);
+				    context.replace(Routes.timer, extra: roast);
                   }
                 },
               ),
