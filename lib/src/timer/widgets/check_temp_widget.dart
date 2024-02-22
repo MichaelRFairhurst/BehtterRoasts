@@ -140,7 +140,7 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
 	  label: digit.toString(),
 	  onPressed: () {
 	    setState(() {
-		  overrideTime = ref.read(timerServiceProvider).elapsed()!;
+		  overrideTime ??= ref.read(timerServiceProvider).elapsed()!;
 	      state = state * 10 + digit;
 	    });
 	  },
