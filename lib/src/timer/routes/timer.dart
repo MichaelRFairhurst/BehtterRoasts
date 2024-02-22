@@ -53,83 +53,114 @@ class TimerPage extends ConsumerWidget {
       );
 	}
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Roast Controls"),
-      ),
-      body: Column(
-	    crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-		    decoration: const BoxDecoration(
-			  color: RoastAppTheme.metalLight,
-			  //border: Border(bottom: BorderSide(color: RoastAppTheme.capuccino, width: 1.0)),
-			  boxShadow: [BoxShadow(
-			    color: RoastAppTheme.capuccino,
-				offset: Offset(0, 0),
-				blurRadius: 2.0,
-			  )],
-			),
-			padding: const EdgeInsets.only(bottom: 4.0),
-			margin: const EdgeInsets.only(bottom: 4.0),
-		    child: const ControlsWidget(),
-		  ),
-          Expanded(
-            child: CustomScrollView(
-              shrinkWrap: true,
-              slivers: [
-                SliverToBoxAdapter(
-	              child: TempLogWidget(
-				    logs: logs,
-				  ),
-                ),
-	            const SliverToBoxAdapter(
-	              child: ProjectionsWidget(),
-	            ),
-              ],
-            ),
-          ),
-          if (showTempInputTime != null && running)
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(16.0),
-		      decoration: const BoxDecoration(
-			    color: RoastAppTheme.metalLight,
-			    boxShadow: [BoxShadow(
-			      color: RoastAppTheme.capuccino,
-			      offset: Offset(0, 0),
-			      blurRadius: 2.0,
-			    )],
-			  ),
-              child: CheckTempWidget(
-				shownTime: showTempInputTime,
-                onSubmit: (time, temp) {
-                  ref.read(temperatureLogsProvider.notifier)
-                    .update((logs) => logs.toList()..add(TempLog(
-                       temp: temp, time: time)
-                  ));
-                  ref.read(showTempInputTimeProvider.notifier).state = null;
-                },
-              ),
-            ),
-        ],
-      ),
-      floatingActionButton: fab,
-      bottomNavigationBar: BottomAppBar(
-        child: Column(
+    return WillPopScope(
+	  onWillPop: () async {
+		showDialog<void>(
+		  context: context,
+		  builder: (context) {
+			return AlertDialog(
+			  title: const Text('Abandon roast?'),
+			  content: const Text('Are you sure you want to stop the current roast?'),
+			  actions: [
+			    ElevatedButton(
+				  onPressed: () {
+					Navigator.pop(context);
+				  },
+				  child: const Text('Continue roasting'),
+				),
+			    ElevatedButton(
+				  style: RoastAppTheme.cancelButtonTheme.style,
+				  onPressed: () {
+					tService.stop();
+					Navigator.pop(context);
+					Navigator.pop(context);
+				  },
+				  child: const Text('Stop current roast'),
+				),
+			  ]
+			);
+		  },
+		);
+        return false;
+	  },
+	  child: Scaffold(
+		appBar: AppBar(
+		  title: const Text("Roast Controls"),
+		),
+		body: Column(
 		  crossAxisAlignment: CrossAxisAlignment.stretch,
-		  mainAxisSize: MainAxisSize.min,
 		  children: [
-			RoastTipWidget(tips: tips),
-			const SizedBox(
-			  height: 50,
-			  child: Center(
-				child: TimeWidget(),
+			Container(
+			  decoration: const BoxDecoration(
+				color: RoastAppTheme.metalLight,
+				//border: Border(bottom: BorderSide(color: RoastAppTheme.capuccino, width: 1.0)),
+				boxShadow: [BoxShadow(
+				  color: RoastAppTheme.capuccino,
+				  offset: Offset(0, 0),
+				  blurRadius: 2.0,
+				)],
+			  ),
+			  padding: const EdgeInsets.only(bottom: 4.0),
+			  margin: const EdgeInsets.only(bottom: 4.0),
+			  child: const ControlsWidget(),
+			),
+			Expanded(
+			  child: CustomScrollView(
+				shrinkWrap: true,
+				slivers: [
+				  SliverToBoxAdapter(
+					child: TempLogWidget(
+					  logs: logs,
+					),
+				  ),
+				  const SliverToBoxAdapter(
+					child: ProjectionsWidget(),
+				  ),
+				],
 			  ),
 			),
+			if (showTempInputTime != null && running)
+			  Container(
+				alignment: Alignment.center,
+				padding: const EdgeInsets.all(16.0),
+				decoration: const BoxDecoration(
+				  color: RoastAppTheme.metalLight,
+				  boxShadow: [BoxShadow(
+					color: RoastAppTheme.capuccino,
+					offset: Offset(0, 0),
+					blurRadius: 2.0,
+				  )],
+				),
+				child: CheckTempWidget(
+				  shownTime: showTempInputTime,
+				  onSubmit: (time, temp) {
+					ref.read(temperatureLogsProvider.notifier)
+					  .update((logs) => logs.toList()..add(TempLog(
+						 temp: temp, time: time)
+					));
+					ref.read(showTempInputTimeProvider.notifier).state = null;
+				  },
+				),
+			  ),
 		  ],
-        ),
-      ),
-    );
+		),
+		floatingActionButton: fab,
+		bottomNavigationBar: BottomAppBar(
+		  child: Column(
+			crossAxisAlignment: CrossAxisAlignment.stretch,
+			mainAxisSize: MainAxisSize.min,
+			children: [
+			  RoastTipWidget(tips: tips),
+			  const SizedBox(
+				height: 50,
+				child: Center(
+				  child: TimeWidget(),
+				),
+			  ),
+			],
+		  ),
+		),
+	  ),
+	);
   }
 }
