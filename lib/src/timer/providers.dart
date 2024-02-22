@@ -6,6 +6,7 @@ import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/services/roast_log_service.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
 import 'package:behmor_roast/src/timer/services/projection_service.dart';
+import 'package:behmor_roast/src/timer/services/tips_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:behmor_roast/src/timer/services/timer_service.dart';
 
@@ -63,4 +64,11 @@ final roastLogsProvider = Provider<List<RoastLog>>((ref) {
   final controls = ref.watch(controlLogsProvider);
   final phases = ref.watch(phaseLogsProvider);
   return RoastLogService().aggregate(temps, phases, controls);
+});
+
+final tipsProvider = Provider<Set<String>>((ref) {
+  final service = TipsService();
+  final roastLogs = ref.watch(roastLogsProvider);
+  final running = ref.watch(timerRunningProvider).value ?? false;
+  return service.getTips(roastLogs, running);
 });

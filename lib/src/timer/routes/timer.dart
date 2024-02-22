@@ -5,6 +5,7 @@ import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/check_temp_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/controls_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/projections_widget.dart';
+import 'package:behmor_roast/src/timer/widgets/roast_tip_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/time_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,6 +20,7 @@ class TimerPage extends ConsumerWidget {
     final running = ref.watch(timerRunningProvider).value ?? false;
     final showTempInputTime = ref.watch(showTempInputTimeProvider);
     final logs = ref.watch(roastLogsProvider);
+    final tips = ref.watch(tipsProvider);
 
     Widget? fab;
 	if (!running && tService.elapsed() == null) {
@@ -114,10 +116,18 @@ class TimerPage extends ConsumerWidget {
       ),
       floatingActionButton: fab,
       bottomNavigationBar: BottomAppBar(
-        child: Container(
-          height: 50,
-          alignment: Alignment.center,
-          child: const TimeWidget(),
+        child: Column(
+		  crossAxisAlignment: CrossAxisAlignment.stretch,
+		  mainAxisSize: MainAxisSize.min,
+		  children: [
+			RoastTipWidget(tips: tips),
+			const SizedBox(
+			  height: 50,
+			  child: Center(
+				child: TimeWidget(),
+			  ),
+			),
+		  ],
         ),
       ),
     );
