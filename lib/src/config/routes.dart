@@ -1,3 +1,4 @@
+import 'package:behmor_roast/src/roast/routes/complete_roast_page.dart';
 import 'package:behmor_roast/src/roast/routes/roast_history.dart';
 import 'package:behmor_roast/src/roast/routes/roast_review_page.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +9,7 @@ class Routes {
   static const roastHistory = '/roastHistory';
   static const newRoast = '/newRoast';
   static const timer = '/timer';
+  static const completeRoast = '/completeRoast';
 
   static const beanIdPart = 'beanId';
   static const roastReviewPart = '/roastReview';
@@ -35,6 +37,10 @@ final router = GoRouter(
     GoRoute(
       path: Routes.timer,
       builder: (context, state) => const TimerPage()
+    ),
+    GoRoute(
+      path: Routes.completeRoast,
+      builder: (context, state) => const CompleteRoastPage()
     ),
   ],
 );

@@ -1,3 +1,4 @@
+import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
@@ -10,6 +11,7 @@ import 'package:behmor_roast/src/timer/widgets/time_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
+import 'package:go_router/go_router.dart';
 
 class TimerPage extends ConsumerWidget {
   const TimerPage({Key? key}) : super(key: key);
@@ -35,8 +37,8 @@ class TimerPage extends ConsumerWidget {
 	} else if (!running) {
       fab = ElevatedButton.icon(
 	    style: RoastAppTheme.largeButtonTheme.style,
-        icon: const Icon(Icons.cloud_upload, size: 28.0),
-        label: const Text('Save'),
+        label: const Icon(Icons.navigate_next, size: 28.0),
+        icon: const Text('Continue'),
         onPressed: () {
 		  final roast = ref.read(roastProvider);
 		  final tempLogs = ref.read(temperatureLogsProvider);
@@ -48,7 +50,8 @@ class TimerPage extends ConsumerWidget {
 			controlLogs: controlLogs,
 			phaseLogs: phaseLogs
 		  );
-          ref.read(roastServiceProvider).add(toAdd);
+		  ref.read(roastProvider.notifier).state = toAdd;
+		  context.replace(Routes.completeRoast);
         },
       );
 	}
