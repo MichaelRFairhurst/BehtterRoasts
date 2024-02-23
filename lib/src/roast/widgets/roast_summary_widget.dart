@@ -4,17 +4,21 @@ import 'package:flutter/material.dart';
 
 class RoastSummaryWidget extends StatelessWidget {
   const RoastSummaryWidget({
+	this.cellPadding = const EdgeInsets.all(6.0),
+	this.showBeanName = true,
 	required this.summary,
 	super.key,
   });
 
+  final bool showBeanName;
+  final EdgeInsets cellPadding;
   final RoastSummary summary;
 
   TableRow paddedRow({
 	required List<Widget> children,
   }) => TableRow(
     children: children.map((child) => Padding(
-	  padding: const EdgeInsets.all(6.0),
+	  padding: cellPadding,
 	  child: child
 	)).toList(),
   );
@@ -26,12 +30,13 @@ class RoastSummaryWidget extends StatelessWidget {
 		0: IntrinsicColumnWidth(),
 	  },
 	  children: [
-	    paddedRow(
-		  children: [
-		    const Text('Bean'),
-			Text(summary.beanName),
-		  ],
-		),
+	    if (showBeanName)
+		  paddedRow(
+			children: [
+			  const Text('Bean'),
+			  Text(summary.beanName),
+			],
+		  ),
 		paddedRow(
 		  children: [
 		    const Text('Roast time:'),

@@ -3,6 +3,8 @@ import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:behmor_roast/src/roast/models/roast.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/services/roast_log_service.dart';
+import 'package:behmor_roast/src/roast/services/roast_summary_service.dart';
+import 'package:behmor_roast/src/roast/widgets/roast_summary_widget.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -133,12 +135,24 @@ class RoastReviewPageState extends ConsumerState<RoastReviewPage> {
 		),
 		Expanded(
 		  child: SingleChildScrollView(
-			child: TempLogWidget(
-			  logs: roastLogService.aggregate(
-				roast.tempLogs,
-				roast.phaseLogs,
-				roast.controlLogs,
-			  ),
+			child: Column(
+			  children: [
+			    Padding(
+				  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+				  child: RoastSummaryWidget(
+					summary: RoastSummaryService().summarize(roast, bean),
+					cellPadding: const EdgeInsets.all(4.0),
+					showBeanName: false,
+				  ),
+				),
+				TempLogWidget(
+				  logs: roastLogService.aggregate(
+					roast.tempLogs,
+					roast.phaseLogs,
+					roast.controlLogs,
+				  ),
+				),
+			  ],
 			),
 		  ),
 		),
