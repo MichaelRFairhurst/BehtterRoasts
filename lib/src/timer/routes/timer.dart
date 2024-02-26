@@ -32,7 +32,8 @@ class TimerPage extends ConsumerWidget {
         icon: const Icon(Icons.local_fire_department_sharp, size: 28.0),
         label: const Text('Start'),
         onPressed: () {
-          tService.start();
+		  final roast = ref.read(roastProvider);
+          tService.start(roast!.config.tempInterval);
         },
       );
 	} else if (!running) {

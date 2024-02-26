@@ -5,13 +5,15 @@ import 'package:flutter_beep/flutter_beep.dart';
 class TimerService {
   DateTime? _startTime;
   DateTime? _stopTime;
+  int _tempCheckInterval = 15;
   final _running = StreamController<bool>()..add(false);
   final _checkTemp = StreamController<Duration>.broadcast();
   final _seconds = StreamController<Duration?>.broadcast();
 
-  void start() {
+  void start(int tempCheckInterval) {
     _startTime = DateTime.now();
     _running.add(true);
+	_tempCheckInterval = tempCheckInterval;
 	_fireSeconds();
   }
 
@@ -27,7 +29,7 @@ class TimerService {
 	  final now = elapsed()!;
       _seconds.add(now);
 
-      if (now.inSeconds % 15 == 0) {
+      if (now.inSeconds % _tempCheckInterval == 0) {
 		FlutterBeep.beep();
 		_checkTemp.add(now);
 	  }
