@@ -5,6 +5,7 @@ import 'package:behmor_roast/src/roast/models/roast.dart';
 import 'package:behmor_roast/src/roast/models/roast_config.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/widgets/bean_select.dart';
+import 'package:behmor_roast/src/roast/widgets/temp_interval_select.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +24,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
   final weight = TextEditingController(text: '300');
   final devel = TextEditingController(text: '20');
   final roastFormKey = GlobalKey<FormState>();
+  int tempInterval = 30;
 
   Bean? selectedBean;
   bool beanErr = false;
@@ -86,6 +88,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                   return null;
                 }
               ),
+              const SizedBox(height: 10),
               const Text('Target Development (%)'),
               TextFormField(
                 controller: devel,
@@ -101,6 +104,21 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                   return null;
                 }
               ),
+			  const SizedBox(height: 10),
+			  Row(
+			    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+			    children: [
+				  const Text('Check roaster temperature:'),
+				  TempIntervalSelect(
+					value: tempInterval,
+					onChanged: (val) {
+					  setState(() {
+						tempInterval = val;
+					  });
+					},
+				  ),
+				],
+			  ),
               const Spacer(),
               ElevatedButton.icon(
                 label: const Icon(Icons.navigate_next),
@@ -125,7 +143,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                       weightIn: double.parse(weight.text),
                       weightOut: double.parse(weight.text),
                       config: RoastConfig(
-                        tempInterval: 30,
+                        tempInterval: tempInterval,
                         targetDevelopment: double.parse(devel.text) / 100,
                       ),
                     );
