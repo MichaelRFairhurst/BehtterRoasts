@@ -6,6 +6,7 @@ import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/check_temp_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/controls_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/projections_widget.dart';
+import 'package:behmor_roast/src/timer/widgets/roast_pop_scope.dart';
 import 'package:behmor_roast/src/timer/widgets/roast_tip_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/time_widget.dart';
 import 'package:flutter/material.dart';
@@ -56,36 +57,8 @@ class TimerPage extends ConsumerWidget {
       );
 	}
 
-    return WillPopScope(
-	  onWillPop: () async {
-		showDialog<void>(
-		  context: context,
-		  builder: (context) {
-			return AlertDialog(
-			  title: const Text('Abandon roast?'),
-			  content: const Text('Are you sure you want to stop the current roast?'),
-			  actions: [
-			    ElevatedButton(
-				  onPressed: () {
-					Navigator.pop(context);
-				  },
-				  child: const Text('Continue roasting'),
-				),
-			    ElevatedButton(
-				  style: RoastAppTheme.cancelButtonTheme.style,
-				  onPressed: () {
-					tService.stop();
-					Navigator.pop(context);
-					Navigator.pop(context);
-				  },
-				  child: const Text('Stop current roast'),
-				),
-			  ]
-			);
-		  },
-		);
-        return false;
-	  },
+    return RoastPopScope(
+	  running: running,
 	  child: Scaffold(
 		appBar: AppBar(
 		  title: const Text("Roast Controls"),
