@@ -14,7 +14,7 @@ final timerServiceProvider = Provider((_) {
   return TimerService();
 });
 
-final secondsProvider = StreamProvider<Duration>((ref) {
+final secondsProvider = StreamProvider<Duration?>((ref) {
   final tService = ref.watch(timerServiceProvider);
   return tService.seconds;
 });

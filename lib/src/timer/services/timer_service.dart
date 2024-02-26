@@ -7,12 +7,19 @@ class TimerService {
   DateTime? _stopTime;
   final _running = StreamController<bool>()..add(false);
   final _checkTemp = StreamController<Duration>.broadcast();
-  final _seconds = StreamController<Duration>.broadcast();
+  final _seconds = StreamController<Duration?>.broadcast();
 
   void start() {
     _startTime = DateTime.now();
     _running.add(true);
 	_fireSeconds();
+  }
+
+  void reset() {
+	_startTime = null;
+	_stopTime = null;
+	_running.add(false);
+	_seconds.add(null);
   }
 
   void _fireSeconds() async {
@@ -49,6 +56,6 @@ class TimerService {
 
   Stream<bool> get running => _running.stream;
   Stream<Duration> get checkTemp => _checkTemp.stream;
-  Stream<Duration> get seconds => _seconds.stream;
+  Stream<Duration?> get seconds => _seconds.stream;
   DateTime? get startTime => _startTime;
 }

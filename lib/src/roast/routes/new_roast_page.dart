@@ -5,6 +5,7 @@ import 'package:behmor_roast/src/roast/models/roast.dart';
 import 'package:behmor_roast/src/roast/models/roast_config.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/widgets/bean_select.dart';
+import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -129,6 +130,10 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                       ),
                     );
                     ref.read(roastProvider.notifier).state = roast;
+					ref.read(temperatureLogsProvider.notifier).state = [];
+					ref.read(phaseLogsProvider.notifier).state = [];
+					ref.read(controlLogsProvider.notifier).state = [];
+					ref.read(timerServiceProvider).reset();
 				    context.replace(Routes.timer, extra: roast);
                   }
                 },
