@@ -30,8 +30,8 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget> with Singl
 
   @override
   void dispose() {
+	ticker.dispose();
 	super.dispose();
-	ticker.stop();
   }
 
   @override
