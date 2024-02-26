@@ -6,14 +6,15 @@ import 'package:behmor_roast/src/roast/models/roast_summary.dart';
 class RoastSummaryService {
 
   RoastSummary summarize(Roast roast, Bean bean) {
+	final dryPhaseLog = roast.phaseLogs.singleWhere((p) => p.phase == Phase.dryEnd);
 	final firstCrackLog = roast.phaseLogs.firstWhere((p) => p.phase == Phase.crack);
 	final lastCrackLog = roast.phaseLogs.lastWhere((p) => p.phase == Phase.crack);
 
 	Duration totalTime = roast.phaseLogs.last.time;
-	Duration dryPhaseTime = roast.phaseLogs.singleWhere((p) => p.phase == Phase.dryEnd).time;
-	Duration maillardPhaseTime = firstCrackLog.time - dryPhaseTime;
+	Duration dryPhaseTime = dryPhaseLog.time;
+	Duration maillardPhaseTime = firstCrackLog.time - dryPhaseLog.time;
 	// TODO: Should this do something different when first crack is last crack?
-	Duration firstCrackPhaseTime = lastCrackLog.time - maillardPhaseTime;
+	Duration firstCrackPhaseTime = lastCrackLog.time - firstCrackLog.time;
 	Duration developmentPhaseTime = totalTime - lastCrackLog.time;
 
 	return RoastSummary(
