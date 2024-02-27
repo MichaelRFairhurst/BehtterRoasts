@@ -10,6 +10,7 @@ import 'package:behmor_roast/src/timer/widgets/roast_pop_scope.dart';
 import 'package:behmor_roast/src/timer/widgets/roast_tip_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/time_widget.dart';
 import 'package:behmor_roast/src/util/widgets/animated_pop_up.dart';
+import 'package:behmor_roast/src/util/widgets/bottom_sticky_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
@@ -83,17 +84,10 @@ class TimerPage extends ConsumerWidget {
 			  child: const ControlsWidget(),
 			),
 			Expanded(
-			  child: CustomScrollView(
-				shrinkWrap: true,
-				slivers: [
-				  SliverToBoxAdapter(
-					child: TempLogWidget(
-					  logs: logs,
-					),
-				  ),
-				  const SliverToBoxAdapter(
-					child: ProjectionsWidget(),
-				  ),
+			  child: BottomStickyScrollView(
+			    children: [
+				  TempLogWidget(logs: logs),
+				  const ProjectionsWidget(),
 				],
 			  ),
 			),
