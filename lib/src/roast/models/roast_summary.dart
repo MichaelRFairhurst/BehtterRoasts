@@ -17,5 +17,6 @@ class RoastSummary with _$RoastSummary {
 	required double developmentPercent,
 	required double developmentPercentTarget,
 	required double weightLoss,
+	String? notes,
   }) = _RoastSummary;
 }

@@ -15,6 +15,10 @@ class RoastAppTheme {
   static const lime = Color(0xFFC8E6D6);
   static const errorColor = Color(0xFFB85544);
 
+  static final roastNotesStyle = materialTheme.textTheme.bodyMedium!.copyWith(
+	fontStyle: FontStyle.italic,
+  );
+
   static final tinyButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
         foregroundColor: capuccino,

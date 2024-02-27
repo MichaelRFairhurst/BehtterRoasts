@@ -28,6 +28,7 @@ mixin _$RoastSummary {
   double get developmentPercent => throw _privateConstructorUsedError;
   double get developmentPercentTarget => throw _privateConstructorUsedError;
   double get weightLoss => throw _privateConstructorUsedError;
+  String? get notes => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $RoastSummaryCopyWith<RoastSummary> get copyWith =>
@@ -52,7 +53,8 @@ abstract class $RoastSummaryCopyWith<$Res> {
       Duration developmentPhaseTime,
       double developmentPercent,
       double developmentPercentTarget,
-      double weightLoss});
+      double weightLoss,
+      String? notes});
 }
 
 /// @nodoc
@@ -80,6 +82,7 @@ class _$RoastSummaryCopyWithImpl<$Res, $Val extends RoastSummary>
     Object? developmentPercent = null,
     Object? developmentPercentTarget = null,
     Object? weightLoss = null,
+    Object? notes = freezed,
   }) {
     return _then(_value.copyWith(
       beanName: null == beanName
@@ -130,6 +133,10 @@ class _$RoastSummaryCopyWithImpl<$Res, $Val extends RoastSummary>
           ? _value.weightLoss
           : weightLoss // ignore: cast_nullable_to_non_nullable
               as double,
+      notes: freezed == notes
+          ? _value.notes
+          : notes // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -154,7 +161,8 @@ abstract class _$$_RoastSummaryCopyWith<$Res>
       Duration developmentPhaseTime,
       double developmentPercent,
       double developmentPercentTarget,
-      double weightLoss});
+      double weightLoss,
+      String? notes});
 }
 
 /// @nodoc
@@ -180,6 +188,7 @@ class __$$_RoastSummaryCopyWithImpl<$Res>
     Object? developmentPercent = null,
     Object? developmentPercentTarget = null,
     Object? weightLoss = null,
+    Object? notes = freezed,
   }) {
     return _then(_$_RoastSummary(
       beanName: null == beanName
@@ -230,6 +239,10 @@ class __$$_RoastSummaryCopyWithImpl<$Res>
           ? _value.weightLoss
           : weightLoss // ignore: cast_nullable_to_non_nullable
               as double,
+      notes: freezed == notes
+          ? _value.notes
+          : notes // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -249,7 +262,8 @@ class _$_RoastSummary implements _RoastSummary {
       required this.developmentPhaseTime,
       required this.developmentPercent,
       required this.developmentPercentTarget,
-      required this.weightLoss});
+      required this.weightLoss,
+      this.notes});
 
   @override
   final String beanName;
@@ -275,10 +289,12 @@ class _$_RoastSummary implements _RoastSummary {
   final double developmentPercentTarget;
   @override
   final double weightLoss;
+  @override
+  final String? notes;
 
   @override
   String toString() {
-    return 'RoastSummary(beanName: $beanName, totalTime: $totalTime, dryPhaseTime: $dryPhaseTime, dryPhasePercent: $dryPhasePercent, maillardPhaseTime: $maillardPhaseTime, maillardPhasePercent: $maillardPhasePercent, firstCrackPhaseTime: $firstCrackPhaseTime, firstCrackPhasePercent: $firstCrackPhasePercent, developmentPhaseTime: $developmentPhaseTime, developmentPercent: $developmentPercent, developmentPercentTarget: $developmentPercentTarget, weightLoss: $weightLoss)';
+    return 'RoastSummary(beanName: $beanName, totalTime: $totalTime, dryPhaseTime: $dryPhaseTime, dryPhasePercent: $dryPhasePercent, maillardPhaseTime: $maillardPhaseTime, maillardPhasePercent: $maillardPhasePercent, firstCrackPhaseTime: $firstCrackPhaseTime, firstCrackPhasePercent: $firstCrackPhasePercent, developmentPhaseTime: $developmentPhaseTime, developmentPercent: $developmentPercent, developmentPercentTarget: $developmentPercentTarget, weightLoss: $weightLoss, notes: $notes)';
   }
 
   @override
@@ -310,7 +326,8 @@ class _$_RoastSummary implements _RoastSummary {
                     other.developmentPercentTarget, developmentPercentTarget) ||
                 other.developmentPercentTarget == developmentPercentTarget) &&
             (identical(other.weightLoss, weightLoss) ||
-                other.weightLoss == weightLoss));
+                other.weightLoss == weightLoss) &&
+            (identical(other.notes, notes) || other.notes == notes));
   }
 
   @override
@@ -327,7 +344,8 @@ class _$_RoastSummary implements _RoastSummary {
       developmentPhaseTime,
       developmentPercent,
       developmentPercentTarget,
-      weightLoss);
+      weightLoss,
+      notes);
 
   @JsonKey(ignore: true)
   @override
@@ -349,7 +367,8 @@ abstract class _RoastSummary implements RoastSummary {
       required final Duration developmentPhaseTime,
       required final double developmentPercent,
       required final double developmentPercentTarget,
-      required final double weightLoss}) = _$_RoastSummary;
+      required final double weightLoss,
+      final String? notes}) = _$_RoastSummary;
 
   @override
   String get beanName;
@@ -375,6 +394,8 @@ abstract class _RoastSummary implements RoastSummary {
   double get developmentPercentTarget;
   @override
   double get weightLoss;
+  @override
+  String? get notes;
   @override
   @JsonKey(ignore: true)
   _$$_RoastSummaryCopyWith<_$_RoastSummary> get copyWith =>

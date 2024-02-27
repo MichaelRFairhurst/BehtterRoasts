@@ -16,6 +16,7 @@ class Roast with _$Roast {
     required double weightIn,
     required double weightOut,
 	required DateTime roasted,
+	String? notes,
 	@Default([])
 	List<TempLog> tempLogs,
 	@Default([])

@@ -33,6 +33,7 @@ class CompleteRoastPageState extends ConsumerState<CompleteRoastPage> {
 			crossAxisAlignment: CrossAxisAlignment.stretch,
 			mainAxisAlignment: MainAxisAlignment.center,
 			children: [
+		      const Spacer(),
 			  Text(
 				'Mmmm, smells good!',
 				textAlign: TextAlign.center,
@@ -43,8 +44,8 @@ class CompleteRoastPageState extends ConsumerState<CompleteRoastPage> {
 				"There's nothing like fresh roasted coffee.",
 				textAlign: TextAlign.center,
 			  ),
-			  const SizedBox(height: 80),
-			  if (needsWeightOut)
+			  const Spacer(),
+			  if (needsWeightOut) ...[
 				Row(
 				  children: [
 					Form(
@@ -69,26 +70,44 @@ class CompleteRoastPageState extends ConsumerState<CompleteRoastPage> {
 						),
 					  ),
 					),
-					const SizedBox(width: 12),
-					ElevatedButton(
-					  style: RoastAppTheme.limeButtonTheme.style,
-					  onPressed: () {
-						if (formKey.currentState!.validate()) {
-						  final weightOut = double.parse(weightOutCtrl.text);
-						  ref.read(roastProvider.notifier).update((roast) => roast!.copyWith(
-							weightOut: weightOut,
-						  ));
-						  setState(() {
-							needsWeightOut = false;
-						  });
-						}
-					  },
-					  child: const Icon(Icons.check),
-					)
 				  ],
 				),
+				const SizedBox(height: 24),
+				TextField(
+				  keyboardType: TextInputType.multiline,
+				  minLines: 1,
+				  maxLines: 3,
+				  decoration: const InputDecoration(
+					prefixIcon: Icon(Icons.text_snippet),
+					labelText: 'Roast notes',
+				  ),
+				  onChanged: (str) {
+					ref.read(roastProvider.notifier).update((roast) => roast!.copyWith(
+					  notes: str,
+					));
+				  },
+				),
+				const SizedBox(height: 24),
+				ElevatedButton.icon(
+				  style: RoastAppTheme.limeButtonTheme.style,
+				  onPressed: () {
+					if (formKey.currentState!.validate()) {
+					  final weightOut = double.parse(weightOutCtrl.text);
+					  ref.read(roastProvider.notifier).update((roast) => roast!.copyWith(
+						weightOut: weightOut,
+					  ));
+					  setState(() {
+						needsWeightOut = false;
+					  });
+					}
+				  },
+				  icon: const Icon(Icons.check),
+				  label: const Text('Done'),
+				),
+			  ],
 			  if (!needsWeightOut)
 				RoastSummaryWidget(summary: ref.watch(roastSummaryProvider)!),
+			  const Spacer(),
 			],
 		  ),
 		),
@@ -97,8 +116,9 @@ class CompleteRoastPageState extends ConsumerState<CompleteRoastPage> {
 		  icon: const Icon(Icons.cloud_upload),
 		  label: const Text('Save Roast'),
 		  onPressed: () {
+			final roast = ref.read(roastProvider)!;
 			final roastService = ref.read(roastServiceProvider);
-			roastService.add(ref.read(roastProvider)!);
+			roastService.add(roast);
 			context.pop();
 		  },
 		),

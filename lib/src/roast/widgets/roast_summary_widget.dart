@@ -1,3 +1,4 @@
+import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/roast_summary.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 import 'package:flutter/material.dart';
@@ -25,67 +26,78 @@ class RoastSummaryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-	return Table(
-	  columnWidths: const {
-		0: IntrinsicColumnWidth(),
-	  },
+	return Column(
 	  children: [
-	    if (showBeanName)
-		  paddedRow(
-			children: [
-			  const Text('Bean'),
-			  Text(summary.beanName),
-			],
+		Table(
+		  columnWidths: const {
+			0: IntrinsicColumnWidth(),
+		  },
+		  children: [
+			if (showBeanName)
+			  paddedRow(
+				children: [
+				  const Text('Bean'),
+				  Text(summary.beanName),
+				],
+			  ),
+			paddedRow(
+			  children: [
+				const Text('Roast time:'),
+				TimestampWidget.twitter(summary.totalTime),
+			  ],
+			),
+			paddedRow(
+			  children: [
+				const Text('Weight reduction:'),
+				Text(formatPercent(summary.weightLoss)),
+			  ],
+			),
+			paddedRow(
+			  children: [
+				const Text('Development'),
+				phaseDetails(
+				  summary.developmentPhaseTime,
+				  summary.developmentPercent,
+				  extra: '/${formatPercent(summary.developmentPercentTarget)}',
+				),
+			  ],
+			),
+			paddedRow(
+			  children: [
+				const Text('First Crack Phase'),
+				phaseDetails(
+				  summary.firstCrackPhaseTime,
+				  summary.firstCrackPhasePercent,
+				),
+			  ],
+			),
+			paddedRow(
+			  children: [
+				const Text('Maillard Phase'),
+				phaseDetails(
+				  summary.maillardPhaseTime,
+				  summary.maillardPhasePercent,
+				),
+			  ],
+			),
+			paddedRow(
+			  children: [
+				const Text('Dry Phase'),
+				phaseDetails(
+				  summary.dryPhaseTime,
+				  summary.dryPhasePercent,
+				),
+			  ],
+			),
+		  ],
+		),
+		if (summary.notes != null)
+		  Padding(
+		    padding: cellPadding,
+			child: Text('Notes: ${summary.notes}',
+			  style: RoastAppTheme.roastNotesStyle,
+			),
 		  ),
-		paddedRow(
-		  children: [
-		    const Text('Roast time:'),
-			TimestampWidget.twitter(summary.totalTime),
-		  ],
-		),
-		paddedRow(
-		  children: [
-		    const Text('Weight reduction:'),
-			Text(formatPercent(summary.weightLoss)),
-		  ],
-		),
-	    paddedRow(
-		  children: [
-		    const Text('Development'),
-			phaseDetails(
-			  summary.developmentPhaseTime,
-			  summary.developmentPercent,
-			  extra: '/${formatPercent(summary.developmentPercentTarget)}',
-			),
-		  ],
-		),
-	    paddedRow(
-		  children: [
-		    const Text('First Crack Phase'),
-			phaseDetails(
-			  summary.firstCrackPhaseTime,
-			  summary.firstCrackPhasePercent,
-			),
-		  ],
-		),
-	    paddedRow(
-		  children: [
-		    const Text('Maillard Phase'),
-			phaseDetails(
-			  summary.maillardPhaseTime,
-			  summary.maillardPhasePercent,
-			),
-		  ],
-		),
-	    paddedRow(
-		  children: [
-		    const Text('Dry Phase'),
-			phaseDetails(
-			  summary.dryPhaseTime,
-			  summary.dryPhasePercent,
-			),
-		  ],
-		),
 	  ],
 	);
   }

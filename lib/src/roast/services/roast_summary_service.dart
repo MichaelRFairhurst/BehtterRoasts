@@ -30,6 +30,7 @@ class RoastSummaryService {
 	  developmentPercent: developmentPhaseTime.inMilliseconds / totalTime.inMilliseconds,
 	  developmentPercentTarget: roast.config.targetDevelopment,
 	  weightLoss: 1.0 - roast.weightOut / roast.weightIn,
+	  notes: roast.notes,
 	);
   }
 }
