@@ -1,3 +1,4 @@
+import 'package:behmor_roast/src/behmor/widgets/program_button.dart';
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
@@ -35,10 +36,18 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
 		Row(
 		  children: [
 		    const SizedBox(width: 4.0),
-		    const Expanded(
-			  child: Text('Enter Temperature'),
+		    //const Expanded(
+			//  child: Text('Enter Temperature'),
+			//),
+			Text('Check temperature with ',
+			    style: RoastAppTheme.checkTempTextStyle),
+			const SizedBox(
+			  height: 32,
+			  child: ProgramButton('B'),
 			),
-			const Text('Time: '),
+			const Spacer(),
+			Text('Time: ',
+			    style: RoastAppTheme.checkTempTextStyle),
 			ToggleSwitch<Duration>(
 			  widgetLeft: TimestampWidget(widget.shownTime),
 			  valueLeft: widget.shownTime,

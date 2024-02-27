@@ -19,6 +19,10 @@ class RoastAppTheme {
 	fontStyle: FontStyle.italic,
   );
 
+  static final checkTempTextStyle = materialTheme.textTheme.caption!.copyWith(
+    fontWeight: FontWeight.bold,
+  );
+
   static final tinyButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
         foregroundColor: capuccino,
