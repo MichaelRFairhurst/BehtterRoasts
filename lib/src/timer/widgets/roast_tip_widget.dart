@@ -1,4 +1,5 @@
 import 'package:behmor_roast/src/config/theme.dart';
+import 'package:behmor_roast/src/util/widgets/animated_pop_up.dart';
 import 'package:flutter/material.dart';
 
 class RoastTipWidget extends StatefulWidget {
@@ -13,26 +14,17 @@ class RoastTipWidget extends StatefulWidget {
   RoastTipWidgetState createState() => RoastTipWidgetState();
 }
 
-class RoastTipWidgetState extends State<RoastTipWidget> with SingleTickerProviderStateMixin {
+class RoastTipWidgetState extends State<RoastTipWidget> {
 
   final tips = <String>[];
   final dismissed = <String>{};
-  late final AnimationController animation;
 
   RoastTipWidgetState();
 
   @override
   void initState() {
 	super.initState();
-	animation = AnimationController(
-	  vsync: this,
-	  duration: const Duration(milliseconds: 150),
-	);
-
 	tips.addAll(widget.tips);
-	if (tips.isNotEmpty) {
-	  animation.forward();
-	}
   }
 
   @override
@@ -45,57 +37,17 @@ class RoastTipWidgetState extends State<RoastTipWidget> with SingleTickerProvide
 	}
 
 	setState(() {
-	  if (tips.isEmpty) {
-		tips.addAll(widget.tips.toSet()..removeAll(dismissed));
-		if (tips.isNotEmpty) {
-		  animation.forward();
-		}
-	  } else {
-		mergeUpdatedTips();
-	  }
+	  tips..clear()..addAll(widget.tips.toSet()..removeAll(dismissed));
 	});
-  }
-
-  void mergeUpdatedTips() {
-    if (!widget.tips.contains(tips[0])) {
-	  animation.reverse().then(reverseAnimationComplete);
-	}
-
-    final newTips = widget.tips.toSet()
-	    ..remove(tips[0])
-		..removeAll(dismissed);
-
-    for (int i = 1; i < tips.length; ++i) {
-	  if (widget.tips.contains(tips[i])) {
-		newTips.remove(tips[i]);
-	  } else {
-		tips.removeAt(i);
-		i--;
-	  }
-	}
-
-    tips.addAll(newTips);
-  }
-
-  void reverseAnimationComplete(void _) {
-	tips.removeAt(0);
-	setState(() {});
-	if (tips.isNotEmpty) {
-	  animation.forward();
-    }
-  }
-
-  @override
-  void dispose() {
-	animation.dispose();
-	super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-	return SizeTransition(
-	  sizeFactor: animation,
-	  child: Container(
+	final tip = tips.isEmpty ? null : tips.first;
+
+	return AnimatedPopUp(
+	  child: tip == null ? null : Container(
+	    key: Key(tip),
 		decoration: const BoxDecoration(
 		  color: RoastAppTheme.capuccino,
 		),
@@ -106,7 +58,7 @@ class RoastTipWidgetState extends State<RoastTipWidget> with SingleTickerProvide
 			const SizedBox(width: 8),
 			Expanded(
 			  child: Text(
-			    'Roasting Tip: ${tips.isEmpty ? '' : tips.first}',
+			    'Roasting Tip: $tip',
 				style: const TextStyle(color: RoastAppTheme.crema),
 			  ),
 			),
@@ -117,8 +69,10 @@ class RoastTipWidgetState extends State<RoastTipWidget> with SingleTickerProvide
 			  child: ElevatedButton(
 				style: RoastAppTheme.tinyButtonTheme.style,
 				onPressed: () {
-				  dismissed.add(tips.first);
-				  animation.reverse().then(reverseAnimationComplete);
+				  setState(() {
+					dismissed.add(tips.first);
+					tips.removeAt(0);
+				  });
 				},
 				child: const Icon(Icons.cancel, size: 12),
 			  ),
