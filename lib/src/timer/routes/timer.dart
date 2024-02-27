@@ -9,6 +9,7 @@ import 'package:behmor_roast/src/timer/widgets/projections_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/roast_pop_scope.dart';
 import 'package:behmor_roast/src/timer/widgets/roast_tip_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/time_widget.dart';
+import 'package:behmor_roast/src/util/widgets/animated_pop_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
@@ -96,8 +97,9 @@ class TimerPage extends ConsumerWidget {
 				],
 			  ),
 			),
-			if (showTempInputTime != null && running)
-			  Container(
+			//if (showTempInputTime != null && running)
+			AnimatedPopUp(
+			  child: !running || showTempInputTime == null ? null : Container(
 				alignment: Alignment.center,
 				padding: const EdgeInsets.all(16.0),
 				decoration: const BoxDecoration(
@@ -119,6 +121,7 @@ class TimerPage extends ConsumerWidget {
 				  },
 				),
 			  ),
+			),
 		  ],
 		),
 		floatingActionButton: fab,
