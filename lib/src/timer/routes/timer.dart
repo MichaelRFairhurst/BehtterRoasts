@@ -97,7 +97,6 @@ class TimerPage extends ConsumerWidget {
 				],
 			  ),
 			),
-			//if (showTempInputTime != null && running)
 			AnimatedPopUp(
 			  child: !running || showTempInputTime == null ? null : Container(
 				alignment: Alignment.center,
