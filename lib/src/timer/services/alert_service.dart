@@ -3,6 +3,8 @@ import 'package:behmor_roast/src/timer/models/alert.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
 
 const _smokeSuppressorTime = Duration(seconds: 7 * 60 + 45);
+// Technically, this is 75% of roast time. This is correct for 1lb P5 roasts.
+const _pressStartTime = Duration(seconds: 13 * 60 + 30);
 
 class AlertService {
   List<Alert> getAlerts({
@@ -22,6 +24,16 @@ class AlertService {
 		severity: severity,
 		message: 'Roaster projected to overheat in'
 		  ' ${timeToOverheat.inSeconds} seconds',
+	  ));
+	}
+
+    final timePastPressStart = elapsed - _pressStartTime;
+	if (!timePastPressStart.isNegative
+		&& timePastPressStart < const Duration(seconds: 30)) {
+	  results.add(const Alert(
+	    kind: AlertKind.smokeSuppressor,
+		severity: Severity.warning,
+		message: 'Press START, or the roaster will automatically off!',
 	  ));
 	}
 
