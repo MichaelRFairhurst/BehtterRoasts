@@ -13,6 +13,8 @@ class RoastSummary with _$RoastSummary {
 	required double maillardPhasePercent,
 	required Duration firstCrackPhaseTime,
 	required double firstCrackPhasePercent,
+	Duration? secondCrackPhaseTime,
+	double? secondCrackPhasePercent,
 	required Duration developmentPhaseTime,
 	required double developmentPercent,
 	required double developmentPercentTarget,

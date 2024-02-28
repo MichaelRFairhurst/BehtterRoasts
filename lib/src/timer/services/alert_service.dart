@@ -15,6 +15,15 @@ class AlertService {
 	final results = <Alert>[];
 	final timeToOverheat = projections.timeToOverheat;
 
+    if (roastLogs.any((log) => log.phase == RoastPhase.secondCrackStart)) {
+	  results.add(const Alert(
+	    kind: AlertKind.pastSecondCrack,
+		severity: Severity.warning,
+		message: 'Roasting more than 10 seconds past second crack is dangerous'
+		    ' and can cause a roaster fire!',
+	  ));
+	}
+
 	if (timeToOverheat != null) {
 	  final severity = timeToOverheat < const Duration(seconds: 60)
 		  ? Severity.warning

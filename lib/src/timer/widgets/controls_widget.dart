@@ -9,6 +9,71 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ControlsWidget extends ConsumerWidget {
   const ControlsWidget({Key? key}) : super(key: key);
 
+  List<Phase> phaseButtonTypes(List<PhaseLog> phaseLogs) {
+	final results = <Phase>[];
+
+	if (!phaseLogs.any((p) => p.phase == Phase.dryEnd)) {
+	  results.add(Phase.dryEnd);
+	} else {
+	  final hasFirstCrack = phaseLogs.any((p) => p.phase == Phase.firstCrack);
+
+	  if(!phaseLogs.any((p) => p.phase == Phase.secondCrack)) {
+		results.add(Phase.firstCrack);
+		if (hasFirstCrack) {
+		  results.add(Phase.secondCrack);
+		}
+	  }
+
+	  if (hasFirstCrack) {
+		results.add(Phase.done);
+	  }
+	}
+
+
+    return results;
+  }
+
+  Widget phaseButton(Phase phaseType, WidgetRef ref, bool running) {
+	final Widget icon;
+	final String label;
+	switch (phaseType) {
+	  case Phase.dryEnd:
+	    icon = const Icon(Icons.air);
+		label = 'Dry end';
+		break;
+	  case Phase.firstCrack:
+	    icon = const CrackIcon();
+		label = '1st crack';
+		break;
+	  case Phase.secondCrack:
+	    icon = const CrackIcon();
+		label = '2nd crack';
+		break;
+	  case Phase.done:
+	    icon = const Icon(Icons.check);
+		label = 'Done';
+	}
+
+	return Container(
+	  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+	  child: ElevatedButton.icon(
+		icon: icon,
+		label: Text(label),
+		onPressed: !running ? null : () {
+		  final tService = ref.read(timerServiceProvider);
+		  final now = tService.elapsed()!;
+		  final newLog = PhaseLog(time: now, phase: phaseType);
+		  ref.read(phaseLogsProvider.notifier).update(
+			  (logs) => logs.toList()..add(newLog));
+
+          if (phaseType == Phase.done) {
+			tService.stop();
+		  }
+		},
+	  ),
+	);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 	final phaseLogs = ref.watch(phaseLogsProvider);
@@ -27,51 +92,9 @@ class ControlsWidget extends ConsumerWidget {
           ],
         ),
 		Wrap(
-		  children: [
-		    if (!phaseLogs.any((p) => p.phase == Phase.dryEnd))
-              ElevatedButton.icon(
-                icon: const Icon(Icons.air),
-                //icon: const Icon(Icons.scatter_plot),
-                label: const Text('Dry end'),
-                onPressed: !running ? null : () {
-		      	  final tService = ref.read(timerServiceProvider);
-		      	  final now = tService.elapsed()!;
-		      	  final newLog = PhaseLog(time: now, phase: Phase.dryEnd);
-		      	  ref.read(phaseLogsProvider.notifier).update((logs) => logs.toList()..add(newLog));
-                },
-              ),
-		    if (phaseLogs.any((p) => p.phase == Phase.dryEnd))
-              ElevatedButton.icon(
-                icon: const CrackIcon(),
-                //icon: const Icon(Icons.wb_sunny),
-                //icon: Icon(Icons.flare),
-                //icon: Icon(Icons.upcoming),
-                //icon: Icon(Icons.stream),
-                //icon: Icon(Icons.new_releases),
-                label: const Text('Log Crack'),
-                onPressed: !running ? null : () {
-		      	  final tService = ref.read(timerServiceProvider);
-		      	  final now = tService.elapsed()!;
-		      	  final newLog = PhaseLog(time: now, phase: Phase.crack);
-		      	  ref.read(phaseLogsProvider.notifier).update((logs) => logs.toList()..add(newLog));
-                },
-              ),
-		    if (phaseLogs.any((p) => p.phase == Phase.crack))
-              ElevatedButton.icon(
-                icon: const Icon(Icons.check),
-                label: const Text('Finish'),
-                onPressed: !running ? null : () {
-		      	  final tService = ref.read(timerServiceProvider);
-				  tService.stop();
-		      	  final now = tService.elapsed()!;
-		      	  final newLog = PhaseLog(time: now, phase: Phase.done);
-		      	  ref.read(phaseLogsProvider.notifier).update((logs) => logs.toList()..add(newLog));
-                },
-              ),
-          ].map((widget) => Container(
-		    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-			child: widget,
-		  )).toList(),
+		  children: phaseButtonTypes(phaseLogs)
+			  .map((type) => phaseButton(type, ref, running))
+			  .toList(),
         ),
       ],
     );

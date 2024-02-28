@@ -17,9 +17,11 @@ class RoastLogService {
     final logs = <BaseLog>[...temps, ...phases, ...controls]
       ..sort((a, b) => a.time.compareTo(b.time));
 
-	final crackLogs = phases.where((p) => p.phase == Phase.crack);
-	final firstCrackStart = crackLogs.isEmpty ? null : crackLogs.first;
-	final firstCrackEnd = crackLogs.length < 2 ? null : crackLogs.last;
+	final fstCrackLogs = phases.where((p) => p.phase == Phase.firstCrack);
+	final firstCrackStart = fstCrackLogs.isEmpty ? null : fstCrackLogs.first;
+	final firstCrackEnd = fstCrackLogs.length < 2 ? null : fstCrackLogs.last;
+
+	final sndCrackLogs = phases.where((p) => p.phase == Phase.secondCrack).toList();
 
     for (final log in logs) {
       if (log is TempLog) {
@@ -46,6 +48,8 @@ class RoastLogService {
           result.add(RoastLog(time: log.time, phase: RoastPhase.firstCrackStart));
 	    } else if (identical(log, firstCrackEnd)) {
           result.add(RoastLog(time: log.time, phase: RoastPhase.firstCrackEnd));
+	    } else if (identical(log, sndCrackLogs[0])) {
+          result.add(RoastLog(time: log.time, phase: RoastPhase.secondCrackStart));
 	    }
       }
 

@@ -6,7 +6,8 @@ part 'phase_log.g.dart';
 
 enum Phase {
   dryEnd,
-  crack,
+  firstCrack,
+  secondCrack,
   done,
 }
 

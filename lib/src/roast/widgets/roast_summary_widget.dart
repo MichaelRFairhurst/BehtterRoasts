@@ -71,6 +71,16 @@ class RoastSummaryWidget extends StatelessWidget {
 				),
 			  ],
 			),
+			if (summary.secondCrackPhaseTime != null)
+			  paddedRow(
+				children: [
+				  const Text('Second Crack Phase'),
+				  phaseDetails(
+					summary.secondCrackPhaseTime!,
+					summary.secondCrackPhasePercent!,
+				  ),
+				],
+			  ),
 			paddedRow(
 			  children: [
 				const Text('Maillard Phase'),

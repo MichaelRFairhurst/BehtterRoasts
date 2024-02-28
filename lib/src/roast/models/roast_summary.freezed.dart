@@ -24,6 +24,8 @@ mixin _$RoastSummary {
   double get maillardPhasePercent => throw _privateConstructorUsedError;
   Duration get firstCrackPhaseTime => throw _privateConstructorUsedError;
   double get firstCrackPhasePercent => throw _privateConstructorUsedError;
+  Duration? get secondCrackPhaseTime => throw _privateConstructorUsedError;
+  double? get secondCrackPhasePercent => throw _privateConstructorUsedError;
   Duration get developmentPhaseTime => throw _privateConstructorUsedError;
   double get developmentPercent => throw _privateConstructorUsedError;
   double get developmentPercentTarget => throw _privateConstructorUsedError;
@@ -50,6 +52,8 @@ abstract class $RoastSummaryCopyWith<$Res> {
       double maillardPhasePercent,
       Duration firstCrackPhaseTime,
       double firstCrackPhasePercent,
+      Duration? secondCrackPhaseTime,
+      double? secondCrackPhasePercent,
       Duration developmentPhaseTime,
       double developmentPercent,
       double developmentPercentTarget,
@@ -78,6 +82,8 @@ class _$RoastSummaryCopyWithImpl<$Res, $Val extends RoastSummary>
     Object? maillardPhasePercent = null,
     Object? firstCrackPhaseTime = null,
     Object? firstCrackPhasePercent = null,
+    Object? secondCrackPhaseTime = freezed,
+    Object? secondCrackPhasePercent = freezed,
     Object? developmentPhaseTime = null,
     Object? developmentPercent = null,
     Object? developmentPercentTarget = null,
@@ -117,6 +123,14 @@ class _$RoastSummaryCopyWithImpl<$Res, $Val extends RoastSummary>
           ? _value.firstCrackPhasePercent
           : firstCrackPhasePercent // ignore: cast_nullable_to_non_nullable
               as double,
+      secondCrackPhaseTime: freezed == secondCrackPhaseTime
+          ? _value.secondCrackPhaseTime
+          : secondCrackPhaseTime // ignore: cast_nullable_to_non_nullable
+              as Duration?,
+      secondCrackPhasePercent: freezed == secondCrackPhasePercent
+          ? _value.secondCrackPhasePercent
+          : secondCrackPhasePercent // ignore: cast_nullable_to_non_nullable
+              as double?,
       developmentPhaseTime: null == developmentPhaseTime
           ? _value.developmentPhaseTime
           : developmentPhaseTime // ignore: cast_nullable_to_non_nullable
@@ -158,6 +172,8 @@ abstract class _$$_RoastSummaryCopyWith<$Res>
       double maillardPhasePercent,
       Duration firstCrackPhaseTime,
       double firstCrackPhasePercent,
+      Duration? secondCrackPhaseTime,
+      double? secondCrackPhasePercent,
       Duration developmentPhaseTime,
       double developmentPercent,
       double developmentPercentTarget,
@@ -184,6 +200,8 @@ class __$$_RoastSummaryCopyWithImpl<$Res>
     Object? maillardPhasePercent = null,
     Object? firstCrackPhaseTime = null,
     Object? firstCrackPhasePercent = null,
+    Object? secondCrackPhaseTime = freezed,
+    Object? secondCrackPhasePercent = freezed,
     Object? developmentPhaseTime = null,
     Object? developmentPercent = null,
     Object? developmentPercentTarget = null,
@@ -223,6 +241,14 @@ class __$$_RoastSummaryCopyWithImpl<$Res>
           ? _value.firstCrackPhasePercent
           : firstCrackPhasePercent // ignore: cast_nullable_to_non_nullable
               as double,
+      secondCrackPhaseTime: freezed == secondCrackPhaseTime
+          ? _value.secondCrackPhaseTime
+          : secondCrackPhaseTime // ignore: cast_nullable_to_non_nullable
+              as Duration?,
+      secondCrackPhasePercent: freezed == secondCrackPhasePercent
+          ? _value.secondCrackPhasePercent
+          : secondCrackPhasePercent // ignore: cast_nullable_to_non_nullable
+              as double?,
       developmentPhaseTime: null == developmentPhaseTime
           ? _value.developmentPhaseTime
           : developmentPhaseTime // ignore: cast_nullable_to_non_nullable
@@ -259,6 +285,8 @@ class _$_RoastSummary implements _RoastSummary {
       required this.maillardPhasePercent,
       required this.firstCrackPhaseTime,
       required this.firstCrackPhasePercent,
+      this.secondCrackPhaseTime,
+      this.secondCrackPhasePercent,
       required this.developmentPhaseTime,
       required this.developmentPercent,
       required this.developmentPercentTarget,
@@ -282,6 +310,10 @@ class _$_RoastSummary implements _RoastSummary {
   @override
   final double firstCrackPhasePercent;
   @override
+  final Duration? secondCrackPhaseTime;
+  @override
+  final double? secondCrackPhasePercent;
+  @override
   final Duration developmentPhaseTime;
   @override
   final double developmentPercent;
@@ -294,7 +326,7 @@ class _$_RoastSummary implements _RoastSummary {
 
   @override
   String toString() {
-    return 'RoastSummary(beanName: $beanName, totalTime: $totalTime, dryPhaseTime: $dryPhaseTime, dryPhasePercent: $dryPhasePercent, maillardPhaseTime: $maillardPhaseTime, maillardPhasePercent: $maillardPhasePercent, firstCrackPhaseTime: $firstCrackPhaseTime, firstCrackPhasePercent: $firstCrackPhasePercent, developmentPhaseTime: $developmentPhaseTime, developmentPercent: $developmentPercent, developmentPercentTarget: $developmentPercentTarget, weightLoss: $weightLoss, notes: $notes)';
+    return 'RoastSummary(beanName: $beanName, totalTime: $totalTime, dryPhaseTime: $dryPhaseTime, dryPhasePercent: $dryPhasePercent, maillardPhaseTime: $maillardPhaseTime, maillardPhasePercent: $maillardPhasePercent, firstCrackPhaseTime: $firstCrackPhaseTime, firstCrackPhasePercent: $firstCrackPhasePercent, secondCrackPhaseTime: $secondCrackPhaseTime, secondCrackPhasePercent: $secondCrackPhasePercent, developmentPhaseTime: $developmentPhaseTime, developmentPercent: $developmentPercent, developmentPercentTarget: $developmentPercentTarget, weightLoss: $weightLoss, notes: $notes)';
   }
 
   @override
@@ -318,6 +350,11 @@ class _$_RoastSummary implements _RoastSummary {
                 other.firstCrackPhaseTime == firstCrackPhaseTime) &&
             (identical(other.firstCrackPhasePercent, firstCrackPhasePercent) ||
                 other.firstCrackPhasePercent == firstCrackPhasePercent) &&
+            (identical(other.secondCrackPhaseTime, secondCrackPhaseTime) ||
+                other.secondCrackPhaseTime == secondCrackPhaseTime) &&
+            (identical(
+                    other.secondCrackPhasePercent, secondCrackPhasePercent) ||
+                other.secondCrackPhasePercent == secondCrackPhasePercent) &&
             (identical(other.developmentPhaseTime, developmentPhaseTime) ||
                 other.developmentPhaseTime == developmentPhaseTime) &&
             (identical(other.developmentPercent, developmentPercent) ||
@@ -341,6 +378,8 @@ class _$_RoastSummary implements _RoastSummary {
       maillardPhasePercent,
       firstCrackPhaseTime,
       firstCrackPhasePercent,
+      secondCrackPhaseTime,
+      secondCrackPhasePercent,
       developmentPhaseTime,
       developmentPercent,
       developmentPercentTarget,
@@ -364,6 +403,8 @@ abstract class _RoastSummary implements RoastSummary {
       required final double maillardPhasePercent,
       required final Duration firstCrackPhaseTime,
       required final double firstCrackPhasePercent,
+      final Duration? secondCrackPhaseTime,
+      final double? secondCrackPhasePercent,
       required final Duration developmentPhaseTime,
       required final double developmentPercent,
       required final double developmentPercentTarget,
@@ -386,6 +427,10 @@ abstract class _RoastSummary implements RoastSummary {
   Duration get firstCrackPhaseTime;
   @override
   double get firstCrackPhasePercent;
+  @override
+  Duration? get secondCrackPhaseTime;
+  @override
+  double? get secondCrackPhasePercent;
   @override
   Duration get developmentPhaseTime;
   @override

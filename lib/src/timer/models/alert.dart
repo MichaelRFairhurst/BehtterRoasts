@@ -11,6 +11,7 @@ enum AlertKind {
   smokeSuppressor,
   willOverheat,
   willShutOff,
+  pastSecondCrack,
 }
 
 @freezed

@@ -49,7 +49,7 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget> with Singl
       return [const Text('Waiting for dry end.')];
 	}
 
-    final firstCracks = phases.where((phase) => phase.phase == Phase.crack);
+    final firstCracks = phases.where((phase) => phase.phase == Phase.firstCrack);
     if (firstCracks.isEmpty) {
       return [const Text('Waiting for first crack.')];
     }
