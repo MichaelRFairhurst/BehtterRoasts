@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_beep/flutter_beep.dart';
 
+const _smokeSuppressorTime = Duration(seconds: 7 * 60 + 45);
+
 class TimerService {
   DateTime? _startTime;
   DateTime? _stopTime;
@@ -60,4 +62,28 @@ class TimerService {
   Stream<Duration> get checkTemp => _checkTemp.stream;
   Stream<Duration?> get seconds => _seconds.stream;
   DateTime? get startTime => _startTime;
+
+  Future<void> smokeSuppressTimer(Duration warningTime) async {
+	final completeTime = _smokeSuppressorTime - warningTime;
+
+	Duration? now;
+	do {
+	  // Remember, we might not be roasting (yet). This await will always
+	  // gracefully complete before we've hit the warning time.
+	  await Future.delayed(completeTime);
+	  now = elapsed();
+    } while (now == null);
+
+    // Now we're roasting, and can await until the exact waring time.
+    await Future.delayed((completeTime) - now);
+
+    // Technically, we may have canceled the roast now and need to complete with
+	// an error.
+    final doubleCheck = elapsed();
+	if (doubleCheck == null || doubleCheck < completeTime) {
+	  throw 'Error: roast canceled before smoke suppress timer could complete.';
+	}
+
+	return;
+  }
 }

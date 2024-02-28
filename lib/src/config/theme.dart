@@ -14,6 +14,7 @@ class RoastAppTheme {
   static const metalLight = Color(0xFFA9A7AB);
   static const lime = Color(0xFFC8E6D6);
   static const errorColor = Color(0xFFB85544);
+  static const alertColor = Color(0xFFC9BF3c);
 
   static final roastNotesStyle = materialTheme.textTheme.bodyMedium!.copyWith(
 	fontStyle: FontStyle.italic,

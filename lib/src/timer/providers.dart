@@ -4,7 +4,9 @@ import 'package:behmor_roast/src/roast/models/roast_log.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/services/roast_log_service.dart';
+import 'package:behmor_roast/src/timer/models/alert.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
+import 'package:behmor_roast/src/timer/services/alert_service.dart';
 import 'package:behmor_roast/src/timer/services/projection_service.dart';
 import 'package:behmor_roast/src/timer/services/tips_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,8 +32,7 @@ final checkTempStreamProvider = StreamProvider<Duration>((ref) {
 });
 
 final showTempInputTimeProvider = StateProvider<Duration?>((ref) {
-  // This watch induces regular updates to set state to true.
-  // We use `hasValue` so that it begins false.
+  // This watch induces regular updates to reset the state.
   return ref.watch(checkTempStreamProvider).value;
 });
 
@@ -45,6 +46,22 @@ final projectionProvider = Provider<Projection>((ref) {
   final logs = ref.watch(roastLogsProvider);
   final elapsed = ref.watch(secondsProvider);
   return service.createProjections(roastLogs: logs, roastConfig: config, elapsed: elapsed.value);
+});
+
+final alertsProvider = Provider<List<Alert>>((ref) {
+  final elapsed = ref.watch(secondsProvider).value;
+  if (elapsed == null) {
+	return [];
+  }
+
+  final service = AlertService();
+  final projection = ref.watch(projectionProvider);
+  final logs = ref.watch(roastLogsProvider);
+  return service.getAlerts(
+    projections: projection,
+	roastLogs: logs,
+	elapsed: elapsed,
+  );
 });
 
 final temperatureLogsProvider = StateProvider<List<TempLog>>(

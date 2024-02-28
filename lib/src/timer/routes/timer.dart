@@ -3,6 +3,7 @@ import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
+import 'package:behmor_roast/src/timer/widgets/alert_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/check_temp_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/controls_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/projections_widget.dart';
@@ -24,6 +25,7 @@ class TimerPage extends ConsumerWidget {
     final tService = ref.watch(timerServiceProvider);
     final running = ref.watch(timerRunningProvider).value ?? false;
     final showTempInputTime = ref.watch(showTempInputTimeProvider);
+    final alerts = ref.watch(alertsProvider);
     final logs = ref.watch(roastLogsProvider);
     final tips = ref.watch(tipsProvider);
 
@@ -69,6 +71,9 @@ class TimerPage extends ConsumerWidget {
 		body: Column(
 		  crossAxisAlignment: CrossAxisAlignment.stretch,
 		  children: [
+		    AlertWidget(
+			  alerts: alerts,
+			),
 			Container(
 			  decoration: const BoxDecoration(
 				color: RoastAppTheme.metalLight,
