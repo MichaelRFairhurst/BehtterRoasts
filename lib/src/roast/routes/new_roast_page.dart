@@ -62,7 +62,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                   },
                 ),
               ),
-              const SliverPadding(padding: EdgeInsets.only(top: 10)),
+              /*const SliverPadding(padding: EdgeInsets.only(top: 10)),
               const SliverToBoxAdapter(
                 child: Text('Roast number'),
               ),
@@ -77,7 +77,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
 
                       return null;
                     }),
-              ),
+              ),*/
               const SliverPadding(padding: EdgeInsets.only(top: 10)),
               const SliverToBoxAdapter(
                 child: Text('Weight (g)'),
@@ -172,7 +172,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                           ref.read(phaseLogsProvider.notifier).state = [];
                           ref.read(controlLogsProvider.notifier).state = [];
                           ref.read(timerServiceProvider).reset();
-                          context.replace(Routes.timer, extra: roast);
+                          context.replace(Routes.timer);
                         }
                       },
                     ),

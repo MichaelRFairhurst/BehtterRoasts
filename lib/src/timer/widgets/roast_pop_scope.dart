@@ -1,16 +1,17 @@
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
+import 'package:behmor_roast/src/timer/services/timer_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RoastPopScope extends ConsumerWidget {
   const RoastPopScope({
     required this.child,
-    required this.running,
+    required this.state,
     super.key,
   });
 
-  final bool running;
+  final RoastTimerState state;
   final Widget child;
 
   @override
@@ -18,7 +19,7 @@ class RoastPopScope extends ConsumerWidget {
     final String contentStr;
     final String continueStr;
     final String stopStr;
-    if (running) {
+    if (state == RoastTimerState.roasting) {
       contentStr = 'Are you sure you want to stop the current roast?';
       continueStr = 'Continue roasting';
       stopStr = 'Stop current roast';
@@ -46,9 +47,7 @@ class RoastPopScope extends ConsumerWidget {
                   ElevatedButton(
                     style: RoastAppTheme.cancelButtonTheme.style,
                     onPressed: () {
-                      if (running) {
-                        ref.read(timerServiceProvider).stop();
-                      }
+                      ref.read(timerServiceProvider).stop();
                       Navigator.pop(context);
                       Navigator.pop(context);
                     },

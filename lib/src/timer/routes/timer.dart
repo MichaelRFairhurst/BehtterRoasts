@@ -3,9 +3,11 @@ import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
+import 'package:behmor_roast/src/timer/services/timer_service.dart';
 import 'package:behmor_roast/src/timer/widgets/alert_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/check_temp_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/controls_widget.dart';
+import 'package:behmor_roast/src/timer/widgets/preheat_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/projections_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/roast_pop_scope.dart';
 import 'package:behmor_roast/src/timer/widgets/roast_tip_widget.dart';
@@ -23,14 +25,15 @@ class TimerPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tService = ref.watch(timerServiceProvider);
-    final running = ref.watch(timerRunningProvider).value ?? false;
+    final state =
+        ref.watch(timerStateProvider).value ?? RoastTimerState.waiting;
     final showTempInputTime = ref.watch(showTempInputTimeProvider);
     final alerts = ref.watch(alertsProvider);
     final logs = ref.watch(roastLogsProvider);
     final tips = ref.watch(tipsProvider);
 
     Widget? fab;
-    if (!running && tService.elapsed() == null) {
+    if (state == RoastTimerState.preheatDone) {
       fab = ElevatedButton.icon(
         style: RoastAppTheme.largeButtonTheme.style,
         icon: const Icon(Icons.local_fire_department_sharp, size: 28.0),
@@ -40,7 +43,7 @@ class TimerPage extends ConsumerWidget {
           tService.start(roast!.config.tempInterval);
         },
       );
-    } else if (!running) {
+    } else if (state == RoastTimerState.done) {
       fab = ElevatedButton.icon(
         style: RoastAppTheme.largeButtonTheme.style,
         label: const Icon(Icons.navigate_next, size: 28.0),
@@ -61,8 +64,24 @@ class TimerPage extends ConsumerWidget {
       );
     }
 
+    final Widget body;
+    if (state == RoastTimerState.waiting ||
+        state == RoastTimerState.preheating) {
+      body = const Padding(
+        padding: EdgeInsets.all(16),
+        child: PreheatWidget(),
+      );
+    } else {
+      body = BottomStickyScrollView(
+        children: [
+          TempLogWidget(logs: logs),
+          const ProjectionsWidget(),
+        ],
+      );
+    }
+
     return RoastPopScope(
-      running: running,
+      state: state,
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Roast Controls"),
@@ -89,16 +108,10 @@ class TimerPage extends ConsumerWidget {
               margin: const EdgeInsets.only(bottom: 4.0),
               child: const ControlsWidget(),
             ),
-            Expanded(
-              child: BottomStickyScrollView(
-                children: [
-                  TempLogWidget(logs: logs),
-                  const ProjectionsWidget(),
-                ],
-              ),
-            ),
+            Expanded(child: body),
             AnimatedPopUp(
-              child: !running || showTempInputTime == null
+              child: state != RoastTimerState.roasting ||
+                      showTempInputTime == null
                   ? null
                   : Container(
                       alignment: Alignment.center,

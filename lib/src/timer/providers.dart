@@ -21,9 +21,9 @@ final secondsProvider = StreamProvider<Duration?>((ref) {
   return tService.seconds;
 });
 
-final timerRunningProvider = StreamProvider<bool>((ref) {
+final timerStateProvider = StreamProvider<RoastTimerState>((ref) {
   final tService = ref.watch(timerServiceProvider);
-  return tService.running;
+  return tService.state;
 });
 
 final checkTempStreamProvider = StreamProvider<Duration>((ref) {
@@ -87,6 +87,7 @@ final roastLogsProvider = Provider<List<RoastLog>>((ref) {
 final tipsProvider = Provider<Set<String>>((ref) {
   final service = TipsService();
   final roastLogs = ref.watch(roastLogsProvider);
-  final running = ref.watch(timerRunningProvider).value ?? false;
+  final running =
+      ref.watch(timerStateProvider).value == RoastTimerState.roasting;
   return service.getTips(roastLogs, running);
 });

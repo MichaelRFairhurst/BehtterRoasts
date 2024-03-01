@@ -4,37 +4,71 @@ import 'package:flutter_beep/flutter_beep.dart';
 
 const _smokeSuppressorTime = Duration(seconds: 7 * 60 + 45);
 
+enum RoastTimerState {
+  waiting,
+  preheating,
+  preheatDone,
+  roasting,
+  done,
+}
+
 class TimerService {
+  DateTime? _preheatStartTime;
+  DateTime? _preheatDoneTime;
   DateTime? _startTime;
   DateTime? _stopTime;
   int _tempCheckInterval = 15;
-  final _running = StreamController<bool>()..add(false);
+  final _state = StreamController<RoastTimerState>()
+    ..add(RoastTimerState.waiting);
   final _checkTemp = StreamController<Duration>.broadcast();
   final _seconds = StreamController<Duration?>.broadcast();
 
+  void startPreheat() {
+    _preheatStartTime = DateTime.now();
+    _state.add(RoastTimerState.preheating);
+    _fireSeconds(() => _preheatStartTime, () => _preheatDoneTime, (_) {});
+  }
+
+  void stopPreheat() {
+    _preheatDoneTime = DateTime.now();
+    _state.add(RoastTimerState.preheatDone);
+  }
+
   void start(int tempCheckInterval) {
     _startTime = DateTime.now();
-    _running.add(true);
+    _state.add(RoastTimerState.roasting);
     _tempCheckInterval = tempCheckInterval;
-    _fireSeconds();
+    _fireSeconds(() => _startTime, () => _stopTime, (time) {
+      if (time.inSeconds % _tempCheckInterval == 0) {
+        FlutterBeep.beep();
+        _checkTemp.add(time);
+      }
+    });
   }
 
   void reset() {
+    _preheatStartTime = null;
+    _preheatDoneTime = null;
     _startTime = null;
     _stopTime = null;
-    _running.add(false);
+    _state.add(RoastTimerState.waiting);
     _seconds.add(null);
   }
 
-  void _fireSeconds() async {
-    while (_stopTime == null) {
-      final now = elapsed()!;
-      _seconds.add(now);
+  void _fireSeconds(
+    DateTime? Function() startTime,
+    DateTime? Function() endTime,
+    void Function(Duration) observe,
+  ) async {
+    while (endTime() == null) {
+      final now = _elapsed(startTime(), endTime());
 
-      if (now.inSeconds % _tempCheckInterval == 0) {
-        FlutterBeep.beep();
-        _checkTemp.add(now);
+      if (now == null) {
+        return;
       }
+
+      observe(now);
+      _seconds.add(now);
 
       final millisToNext = 1000 - (now.inMilliseconds % 1000);
       await Future.delayed(Duration(milliseconds: millisToNext));
@@ -43,22 +77,25 @@ class TimerService {
 
   void stop() {
     _stopTime = DateTime.now();
-    _running.add(false);
+    _state.add(RoastTimerState.done);
   }
 
-  Duration? elapsed() {
-    if (_startTime == null) {
+  Duration? elapsed() => _elapsed(_startTime, _stopTime);
+  Duration? elapsedPreheat() => _elapsed(_preheatStartTime, _preheatDoneTime);
+
+  Duration? _elapsed(DateTime? start, DateTime? stop) {
+    if (start == null) {
       return null;
     }
 
-    if (_stopTime != null) {
-      return _stopTime!.difference(_startTime!);
+    if (stop != null) {
+      return stop.difference(start);
     }
 
-    return DateTime.now().difference(_startTime!);
+    return DateTime.now().difference(start);
   }
 
-  Stream<bool> get running => _running.stream;
+  Stream<RoastTimerState> get state => _state.stream;
   Stream<Duration> get checkTemp => _checkTemp.stream;
   Stream<Duration?> get seconds => _seconds.stream;
   DateTime? get startTime => _startTime;
