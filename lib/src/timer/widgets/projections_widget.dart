@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 
 class ProjectionsWidget extends ConsumerWidget {
-
   const ProjectionsWidget({Key? key}) : super(key: key);
 
   @override
@@ -15,10 +14,10 @@ class ProjectionsWidget extends ConsumerWidget {
     return DataTable(
       columns: const [
         DataColumn(
-         label: Expanded(
-           child: Text('Projections'),
-         ),
-       ),
+          label: Expanded(
+            child: Text('Projections'),
+          ),
+        ),
         DataColumn(label: Text('')),
       ],
       rows: [
@@ -37,29 +36,32 @@ class ProjectionsWidget extends ConsumerWidget {
             ],
           ),
       ],
-	);
+    );
   }
 
   Map<String, Widget> getProjections(Projection projection) {
     final results = <String, Widget>{};
     if (projection.currentTemp != null) {
-      results['Estimated current temp'] = Text('${(projection.currentTemp!).round()}°F');
-	}
+      results['Estimated current temp'] =
+          Text('${(projection.currentTemp!).round()}°F');
+    }
     if (projection.temp30s != null) {
       results['Temp in 30s'] = Text('${(projection.temp30s!).round()}°F');
-	}
+    }
     if (projection.temp60s != null) {
       results['Temp in 60s'] = Text('${(projection.temp60s!).round()}°F');
-	}
+    }
     if (projection.roastTime != null) {
       results['Roast Time'] = TimestampWidget(projection.roastTime!);
-	}
+    }
     if (projection.timeRemaining != null) {
-      results['Time Remaining'] = TimestampWidget.twitter(projection.timeRemaining!);
-	}
+      results['Time Remaining'] =
+          TimestampWidget.twitter(projection.timeRemaining!);
+    }
     if (projection.timeToOverheat != null) {
-      results['Time To Overheat'] = TimestampWidget.twitter(projection.timeToOverheat!);
-	}
-	return results;
+      results['Time To Overheat'] =
+          TimestampWidget.twitter(projection.timeToOverheat!);
+    }
+    return results;
   }
 }

@@ -45,13 +45,14 @@ final projectionProvider = Provider<Projection>((ref) {
   final config = ref.watch(roastProvider)!.config;
   final logs = ref.watch(roastLogsProvider);
   final elapsed = ref.watch(secondsProvider);
-  return service.createProjections(roastLogs: logs, roastConfig: config, elapsed: elapsed.value);
+  return service.createProjections(
+      roastLogs: logs, roastConfig: config, elapsed: elapsed.value);
 });
 
 final alertsProvider = Provider<List<Alert>>((ref) {
   final elapsed = ref.watch(secondsProvider).value;
   if (elapsed == null) {
-	return [];
+    return [];
   }
 
   final service = AlertService();
@@ -59,8 +60,8 @@ final alertsProvider = Provider<List<Alert>>((ref) {
   final logs = ref.watch(roastLogsProvider);
   return service.getAlerts(
     projections: projection,
-	roastLogs: logs,
-	elapsed: elapsed,
+    roastLogs: logs,
+    elapsed: elapsed,
   );
 });
 

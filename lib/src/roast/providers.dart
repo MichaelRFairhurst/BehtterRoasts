@@ -11,7 +11,8 @@ final roastProvider = StateProvider<Roast?>((ref) => null);
 
 final roastServiceProvider = Provider<RoastService>((ref) => RoastService());
 
-final roastLogServiceProvider = Provider<RoastLogService>((ref) => RoastLogService());
+final roastLogServiceProvider =
+    Provider<RoastLogService>((ref) => RoastLogService());
 
 final roastsProvider = StreamProvider<List<Roast>>((ref) {
   final roastService = ref.watch(roastServiceProvider);
@@ -23,12 +24,14 @@ final roastSummaryProvider = Provider<RoastSummary?>((ref) {
   final roast = ref.watch(roastProvider);
   final beans = ref.watch(beansProvider).value ?? [];
   if (roast == null) {
-	return null;
+    return null;
   }
-  return roastSummaryService.summarize(roast, beans.singleWhere((bean) => bean.id == roast.beanId));
+  return roastSummaryService.summarize(
+      roast, beans.singleWhere((bean) => bean.id == roast.beanId));
 });
 
-final roastsForBeanProvider = StreamProvider.family<List<Roast>, String>((ref, beanId) {
+final roastsForBeanProvider =
+    StreamProvider.family<List<Roast>, String>((ref, beanId) {
   final roastService = ref.watch(roastServiceProvider);
   return roastService.roastsForBean(beanId);
 });
@@ -39,4 +42,3 @@ final beansProvider = StreamProvider<List<Bean>>((ref) {
   final beanService = ref.watch(beanServiceProvider);
   return beanService.beans;
 });
-

@@ -9,52 +9,52 @@ const _pressStartTime = Duration(seconds: 13 * 60 + 30);
 class AlertService {
   List<Alert> getAlerts({
     required List<RoastLog> roastLogs,
-	required Projection projections,
+    required Projection projections,
     required Duration elapsed,
   }) {
-	final results = <Alert>[];
-	final timeToOverheat = projections.timeToOverheat;
+    final results = <Alert>[];
+    final timeToOverheat = projections.timeToOverheat;
 
     if (roastLogs.any((log) => log.phase == RoastPhase.secondCrackStart)) {
-	  results.add(const Alert(
-	    kind: AlertKind.pastSecondCrack,
-		severity: Severity.warning,
-		message: 'Roasting more than 10 seconds past second crack is dangerous'
-		    ' and can cause a roaster fire!',
-	  ));
-	}
+      results.add(const Alert(
+        kind: AlertKind.pastSecondCrack,
+        severity: Severity.warning,
+        message: 'Roasting more than 10 seconds past second crack is dangerous'
+            ' and can cause a roaster fire!',
+      ));
+    }
 
-	if (timeToOverheat != null) {
-	  final severity = timeToOverheat < const Duration(seconds: 60)
-		  ? Severity.warning
-		  : Severity.alert;
-	  results.add(Alert(
-		kind: AlertKind.willOverheat,
-		severity: severity,
-		message: 'Roaster projected to overheat in'
-		  ' ${timeToOverheat.inSeconds} seconds',
-	  ));
-	}
+    if (timeToOverheat != null) {
+      final severity = timeToOverheat < const Duration(seconds: 60)
+          ? Severity.warning
+          : Severity.alert;
+      results.add(Alert(
+        kind: AlertKind.willOverheat,
+        severity: severity,
+        message: 'Roaster projected to overheat in'
+            ' ${timeToOverheat.inSeconds} seconds',
+      ));
+    }
 
     final timePastPressStart = elapsed - _pressStartTime;
-	if (!timePastPressStart.isNegative
-		&& timePastPressStart < const Duration(seconds: 30)) {
-	  results.add(const Alert(
-	    kind: AlertKind.smokeSuppressor,
-		severity: Severity.warning,
-		message: 'Press START, or the roaster will automatically off!',
-	  ));
-	}
+    if (!timePastPressStart.isNegative &&
+        timePastPressStart < const Duration(seconds: 30)) {
+      results.add(const Alert(
+        kind: AlertKind.smokeSuppressor,
+        severity: Severity.warning,
+        message: 'Press START, or the roaster will automatically off!',
+      ));
+    }
 
-	final timeToSmoke = _smokeSuppressorTime - elapsed;
+    final timeToSmoke = _smokeSuppressorTime - elapsed;
     if (timeToSmoke < const Duration(seconds: 45) && !timeToSmoke.isNegative) {
-	  results.add(Alert(
-	    kind: AlertKind.smokeSuppressor,
-		severity: Severity.alert,
-		message: 'Smoke suppressor turns on in ${timeToSmoke.inSeconds}'
-		    ' seconds, and roast temps will quickly fall.',
-	  ));
-	}
+      results.add(Alert(
+        kind: AlertKind.smokeSuppressor,
+        severity: Severity.alert,
+        message: 'Smoke suppressor turns on in ${timeToSmoke.inSeconds}'
+            ' seconds, and roast temps will quickly fall.',
+      ));
+    }
 
     return results;
   }

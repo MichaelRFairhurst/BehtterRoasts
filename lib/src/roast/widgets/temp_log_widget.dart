@@ -4,10 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 
 class TempLogWidget extends ConsumerWidget {
-
   const TempLogWidget({
-	required this.logs,
-	super.key,
+    required this.logs,
+    super.key,
   });
 
   final List<RoastLog> logs;
@@ -20,30 +19,30 @@ class TempLogWidget extends ConsumerWidget {
       headingRowHeight: 26,
       columns: const [
         DataColumn(
-    	  label: Expanded(
-    	    child: Text('Time'),
-    	  ),
-    	),
+          label: Expanded(
+            child: Text('Time'),
+          ),
+        ),
         DataColumn(
-    	  label: Expanded(
-    	    child: Text('Temp'),
-    	  ),
-    	),
+          label: Expanded(
+            child: Text('Temp'),
+          ),
+        ),
         DataColumn(
-    	  label: Expanded(
-    	    child: Text('Power'),
-    	  ),
-    	),
+          label: Expanded(
+            child: Text('Power'),
+          ),
+        ),
         DataColumn(
-    	  label: Expanded(
-    	    child: Text('Phase'),
-    	  ),
-    	),
+          label: Expanded(
+            child: Text('Phase'),
+          ),
+        ),
         DataColumn(
-    	  label: Expanded(
-    	    child: Text('Rate of Rise'),
-    	  ),
-    	),
+          label: Expanded(
+            child: Text('Rate of Rise'),
+          ),
+        ),
       ],
       rows: getRows(logs),
     );
@@ -64,15 +63,17 @@ class TempLogWidget extends ConsumerWidget {
       ];
     }
 
-    return logs.map((log) => DataRow(
-        cells: [
-          DataCell(TimestampWidget(log.time)),
-          tempCell(log),
-          powerCell(log),
-          phaseCell(log),
-          rorCell(log),
-        ],
-      )).toList();
+    return logs
+        .map((log) => DataRow(
+              cells: [
+                DataCell(TimestampWidget(log.time)),
+                tempCell(log),
+                powerCell(log),
+                phaseCell(log),
+                rorCell(log),
+              ],
+            ))
+        .toList();
   }
 
   DataCell tempCell(RoastLog log) {
@@ -88,7 +89,8 @@ class TempLogWidget extends ConsumerWidget {
       return const DataCell(Text(''));
     }
 
-    return DataCell(Text(log.control.toString().replaceAll('Control.','').toUpperCase()));
+    return DataCell(
+        Text(log.control.toString().replaceAll('Control.', '').toUpperCase()));
   }
 
   DataCell phaseCell(RoastLog log) {
@@ -100,10 +102,10 @@ class TempLogWidget extends ConsumerWidget {
     }
     if (log.phase == RoastPhase.firstCrackEnd) {
       return const DataCell(Text('FC End'));
-	}
+    }
     if (log.phase == RoastPhase.done) {
       return const DataCell(Text('Done'));
-	}
+    }
 
     return const DataCell(Text(''));
   }

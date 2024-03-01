@@ -20,5 +20,6 @@ class ControlLog with _$ControlLog implements BaseLog {
     required Control control,
   }) = _ControlLog;
 
-  factory ControlLog.fromJson(Map<String, dynamic> json) => _$ControlLogFromJson(json);
+  factory ControlLog.fromJson(Map<String, dynamic> json) =>
+      _$ControlLogFromJson(json);
 }

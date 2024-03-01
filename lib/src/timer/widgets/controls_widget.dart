@@ -10,74 +10,76 @@ class ControlsWidget extends ConsumerWidget {
   const ControlsWidget({Key? key}) : super(key: key);
 
   List<Phase> phaseButtonTypes(List<PhaseLog> phaseLogs) {
-	final results = <Phase>[];
+    final results = <Phase>[];
 
-	if (!phaseLogs.any((p) => p.phase == Phase.dryEnd)) {
-	  results.add(Phase.dryEnd);
-	} else {
-	  final hasFirstCrack = phaseLogs.any((p) => p.phase == Phase.firstCrack);
+    if (!phaseLogs.any((p) => p.phase == Phase.dryEnd)) {
+      results.add(Phase.dryEnd);
+    } else {
+      final hasFirstCrack = phaseLogs.any((p) => p.phase == Phase.firstCrack);
 
-	  if(!phaseLogs.any((p) => p.phase == Phase.secondCrack)) {
-		results.add(Phase.firstCrack);
-		if (hasFirstCrack) {
-		  results.add(Phase.secondCrack);
-		}
-	  }
+      if (!phaseLogs.any((p) => p.phase == Phase.secondCrack)) {
+        results.add(Phase.firstCrack);
+        if (hasFirstCrack) {
+          results.add(Phase.secondCrack);
+        }
+      }
 
-	  if (hasFirstCrack) {
-		results.add(Phase.done);
-	  }
-	}
-
+      if (hasFirstCrack) {
+        results.add(Phase.done);
+      }
+    }
 
     return results;
   }
 
   Widget phaseButton(Phase phaseType, WidgetRef ref, bool running) {
-	final Widget icon;
-	final String label;
-	switch (phaseType) {
-	  case Phase.dryEnd:
-	    icon = const Icon(Icons.air);
-		label = 'Dry end';
-		break;
-	  case Phase.firstCrack:
-	    icon = const CrackIcon();
-		label = '1st crack';
-		break;
-	  case Phase.secondCrack:
-	    icon = const CrackIcon();
-		label = '2nd crack';
-		break;
-	  case Phase.done:
-	    icon = const Icon(Icons.check);
-		label = 'Done';
-	}
+    final Widget icon;
+    final String label;
+    switch (phaseType) {
+      case Phase.dryEnd:
+        icon = const Icon(Icons.air);
+        label = 'Dry end';
+        break;
+      case Phase.firstCrack:
+        icon = const CrackIcon();
+        label = '1st crack';
+        break;
+      case Phase.secondCrack:
+        icon = const CrackIcon();
+        label = '2nd crack';
+        break;
+      case Phase.done:
+        icon = const Icon(Icons.check);
+        label = 'Done';
+    }
 
-	return Container(
-	  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-	  child: ElevatedButton.icon(
-		icon: icon,
-		label: Text(label),
-		onPressed: !running ? null : () {
-		  final tService = ref.read(timerServiceProvider);
-		  final now = tService.elapsed()!;
-		  final newLog = PhaseLog(time: now, phase: phaseType);
-		  ref.read(phaseLogsProvider.notifier).update(
-			  (logs) => logs.toList()..add(newLog));
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: ElevatedButton.icon(
+        icon: icon,
+        label: Text(label),
+        onPressed: !running
+            ? null
+            : () {
+                final tService = ref.read(timerServiceProvider);
+                final now = tService.elapsed()!;
+                final newLog = PhaseLog(time: now, phase: phaseType);
+                ref
+                    .read(phaseLogsProvider.notifier)
+                    .update((logs) => logs.toList()..add(newLog));
 
-          if (phaseType == Phase.done) {
-			tService.stop();
-		  }
-		},
-	  ),
-	);
+                if (phaseType == Phase.done) {
+                  tService.stop();
+                }
+              },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-	final phaseLogs = ref.watch(phaseLogsProvider);
-	final running = ref.watch(timerRunningProvider).value ?? false;
+    final phaseLogs = ref.watch(phaseLogsProvider);
+    final running = ref.watch(timerRunningProvider).value ?? false;
 
     return Column(
       children: [
@@ -91,10 +93,10 @@ class ControlsWidget extends ConsumerWidget {
             ControlButton(control: Control.d),
           ],
         ),
-		Wrap(
-		  children: phaseButtonTypes(phaseLogs)
-			  .map((type) => phaseButton(type, ref, running))
-			  .toList(),
+        Wrap(
+          children: phaseButtonTypes(phaseLogs)
+              .map((type) => phaseButton(type, ref, running))
+              .toList(),
         ),
       ],
     );

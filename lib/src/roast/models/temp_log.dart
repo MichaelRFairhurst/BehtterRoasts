@@ -8,8 +8,9 @@ part 'temp_log.g.dart';
 class TempLog with _$TempLog implements BaseLog {
   const factory TempLog({
     required Duration time,
-	required int temp,
+    required int temp,
   }) = _TempLog;
 
-  factory TempLog.fromJson(Map<String, dynamic> json) => _$TempLogFromJson(json);
+  factory TempLog.fromJson(Map<String, dynamic> json) =>
+      _$TempLogFromJson(json);
 }

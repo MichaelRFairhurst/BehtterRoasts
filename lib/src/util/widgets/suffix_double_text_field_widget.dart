@@ -4,9 +4,8 @@ class SuffixDoubleTextFieldWidget extends StatelessWidget {
   final TextEditingController controller;
   final String suffix;
 
-  const SuffixDoubleTextFieldWidget({
-    required this.controller,
-    required this.suffix, super.key});
+  const SuffixDoubleTextFieldWidget(
+      {required this.controller, required this.suffix, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +22,5 @@ class SuffixDoubleTextFieldWidget extends StatelessWidget {
     }
 
     final asDouble = double.tryParse(value);
-
   }
 }

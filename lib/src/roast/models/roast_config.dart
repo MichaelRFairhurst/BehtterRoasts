@@ -10,5 +10,6 @@ class RoastConfig with _$RoastConfig {
     required double targetDevelopment,
   }) = _RoastConfig;
 
-  factory RoastConfig.fromJson(Map<String, dynamic> json) => _$RoastConfigFromJson(json);
+  factory RoastConfig.fromJson(Map<String, dynamic> json) =>
+      _$RoastConfigFromJson(json);
 }

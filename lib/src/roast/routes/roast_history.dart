@@ -10,54 +10,52 @@ class RoastHistoryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-	final roasts = ref.watch(beansProvider);
+    final roasts = ref.watch(beansProvider);
 
-	return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: const Text('Roast History'),
       ),
       body: roasts.when(
-	    data: (items) {
-	      return ListView.builder(
-	        itemCount: items.length,
-	        itemBuilder: (context, i) {
-	      	  return Card(
-			    margin: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-			    child: Container(
-				  padding: const EdgeInsets.all(12.0),
-				  child: Row(
-				    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-				    children: [
-				      Flexible(
-					    child: Text(items[i].name),
-					  ),
-				      ElevatedButton.icon(
-					    icon: const Icon(Icons.visibility),
-						label: const Text('View Roasts'),
-						style: RoastAppTheme.limeButtonTheme.style,
-						onPressed: () {
-						  context.push(Routes.roastReview(items[i].id!));
-						},
-					  ),
-					],
-				  ),
-				),
-			  );
-	        }
-	      );
-	    },
-	    loading: () => Container(),
-	    error: (e, st) => Container(),
-	  ),
-	  floatingActionButton: ElevatedButton.icon(
-	    style: RoastAppTheme.largeButtonTheme.style,
-        icon: const Icon(Icons.add),
-        label: const Text('New Roast'),
-        onPressed: () {
-	      context.push(Routes.newRoast);
-        }
+        data: (items) {
+          return ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, i) {
+                return Card(
+                  margin:
+                      const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(items[i].name),
+                        ),
+                        ElevatedButton.icon(
+                          icon: const Icon(Icons.visibility),
+                          label: const Text('View Roasts'),
+                          style: RoastAppTheme.limeButtonTheme.style,
+                          onPressed: () {
+                            context.push(Routes.roastReview(items[i].id!));
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+        },
+        loading: () => Container(),
+        error: (e, st) => Container(),
       ),
-	);
+      floatingActionButton: ElevatedButton.icon(
+          style: RoastAppTheme.largeButtonTheme.style,
+          icon: const Icon(Icons.add),
+          label: const Text('New Roast'),
+          onPressed: () {
+            context.push(Routes.newRoast);
+          }),
+    );
   }
-
 }

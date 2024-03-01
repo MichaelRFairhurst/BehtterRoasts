@@ -1,13 +1,15 @@
 import 'package:flutter/widgets.dart';
 
 class TimestampWidget extends StatelessWidget {
-  const TimestampWidget(this.time, {
+  const TimestampWidget(
+    this.time, {
     this.twitterFormat = false,
-	super.key,
+    super.key,
   });
 
-  const TimestampWidget.twitter(this.time, {
-	super.key,
+  const TimestampWidget.twitter(
+    this.time, {
+    super.key,
   }) : twitterFormat = true;
 
   final Duration time;
@@ -19,13 +21,14 @@ class TimestampWidget extends StatelessWidget {
   String formattedTime() {
     final minutes = time.abs().inMinutes;
     final seconds = formatSegment(time.abs().inSeconds % 60);
-	final negative = time.isNegative ? '-' : '';
+    final negative = time.isNegative ? '-' : '';
     return twitterFormat
-	  ? '$negative${minutes}m${seconds}s' : '$negative$minutes:$seconds';
+        ? '$negative${minutes}m${seconds}s'
+        : '$negative$minutes:$seconds';
   }
 
   String formatSegment(num segment) {
-	assert(segment >= 0);
+    assert(segment >= 0);
     final flat = segment.floor();
     if (flat < 10) {
       return '0$flat';
@@ -33,5 +36,4 @@ class TimestampWidget extends StatelessWidget {
       return flat.toString();
     }
   }
-
 }

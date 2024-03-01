@@ -15,8 +15,8 @@ import 'package:flutter/material.dart';
 /// some circumstances.
 class AnimatedPopUp extends StatefulWidget {
   const AnimatedPopUp({
-	this.child,
-	super.key,
+    this.child,
+    super.key,
   });
 
   final Widget? child;
@@ -25,88 +25,88 @@ class AnimatedPopUp extends StatefulWidget {
   AnimatedPopUpState createState() => AnimatedPopUpState();
 }
 
-class AnimatedPopUpState extends State<AnimatedPopUp> with SingleTickerProviderStateMixin {
-
+class AnimatedPopUpState extends State<AnimatedPopUp>
+    with SingleTickerProviderStateMixin {
   Widget? showing;
   Widget? next;
   late final AnimationController animation;
 
   @override
   void initState() {
-	super.initState();
-	animation = AnimationController(
-	  vsync: this,
-	  duration: const Duration(milliseconds: 150),
-	);
+    super.initState();
+    animation = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 150),
+    );
 
-	showing = widget.child;
-	if (showing != null) {
-	  animation.forward();
-	}
+    showing = widget.child;
+    if (showing != null) {
+      animation.forward();
+    }
   }
 
   bool same(Widget? a, Widget? b) {
-	dynamic id(Widget? widget)
-		=> widget == null ? null : widget.key ?? widget.runtimeType;
+    dynamic id(Widget? widget) =>
+        widget == null ? null : widget.key ?? widget.runtimeType;
 
     return id(a) == id(b);
   }
 
   @override
   void didUpdateWidget(AnimatedPopUp oldWidget) {
-	super.didUpdateWidget(oldWidget);
+    super.didUpdateWidget(oldWidget);
 
     if (same(showing, widget.child)) {
-	  // Handle case: widget being swapped, we reshow it.
-	  if (animation.isAnimating) {
-		animation.forward();
-		next = null;
-	  }
+      // Handle case: widget being swapped, we reshow it.
+      if (animation.isAnimating) {
+        animation.forward();
+        next = null;
+      }
 
       // Handle case: Stateful child, must rebuild even though it IDs the same.
-	  if (widget.child != null) {
-		setState(() {
-		  showing = widget.child;
-		});
-	  }
-	  return;
-	}
+      if (widget.child != null) {
+        setState(() {
+          showing = widget.child;
+        });
+      }
+      return;
+    }
 
     if (showing == null) {
-	  // Handle case: Appear from nothing.
-	  setState(() {
-		showing = widget.child;
-	  });
-	  animation.forward();
-	} else {
-	  // Handle case: Pull widget down to swap with a new one.
-	  next = widget.child;
-	  animation.reverse().then(reverseAnimationComplete);
-	}
+      // Handle case: Appear from nothing.
+      setState(() {
+        showing = widget.child;
+      });
+      animation.forward();
+    } else {
+      // Handle case: Pull widget down to swap with a new one.
+      next = widget.child;
+      animation.reverse().then(reverseAnimationComplete);
+    }
   }
 
   void reverseAnimationComplete(void _) {
-	setState(() {
-	  showing = next;
-	  next = null;
-	});
+    setState(() {
+      showing = next;
+      next = null;
+    });
 
-	if (showing != null) {
-	  animation.forward();
+    if (showing != null) {
+      animation.forward();
     }
   }
 
   @override
   void dispose() {
-	animation.dispose();
-	super.dispose();
+    animation.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-	return SizeTransition(
-	  sizeFactor: animation,
-	  child: showing,
-	);
+    return SizeTransition(
+      sizeFactor: animation,
+      child: showing,
+    );
   }
 }

@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BeanSelect extends ConsumerStatefulWidget {
   const BeanSelect({
-	required this.selectedBean,
-	required this.onChanged,
-	super.key,
+    required this.selectedBean,
+    required this.onChanged,
+    super.key,
   });
 
   final Bean? selectedBean;
@@ -25,96 +25,100 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
 
   @override
   Widget build(BuildContext context) {
-	final beans = ref.watch(beansProvider).value ?? [];
+    final beans = ref.watch(beansProvider).value ?? [];
 
     if (addNew) {
-	  return Form(
-	    key: newBeanForm,
-		child: Row(
-		  children: [
-		    Expanded(child: TextFormField(
-			  decoration: const InputDecoration(
-				label: Text('Bean name'),
-			  ),
-			  controller: newBeanName,
-			  validator: (value) {
-				if (value == '') {
-				  return 'Enter a bean name';
-				}
+      return Form(
+        key: newBeanForm,
+        child: Row(
+          children: [
+            Expanded(
+                child: TextFormField(
+                    decoration: const InputDecoration(
+                      label: Text('Bean name'),
+                    ),
+                    controller: newBeanName,
+                    validator: (value) {
+                      if (value == '') {
+                        return 'Enter a bean name';
+                      }
 
-				return null;
-			  }
-			)),
-			ElevatedButton(
-			  style: RoastAppTheme.limeButtonTheme.style,
-			  onPressed: () async {
-				if (newBeanForm.currentState!.validate()) {
-				  final bean = await ref.read(beanServiceProvider).add(Bean(name: newBeanName.text));
-				  addNew = false;
+                      return null;
+                    })),
+            ElevatedButton(
+              style: RoastAppTheme.limeButtonTheme.style,
+              onPressed: () async {
+                if (newBeanForm.currentState!.validate()) {
+                  final bean = await ref
+                      .read(beanServiceProvider)
+                      .add(Bean(name: newBeanName.text));
+                  addNew = false;
                   widget.onChanged(bean);
-				}
-			  },
-			  child: const Icon(Icons.check),
-			),
-			const SizedBox(width: 4.0),
-			ElevatedButton(
-			  style: RoastAppTheme.cancelButtonTheme.style,
-			  onPressed: () {
-				setState(() {
-				  addNew = false;
-				});
-			  },
-			  child: const Icon(Icons.cancel),
-			),
-		  ],
-		),
-	  );
-	}
+                }
+              },
+              child: const Icon(Icons.check),
+            ),
+            const SizedBox(width: 4.0),
+            ElevatedButton(
+              style: RoastAppTheme.cancelButtonTheme.style,
+              onPressed: () {
+                setState(() {
+                  addNew = false;
+                });
+              },
+              child: const Icon(Icons.cancel),
+            ),
+          ],
+        ),
+      );
+    }
 
-	return Wrap(
-	  crossAxisAlignment: WrapCrossAlignment.center,
-	  spacing: 8.0,
-	  children: [
-		const Text('Bean:'),
-	    DropdownButton<Bean>(
-		  value: widget.selectedBean,
-		  items: getItems(beans),
-		  onChanged: widget.onChanged,
-		),
-		const Text('OR'),
-		ElevatedButton.icon(
-		  label: const Text('Add new bean'),
-		  icon: const Icon(Icons.add),
-		  style: RoastAppTheme.limeButtonTheme.style,
-		  onPressed: () {
-			widget.onChanged(null);
-			setState(() {
-			  addNew = true;
-			});
-		  },
-		),
-	  ],
-	);
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 8.0,
+      children: [
+        const Text('Bean:'),
+        DropdownButton<Bean>(
+          value: widget.selectedBean,
+          items: getItems(beans),
+          onChanged: widget.onChanged,
+        ),
+        const Text('OR'),
+        ElevatedButton.icon(
+          label: const Text('Add new bean'),
+          icon: const Icon(Icons.add),
+          style: RoastAppTheme.limeButtonTheme.style,
+          onPressed: () {
+            widget.onChanged(null);
+            setState(() {
+              addNew = true;
+            });
+          },
+        ),
+      ],
+    );
   }
 
   List<DropdownMenuItem<Bean>> getItems(List<Bean> beans) {
-	if (beans.isEmpty) {
-	  return [const DropdownMenuItem<Bean>(
-	    value: null,
-		child: Text('None'),
-	  )];
-	}
+    if (beans.isEmpty) {
+      return [
+        const DropdownMenuItem<Bean>(
+          value: null,
+          child: Text('None'),
+        )
+      ];
+    }
 
-	return [
-	  ...beans.map((bean) => DropdownMenuItem<Bean>(
-	    value: bean,
-	    child: Text(bean.name),
-	  )),
-	  if (widget.selectedBean == null)
-	    const DropdownMenuItem<Bean>(
-		  value: null,
-		  child: Text('Select a bean'),
-		),
-	];
+    return [
+      ...beans.map((bean) => DropdownMenuItem<Bean>(
+            value: bean,
+            child: Text(bean.name),
+          )),
+      if (widget.selectedBean == null)
+        const DropdownMenuItem<Bean>(
+          value: null,
+          child: Text('Select a bean'),
+        ),
+    ];
   }
 }

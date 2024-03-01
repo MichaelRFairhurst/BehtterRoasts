@@ -17,8 +17,8 @@ enum AlertKind {
 @freezed
 class Alert with _$Alert {
   const factory Alert({
-	required Severity severity,
-	required AlertKind kind,
-	required String message,
+    required Severity severity,
+    required AlertKind kind,
+    required String message,
   }) = _Alert;
 }

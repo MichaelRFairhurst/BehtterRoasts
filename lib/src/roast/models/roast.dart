@@ -15,14 +15,11 @@ class Roast with _$Roast {
     required int roastNumber,
     required double weightIn,
     required double weightOut,
-	required DateTime roasted,
-	String? notes,
-	@Default([])
-	List<TempLog> tempLogs,
-	@Default([])
-	List<ControlLog> controlLogs,
-	@Default([])
-	List<PhaseLog> phaseLogs,
+    required DateTime roasted,
+    String? notes,
+    @Default([]) List<TempLog> tempLogs,
+    @Default([]) List<ControlLog> controlLogs,
+    @Default([]) List<PhaseLog> phaseLogs,
   }) = _Roast;
 
   factory Roast.fromJson(Map<String, dynamic> json) => _$RoastFromJson(json);

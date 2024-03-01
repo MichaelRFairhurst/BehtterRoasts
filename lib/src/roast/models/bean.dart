@@ -6,8 +6,7 @@ part 'bean.g.dart';
 @Freezed()
 class Bean with _$Bean {
   const factory Bean({
-    @JsonKey(includeFromJson: false, includeToJson: false)
-	String? id,
+    @JsonKey(includeFromJson: false, includeToJson: false) String? id,
     required String name,
   }) = _Bean;
 

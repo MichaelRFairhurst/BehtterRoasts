@@ -15,26 +15,26 @@ class TimerService {
   void start(int tempCheckInterval) {
     _startTime = DateTime.now();
     _running.add(true);
-	_tempCheckInterval = tempCheckInterval;
-	_fireSeconds();
+    _tempCheckInterval = tempCheckInterval;
+    _fireSeconds();
   }
 
   void reset() {
-	_startTime = null;
-	_stopTime = null;
-	_running.add(false);
-	_seconds.add(null);
+    _startTime = null;
+    _stopTime = null;
+    _running.add(false);
+    _seconds.add(null);
   }
 
   void _fireSeconds() async {
     while (_stopTime == null) {
-	  final now = elapsed()!;
+      final now = elapsed()!;
       _seconds.add(now);
 
       if (now.inSeconds % _tempCheckInterval == 0) {
-		FlutterBeep.beep();
-		_checkTemp.add(now);
-	  }
+        FlutterBeep.beep();
+        _checkTemp.add(now);
+      }
 
       final millisToNext = 1000 - (now.inMilliseconds % 1000);
       await Future.delayed(Duration(milliseconds: millisToNext));
@@ -64,26 +64,26 @@ class TimerService {
   DateTime? get startTime => _startTime;
 
   Future<void> smokeSuppressTimer(Duration warningTime) async {
-	final completeTime = _smokeSuppressorTime - warningTime;
+    final completeTime = _smokeSuppressorTime - warningTime;
 
-	Duration? now;
-	do {
-	  // Remember, we might not be roasting (yet). This await will always
-	  // gracefully complete before we've hit the warning time.
-	  await Future.delayed(completeTime);
-	  now = elapsed();
+    Duration? now;
+    do {
+      // Remember, we might not be roasting (yet). This await will always
+      // gracefully complete before we've hit the warning time.
+      await Future.delayed(completeTime);
+      now = elapsed();
     } while (now == null);
 
     // Now we're roasting, and can await until the exact waring time.
     await Future.delayed((completeTime) - now);
 
     // Technically, we may have canceled the roast now and need to complete with
-	// an error.
+    // an error.
     final doubleCheck = elapsed();
-	if (doubleCheck == null || doubleCheck < completeTime) {
-	  throw 'Error: roast canceled before smoke suppress timer could complete.';
-	}
+    if (doubleCheck == null || doubleCheck < completeTime) {
+      throw 'Error: roast canceled before smoke suppress timer could complete.';
+    }
 
-	return;
+    return;
   }
 }

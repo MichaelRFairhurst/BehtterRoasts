@@ -17,46 +17,49 @@ class RoastLogService {
     final logs = <BaseLog>[...temps, ...phases, ...controls]
       ..sort((a, b) => a.time.compareTo(b.time));
 
-	final fstCrackLogs = phases.where((p) => p.phase == Phase.firstCrack);
-	final firstCrackStart = fstCrackLogs.isEmpty ? null : fstCrackLogs.first;
-	final firstCrackEnd = fstCrackLogs.length < 2 ? null : fstCrackLogs.last;
+    final fstCrackLogs = phases.where((p) => p.phase == Phase.firstCrack);
+    final firstCrackStart = fstCrackLogs.isEmpty ? null : fstCrackLogs.first;
+    final firstCrackEnd = fstCrackLogs.length < 2 ? null : fstCrackLogs.last;
 
-	final sndCrackLogs = phases.where((p) => p.phase == Phase.secondCrack).toList();
+    final sndCrackLogs =
+        phases.where((p) => p.phase == Phase.secondCrack).toList();
 
     for (final log in logs) {
       if (log is TempLog) {
-	    if (previousTemp == null) {
-	      result.add(RoastLog(time: log.time, temp: log.temp));
-	    } else {
-	      final duration = log.time - previousTemp.time;
-	      final rise = log.temp - previousTemp.temp;
-	      result.add(RoastLog(
+        if (previousTemp == null) {
+          result.add(RoastLog(time: log.time, temp: log.temp));
+        } else {
+          final duration = log.time - previousTemp.time;
+          final rise = log.temp - previousTemp.temp;
+          result.add(RoastLog(
             time: log.time,
-	        temp: log.temp,
-	        rateOfRise: rise / (duration.inMilliseconds / 1000.0 / 60.0),
-	      ));
-	    }
-	    previousTemp = log;
+            temp: log.temp,
+            rateOfRise: rise / (duration.inMilliseconds / 1000.0 / 60.0),
+          ));
+        }
+        previousTemp = log;
       }
 
       if (log is PhaseLog) {
-		if (log.phase == Phase.dryEnd) {
+        if (log.phase == Phase.dryEnd) {
           result.add(RoastLog(time: log.time, phase: RoastPhase.dryEnd));
-		} else if (log.phase == Phase.done) {
+        } else if (log.phase == Phase.done) {
           result.add(RoastLog(time: log.time, phase: RoastPhase.done));
-	    } else if (identical(log, firstCrackStart)) {
-          result.add(RoastLog(time: log.time, phase: RoastPhase.firstCrackStart));
-	    } else if (identical(log, firstCrackEnd)) {
+        } else if (identical(log, firstCrackStart)) {
+          result
+              .add(RoastLog(time: log.time, phase: RoastPhase.firstCrackStart));
+        } else if (identical(log, firstCrackEnd)) {
           result.add(RoastLog(time: log.time, phase: RoastPhase.firstCrackEnd));
-	    } else if (identical(log, sndCrackLogs[0])) {
-          result.add(RoastLog(time: log.time, phase: RoastPhase.secondCrackStart));
-	    }
+        } else if (identical(log, sndCrackLogs[0])) {
+          result.add(
+              RoastLog(time: log.time, phase: RoastPhase.secondCrackStart));
+        }
       }
 
       if (log is ControlLog) {
         result.add(RoastLog(time: log.time, control: log.control));
       }
-	}
+    }
 
     return result;
   }

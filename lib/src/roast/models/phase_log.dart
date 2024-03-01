@@ -18,5 +18,6 @@ class PhaseLog with _$PhaseLog implements BaseLog {
     required Phase phase,
   }) = _PhaseLog;
 
-  factory PhaseLog.fromJson(Map<String, dynamic> json) => _$PhaseLogFromJson(json);
+  factory PhaseLog.fromJson(Map<String, dynamic> json) =>
+      _$PhaseLogFromJson(json);
 }

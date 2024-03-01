@@ -19,7 +19,6 @@ class NewRoastPage extends ConsumerStatefulWidget {
 }
 
 class NewRoastPageState extends ConsumerState<NewRoastPage> {
-
   final number = TextEditingController(text: '1');
   final weight = TextEditingController(text: '300');
   final devel = TextEditingController(text: '20');
@@ -36,156 +35,154 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
         title: const Text("Start a New Roast"),
       ),
       body: Container(
-		padding: const EdgeInsets.symmetric(horizontal: 16.0),
-		child: Form(
-		  key: roastFormKey,
-		  child: CustomScrollView(
-			slivers: [
-			  const SliverPadding(padding: EdgeInsets.only(top: 16.0)),
-			  if (beanErr)
-				SliverToBoxAdapter(
-				  child: Text(
-					'Select a bean:',
-					style: RoastAppTheme.materialTheme.textTheme.caption!.copyWith(
-					  color: RoastAppTheme.materialTheme.errorColor,
-					  fontSize: 12.0,
-					),
-				  ),
-				),
-			  SliverToBoxAdapter(
-				child: BeanSelect(
-				  selectedBean: selectedBean,
-				  onChanged: (bean) {
-					setState(() {
-					  selectedBean = bean;
-					});
-				  },
-				),
-			  ),
-			  const SliverPadding(padding: EdgeInsets.only(top:10)),
-			  const SliverToBoxAdapter(
-			    child: Text('Roast number'),
-			  ),
-			  SliverToBoxAdapter(
-				child: TextFormField(
-				  controller: number,
-				  keyboardType: TextInputType.number,
-				  validator: (value) {
-					if (int.tryParse(value ?? '') == null) {
-					  return 'Enter a valid roast number';
-					}
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Form(
+          key: roastFormKey,
+          child: CustomScrollView(
+            slivers: [
+              const SliverPadding(padding: EdgeInsets.only(top: 16.0)),
+              if (beanErr)
+                SliverToBoxAdapter(
+                  child: Text(
+                    'Select a bean:',
+                    style:
+                        RoastAppTheme.materialTheme.textTheme.caption!.copyWith(
+                      color: RoastAppTheme.materialTheme.errorColor,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                ),
+              SliverToBoxAdapter(
+                child: BeanSelect(
+                  selectedBean: selectedBean,
+                  onChanged: (bean) {
+                    setState(() {
+                      selectedBean = bean;
+                    });
+                  },
+                ),
+              ),
+              const SliverPadding(padding: EdgeInsets.only(top: 10)),
+              const SliverToBoxAdapter(
+                child: Text('Roast number'),
+              ),
+              SliverToBoxAdapter(
+                child: TextFormField(
+                    controller: number,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (int.tryParse(value ?? '') == null) {
+                        return 'Enter a valid roast number';
+                      }
 
-					return null;
-				  }
-				),
-			  ),
-			  const SliverPadding(padding: EdgeInsets.only(top:10)),
-			  const SliverToBoxAdapter(
-			    child: Text('Weight (g)'),
-			  ),
-			  SliverToBoxAdapter(
-			    child: TextFormField(
-				  controller: weight,
-				  keyboardType: TextInputType.number,
-				  decoration: const InputDecoration(
-					suffixText: 'g',
-				  ),
-				  validator: (value) {
-					if (double.tryParse(value ?? '') == null) {
-					  return 'Enter a valid weight';
-					}
+                      return null;
+                    }),
+              ),
+              const SliverPadding(padding: EdgeInsets.only(top: 10)),
+              const SliverToBoxAdapter(
+                child: Text('Weight (g)'),
+              ),
+              SliverToBoxAdapter(
+                child: TextFormField(
+                    controller: weight,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      suffixText: 'g',
+                    ),
+                    validator: (value) {
+                      if (double.tryParse(value ?? '') == null) {
+                        return 'Enter a valid weight';
+                      }
 
-					return null;
-				  }
-				),
-			  ),
-			  const SliverPadding(padding: EdgeInsets.only(top: 10)),
-			  const SliverToBoxAdapter(
-			    child: Text('Target Development (%)'),
-			  ),
-			  SliverToBoxAdapter(
-			    child: TextFormField(
-				  controller: devel,
-				  keyboardType: TextInputType.number,
-				  decoration: const InputDecoration(
-					suffixText: '%',
-				  ),
-				  validator: (value) {
-					if (double.tryParse(value ?? '') == null) {
-					  return 'Enter a valid development percentage';
-					}
+                      return null;
+                    }),
+              ),
+              const SliverPadding(padding: EdgeInsets.only(top: 10)),
+              const SliverToBoxAdapter(
+                child: Text('Target Development (%)'),
+              ),
+              SliverToBoxAdapter(
+                child: TextFormField(
+                    controller: devel,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      suffixText: '%',
+                    ),
+                    validator: (value) {
+                      if (double.tryParse(value ?? '') == null) {
+                        return 'Enter a valid development percentage';
+                      }
 
-					return null;
-				  }
-				),
-			  ),
-			  const SliverPadding(padding: EdgeInsets.only(top:10)),
-			  SliverToBoxAdapter(
-			    child: Row(
-				  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-				  children: [
-					const Text('Check roaster temperature:'),
-					TempIntervalSelect(
-					  value: tempInterval,
-					  onChanged: (val) {
-						setState(() {
-						  tempInterval = val;
-						});
-					  },
-					),
-				  ],
-				),
-			  ),
-			  SliverFillRemaining(
-			    hasScrollBody: false,
-				child: Container(
-				  alignment: Alignment.bottomCenter,
-				  padding: const EdgeInsets.only(bottom: 16),
-				  child: SizedBox(
-				    width: double.infinity,
-				    child: ElevatedButton.icon(
-					  label: const Icon(Icons.navigate_next),
-					  icon: const Text('Begin roast'),
-					  onPressed: () {
-						final formValid = roastFormKey.currentState!.validate();
-						if (selectedBean == null) {
-						  setState(() {
-							beanErr = true;
-						  });
-						} else {
-						  setState(() {
-							beanErr = false;
-						  });
-						}
+                      return null;
+                    }),
+              ),
+              const SliverPadding(padding: EdgeInsets.only(top: 10)),
+              SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Check roaster temperature:'),
+                    TempIntervalSelect(
+                      value: tempInterval,
+                      onChanged: (val) {
+                        setState(() {
+                          tempInterval = val;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      label: const Icon(Icons.navigate_next),
+                      icon: const Text('Begin roast'),
+                      onPressed: () {
+                        final formValid = roastFormKey.currentState!.validate();
+                        if (selectedBean == null) {
+                          setState(() {
+                            beanErr = true;
+                          });
+                        } else {
+                          setState(() {
+                            beanErr = false;
+                          });
+                        }
 
-						if (!beanErr && formValid) {
-						  final roast = Roast(
-							beanId: selectedBean!.id!,
-							roasted: DateTime.now(), // Replaced later.
-							roastNumber: int.parse(number.text),
-							weightIn: double.parse(weight.text),
-							weightOut: double.parse(weight.text),
-							config: RoastConfig(
-							  tempInterval: tempInterval,
-							  targetDevelopment: double.parse(devel.text) / 100,
-							),
-						  );
-						  ref.read(roastProvider.notifier).state = roast;
-						  ref.read(temperatureLogsProvider.notifier).state = [];
-						  ref.read(phaseLogsProvider.notifier).state = [];
-						  ref.read(controlLogsProvider.notifier).state = [];
-						  ref.read(timerServiceProvider).reset();
-						  context.replace(Routes.timer, extra: roast);
-						}
-					  },
-					),
-				  ),
-				),
-			  ),
-			],
-		  ),
-		),
-	  ),
+                        if (!beanErr && formValid) {
+                          final roast = Roast(
+                            beanId: selectedBean!.id!,
+                            roasted: DateTime.now(), // Replaced later.
+                            roastNumber: int.parse(number.text),
+                            weightIn: double.parse(weight.text),
+                            weightOut: double.parse(weight.text),
+                            config: RoastConfig(
+                              tempInterval: tempInterval,
+                              targetDevelopment: double.parse(devel.text) / 100,
+                            ),
+                          );
+                          ref.read(roastProvider.notifier).state = roast;
+                          ref.read(temperatureLogsProvider.notifier).state = [];
+                          ref.read(phaseLogsProvider.notifier).state = [];
+                          ref.read(controlLogsProvider.notifier).state = [];
+                          ref.read(timerServiceProvider).reset();
+                          context.replace(Routes.timer, extra: roast);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

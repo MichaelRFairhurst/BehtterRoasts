@@ -30,115 +30,120 @@ class TimerPage extends ConsumerWidget {
     final tips = ref.watch(tipsProvider);
 
     Widget? fab;
-	if (!running && tService.elapsed() == null) {
+    if (!running && tService.elapsed() == null) {
       fab = ElevatedButton.icon(
-	    style: RoastAppTheme.largeButtonTheme.style,
+        style: RoastAppTheme.largeButtonTheme.style,
         icon: const Icon(Icons.local_fire_department_sharp, size: 28.0),
         label: const Text('Start'),
         onPressed: () {
-		  final roast = ref.read(roastProvider);
+          final roast = ref.read(roastProvider);
           tService.start(roast!.config.tempInterval);
         },
       );
-	} else if (!running) {
+    } else if (!running) {
       fab = ElevatedButton.icon(
-	    style: RoastAppTheme.largeButtonTheme.style,
+        style: RoastAppTheme.largeButtonTheme.style,
         label: const Icon(Icons.navigate_next, size: 28.0),
         icon: const Text('Continue'),
         onPressed: () {
-		  final roast = ref.read(roastProvider);
-		  final tempLogs = ref.read(temperatureLogsProvider);
-		  final controlLogs = ref.read(controlLogsProvider);
-		  final phaseLogs = ref.read(phaseLogsProvider);
-		  final toAdd = roast!.copyWith(
-		    roasted: tService.startTime!,
-		    tempLogs: tempLogs,
-			controlLogs: controlLogs,
-			phaseLogs: phaseLogs
-		  );
-		  ref.read(roastProvider.notifier).state = toAdd;
-		  context.replace(Routes.completeRoast);
+          final roast = ref.read(roastProvider);
+          final tempLogs = ref.read(temperatureLogsProvider);
+          final controlLogs = ref.read(controlLogsProvider);
+          final phaseLogs = ref.read(phaseLogsProvider);
+          final toAdd = roast!.copyWith(
+              roasted: tService.startTime!,
+              tempLogs: tempLogs,
+              controlLogs: controlLogs,
+              phaseLogs: phaseLogs);
+          ref.read(roastProvider.notifier).state = toAdd;
+          context.replace(Routes.completeRoast);
         },
       );
-	}
+    }
 
     return RoastPopScope(
-	  running: running,
-	  child: Scaffold(
-		appBar: AppBar(
-		  title: const Text("Roast Controls"),
-		),
-		body: Column(
-		  crossAxisAlignment: CrossAxisAlignment.stretch,
-		  children: [
-		    AlertWidget(
-			  alerts: alerts,
-			),
-			Container(
-			  decoration: const BoxDecoration(
-				color: RoastAppTheme.metalLight,
-				//border: Border(bottom: BorderSide(color: RoastAppTheme.capuccino, width: 1.0)),
-				boxShadow: [BoxShadow(
-				  color: RoastAppTheme.capuccino,
-				  offset: Offset(0, 0),
-				  blurRadius: 2.0,
-				)],
-			  ),
-			  padding: const EdgeInsets.only(bottom: 4.0),
-			  margin: const EdgeInsets.only(bottom: 4.0),
-			  child: const ControlsWidget(),
-			),
-			Expanded(
-			  child: BottomStickyScrollView(
-			    children: [
-				  TempLogWidget(logs: logs),
-				  const ProjectionsWidget(),
-				],
-			  ),
-			),
-			AnimatedPopUp(
-			  child: !running || showTempInputTime == null ? null : Container(
-				alignment: Alignment.center,
-				padding: const EdgeInsets.all(16.0),
-				decoration: const BoxDecoration(
-				  color: RoastAppTheme.metalLight,
-				  boxShadow: [BoxShadow(
-					color: RoastAppTheme.capuccino,
-					offset: Offset(0, 0),
-					blurRadius: 2.0,
-				  )],
-				),
-				child: CheckTempWidget(
-				  shownTime: showTempInputTime,
-				  onSubmit: (time, temp) {
-					ref.read(temperatureLogsProvider.notifier)
-					  .update((logs) => logs.toList()..add(TempLog(
-						 temp: temp, time: time)
-					));
-					ref.read(showTempInputTimeProvider.notifier).state = null;
-				  },
-				),
-			  ),
-			),
-		  ],
-		),
-		floatingActionButton: fab,
-		bottomNavigationBar: BottomAppBar(
-		  child: Column(
-			crossAxisAlignment: CrossAxisAlignment.stretch,
-			mainAxisSize: MainAxisSize.min,
-			children: [
-			  RoastTipWidget(tips: tips),
-			  const SizedBox(
-				height: 50,
-				child: Center(
-				  child: TimeWidget(),
-				),
-			  ),
-			],
-		  ),
-		),
-	  ),
-	);
+      running: running,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Roast Controls"),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AlertWidget(
+              alerts: alerts,
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                color: RoastAppTheme.metalLight,
+                //border: Border(bottom: BorderSide(color: RoastAppTheme.capuccino, width: 1.0)),
+                boxShadow: [
+                  BoxShadow(
+                    color: RoastAppTheme.capuccino,
+                    offset: Offset(0, 0),
+                    blurRadius: 2.0,
+                  )
+                ],
+              ),
+              padding: const EdgeInsets.only(bottom: 4.0),
+              margin: const EdgeInsets.only(bottom: 4.0),
+              child: const ControlsWidget(),
+            ),
+            Expanded(
+              child: BottomStickyScrollView(
+                children: [
+                  TempLogWidget(logs: logs),
+                  const ProjectionsWidget(),
+                ],
+              ),
+            ),
+            AnimatedPopUp(
+              child: !running || showTempInputTime == null
+                  ? null
+                  : Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: const BoxDecoration(
+                        color: RoastAppTheme.metalLight,
+                        boxShadow: [
+                          BoxShadow(
+                            color: RoastAppTheme.capuccino,
+                            offset: Offset(0, 0),
+                            blurRadius: 2.0,
+                          )
+                        ],
+                      ),
+                      child: CheckTempWidget(
+                        shownTime: showTempInputTime,
+                        onSubmit: (time, temp) {
+                          ref.read(temperatureLogsProvider.notifier).update(
+                              (logs) => logs.toList()
+                                ..add(TempLog(temp: temp, time: time)));
+                          ref.read(showTempInputTimeProvider.notifier).state =
+                              null;
+                        },
+                      ),
+                    ),
+            ),
+          ],
+        ),
+        floatingActionButton: fab,
+        bottomNavigationBar: BottomAppBar(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RoastTipWidget(tips: tips),
+              const SizedBox(
+                height: 50,
+                child: Center(
+                  child: TimeWidget(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -18,6 +18,6 @@ class RoastLog with _$RoastLog {
     int? temp,
     RoastPhase? phase,
     Control? control,
-	double? rateOfRise,
+    double? rateOfRise,
   }) = _RoastLog;
 }

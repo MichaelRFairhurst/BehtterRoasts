@@ -21,26 +21,21 @@ final router = GoRouter(
   initialLocation: Routes.roastHistory,
   routes: [
     GoRoute(
-      path: Routes.newRoast,
-      builder: (context, state) => const NewRoastPage()
-    ),
+        path: Routes.newRoast,
+        builder: (context, state) => const NewRoastPage()),
     GoRoute(
-      path: Routes.roastHistory,
-      builder: (context, state) => const RoastHistoryPage()
-    ),
+        path: Routes.roastHistory,
+        builder: (context, state) => const RoastHistoryPage()),
     GoRoute(
       path: Routes.roastReviewConfigPath,
       builder: (context, state) {
-		return RoastReviewPage(beanId: state.pathParameters[Routes.beanIdPart]!);
-	  },
+        return RoastReviewPage(
+            beanId: state.pathParameters[Routes.beanIdPart]!);
+      },
     ),
+    GoRoute(path: Routes.timer, builder: (context, state) => const TimerPage()),
     GoRoute(
-      path: Routes.timer,
-      builder: (context, state) => const TimerPage()
-    ),
-    GoRoute(
-      path: Routes.completeRoast,
-      builder: (context, state) => const CompleteRoastPage()
-    ),
+        path: Routes.completeRoast,
+        builder: (context, state) => const CompleteRoastPage()),
   ],
 );

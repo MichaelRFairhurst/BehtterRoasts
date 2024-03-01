@@ -9,21 +9,21 @@ class TimeWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-	final time = ref.watch(secondsProvider).value;
+    final time = ref.watch(secondsProvider).value;
 
     if (time == null) {
       return const Text('Not roasting.');
     }
 
     return Row(
-	  children: [
+      children: [
         const SizedBox(width: 20),
         const DevelopmentWidget(),
         const Spacer(),
-	    const Text('Roast time: '),
-	    TimestampWidget.twitter(time),
-	    const SizedBox(width: 20),
-	  ],
-	);
+        const Text('Roast time: '),
+        TimestampWidget.twitter(time),
+        const SizedBox(width: 20),
+      ],
+    );
   }
 }
