@@ -62,6 +62,15 @@ class TimerPage extends ConsumerWidget {
           context.replace(Routes.completeRoast);
         },
       );
+    } else if (state == RoastTimerState.preheating) {
+      fab = ElevatedButton.icon(
+        style: RoastAppTheme.largeButtonTheme.style,
+        icon: const Icon(Icons.stop_circle, size: 28.0),
+        label: const Text('Stop Preheat'),
+        onPressed: () {
+          tService.stopPreheat();
+        },
+      );
     }
 
     final Widget body;

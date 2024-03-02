@@ -26,14 +26,20 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
         ref.watch(timerStateProvider).value ?? RoastTimerState.waiting;
 
     if (state == RoastTimerState.preheating) {
+      final time = ref.watch(secondsProvider).value ?? Duration.zero;
+
+      final remaining = duration - time;
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
             'Preheating...',
+            textAlign: TextAlign.center,
             style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
           ),
           const SizedBox(height: 6),
           RichText(
+            textAlign: TextAlign.left,
             text: TextSpan(
               children: [
                 TextSpan(
@@ -50,11 +56,14 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
               ],
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              ref.read(timerServiceProvider).stopPreheat();
-            },
-            child: const Text('Stop'),
+          const SizedBox(height: 12),
+          Text('Target temp: ${tempCtrl.text}F'),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const Text('Estimated time remaining: '),
+              TimestampWidget.twitter(remaining),
+            ],
           ),
         ],
       );
