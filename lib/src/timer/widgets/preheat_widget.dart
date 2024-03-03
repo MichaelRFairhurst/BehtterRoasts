@@ -1,8 +1,9 @@
 import 'package:behmor_roast/src/behmor/widgets/program_button.dart';
 import 'package:behmor_roast/src/config/theme.dart';
+import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
+import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
-import 'package:behmor_roast/src/timer/services/timer_service.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,10 +25,9 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final state =
-        ref.watch(timerStateProvider).value ?? RoastTimerState.waiting;
+    final state = ref.watch(roastStateProvider);
 
-    if (state == RoastTimerState.preheating) {
+    if (state == RoastState.preheating) {
       final time = ref.watch(secondsTotalProvider).value ?? Duration.zero;
 
       final remaining = duration - time;
@@ -152,6 +152,8 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
                                 preheatTimeEst: duration,
                               ),
                             ));
+                    ref.read(preheatStartTimeProvider.notifier).state =
+                        DateTime.now();
                     ref.read(timerServiceProvider).startPreheat();
                   }
                 },
@@ -161,7 +163,13 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
                 style: RoastAppTheme.limeButtonTheme.style,
                 child: const Text('Skip'),
                 onPressed: () {
-                  ref.read(timerServiceProvider).stopPreheat();
+                  ref
+                      .read(phaseLogsProvider.notifier)
+                      .update((state) => state.toList()
+                        ..add(const PhaseLog(
+                          time: Duration.zero,
+                          phase: Phase.preheatEnd,
+                        )));
                 },
               ),
             ],

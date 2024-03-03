@@ -1,7 +1,7 @@
 import 'package:behmor_roast/src/roast/models/control_log.dart';
 import 'package:behmor_roast/src/roast/models/phase_log.dart';
+import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
-import 'package:behmor_roast/src/timer/services/timer_service.dart';
 import 'package:behmor_roast/src/timer/widgets/control_button.dart';
 import 'package:behmor_roast/src/util/widgets/crack_icon.dart';
 import 'package:flutter/material.dart';
@@ -84,8 +84,7 @@ class ControlsWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final phaseLogs = ref.watch(phaseLogsProvider);
-    final running =
-        ref.watch(timerStateProvider).value == RoastTimerState.roasting;
+    final running = ref.watch(roastStateProvider) == RoastState.roasting;
 
     return Column(
       children: [

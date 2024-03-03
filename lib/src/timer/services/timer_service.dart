@@ -4,39 +4,23 @@ import 'package:flutter_beep/flutter_beep.dart';
 
 const _smokeSuppressorTime = Duration(seconds: 7 * 60 + 45);
 
-enum RoastTimerState {
-  waiting,
-  preheating,
-  preheatDone,
-  roasting,
-  done,
-}
-
 class TimerService {
   DateTime? _startTime;
   DateTime? _roastTime;
   DateTime? _stopTime;
   int _tempCheckInterval = 15;
-  final _state = StreamController<RoastTimerState>()
-    ..add(RoastTimerState.waiting);
   final _checkTemp = StreamController<Duration>.broadcast();
   final _secondsRoast = StreamController<Duration?>.broadcast();
   final _secondsTotal = StreamController<Duration?>.broadcast();
 
   void startPreheat() {
     _startTime = DateTime.now();
-    _state.add(RoastTimerState.preheating);
     _fireSeconds(() => _startTime, () => _stopTime, (_) {}, _secondsTotal);
-  }
-
-  void stopPreheat() {
-    _state.add(RoastTimerState.preheatDone);
   }
 
   void start(int tempCheckInterval) {
     _roastTime = DateTime.now();
     _startTime ??= _roastTime;
-    _state.add(RoastTimerState.roasting);
     _tempCheckInterval = tempCheckInterval;
     _fireSeconds(() => _roastTime, () => _stopTime, (time) {
       if (time.inSeconds % _tempCheckInterval == 0) {
@@ -50,7 +34,6 @@ class TimerService {
     _startTime = null;
     _roastTime = null;
     _stopTime = null;
-    _state.add(RoastTimerState.waiting);
     _secondsTotal.add(null);
     _secondsRoast.add(null);
   }
@@ -78,7 +61,6 @@ class TimerService {
 
   void stop() {
     _stopTime = DateTime.now();
-    _state.add(RoastTimerState.done);
   }
 
   Duration? elapsed() => _elapsed(_startTime, _stopTime);
@@ -96,7 +78,6 @@ class TimerService {
     return DateTime.now().difference(start);
   }
 
-  Stream<RoastTimerState> get state => _state.stream;
   Stream<Duration> get checkTemp => _checkTemp.stream;
   Stream<Duration?> get seconds => _secondsTotal.stream;
   Stream<Duration?> get secondsTotal => _secondsTotal.stream;

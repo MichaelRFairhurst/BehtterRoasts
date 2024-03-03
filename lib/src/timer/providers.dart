@@ -27,11 +27,6 @@ final secondsTotalProvider = StreamProvider<Duration?>((ref) {
   return tService.secondsTotal;
 });
 
-final timerStateProvider = StreamProvider<RoastTimerState>((ref) {
-  final tService = ref.watch(timerServiceProvider);
-  return tService.state;
-});
-
 final checkTempStreamProvider = StreamProvider<Duration>((ref) {
   final tService = ref.watch(timerServiceProvider);
   return tService.checkTemp;
@@ -93,13 +88,13 @@ final roastLogsProvider = Provider<List<RoastLog>>((ref) {
 final tipsProvider = Provider<Set<String>>((ref) {
   final service = TipsService();
   final roastLogs = ref.watch(roastLogsProvider);
-  final running =
-      ref.watch(timerStateProvider).value == RoastTimerState.roasting;
+  final running = ref.watch(roastStateProvider) == RoastState.roasting;
   return service.getTips(roastLogs, running);
 });
 
 final roastTimelineProvider = Provider<RoastTimeline>((ref) {
   final tService = ref.watch(timerServiceProvider);
+  final preheatTime = ref.watch(preheatStartTimeProvider);
   final temps = ref.watch(temperatureLogsProvider);
   final controls = ref.watch(controlLogsProvider);
   final phases = ref.watch(phaseLogsProvider);
@@ -107,5 +102,11 @@ final roastTimelineProvider = Provider<RoastTimeline>((ref) {
     ...temps,
     ...controls,
     ...phases,
-  ], startTime: tService.roastTime, preheatStart: tService.startTime);
+  ], startTime: tService.roastTime, preheatStart: preheatTime);
+});
+
+final preheatStartTimeProvider = StateProvider<DateTime?>((ref) => null);
+
+final roastStateProvider = Provider<RoastState>((ref) {
+  return ref.watch(roastTimelineProvider).roastState;
 });

@@ -1,6 +1,6 @@
 import 'package:behmor_roast/src/config/theme.dart';
+import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
-import 'package:behmor_roast/src/timer/services/timer_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,7 +11,7 @@ class RoastPopScope extends ConsumerWidget {
     super.key,
   });
 
-  final RoastTimerState state;
+  final RoastState state;
   final Widget child;
 
   @override
@@ -19,7 +19,7 @@ class RoastPopScope extends ConsumerWidget {
     final String contentStr;
     final String continueStr;
     final String stopStr;
-    if (state == RoastTimerState.roasting) {
+    if (state == RoastState.roasting) {
       contentStr = 'Are you sure you want to stop the current roast?';
       continueStr = 'Continue roasting';
       stopStr = 'Stop current roast';

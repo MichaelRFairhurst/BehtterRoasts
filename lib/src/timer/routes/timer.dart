@@ -4,7 +4,7 @@ import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
-import 'package:behmor_roast/src/timer/services/timer_service.dart';
+import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/widgets/alert_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/check_temp_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/controls_widget.dart';
@@ -26,15 +26,14 @@ class TimerPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tService = ref.watch(timerServiceProvider);
-    final state =
-        ref.watch(timerStateProvider).value ?? RoastTimerState.waiting;
+    final state = ref.watch(roastStateProvider);
     final showTempInputTime = ref.watch(showTempInputTimeProvider);
     final alerts = ref.watch(alertsProvider);
     final logs = ref.watch(roastLogsProvider);
     final tips = ref.watch(tipsProvider);
 
     Widget? fab;
-    if (state == RoastTimerState.preheatDone) {
+    if (state == RoastState.preheatDone) {
       fab = ElevatedButton.icon(
         style: RoastAppTheme.largeButtonTheme.style,
         icon: const Icon(Icons.local_fire_department_sharp, size: 28.0),
@@ -49,7 +48,7 @@ class TimerPage extends ConsumerWidget {
             )));
         },
       );
-    } else if (state == RoastTimerState.done) {
+    } else if (state == RoastState.done) {
       fab = ElevatedButton.icon(
         style: RoastAppTheme.largeButtonTheme.style,
         label: const Icon(Icons.navigate_next, size: 28.0),
@@ -68,7 +67,7 @@ class TimerPage extends ConsumerWidget {
           context.replace(Routes.completeRoast);
         },
       );
-    } else if (state == RoastTimerState.preheating) {
+    } else if (state == RoastState.preheating) {
       fab = ElevatedButton.icon(
         style: RoastAppTheme.largeButtonTheme.style,
         icon: const Icon(Icons.stop_circle, size: 28.0),
@@ -79,14 +78,12 @@ class TimerPage extends ConsumerWidget {
               time: tService.elapsed()!,
               phase: Phase.preheatEnd,
             )));
-          tService.stopPreheat();
         },
       );
     }
 
     final Widget body;
-    if (state == RoastTimerState.waiting ||
-        state == RoastTimerState.preheating) {
+    if (state == RoastState.waiting || state == RoastState.preheating) {
       body = const Padding(
         padding: EdgeInsets.all(16),
         child: PreheatWidget(),
@@ -130,8 +127,7 @@ class TimerPage extends ConsumerWidget {
             ),
             Expanded(child: body),
             AnimatedPopUp(
-              child: state != RoastTimerState.roasting ||
-                      showTempInputTime == null
+              child: state != RoastState.roasting || showTempInputTime == null
                   ? null
                   : Container(
                       alignment: Alignment.center,

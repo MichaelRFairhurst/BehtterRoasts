@@ -1,6 +1,6 @@
 import 'package:behmor_roast/src/roast/models/control_log.dart';
+import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
-import 'package:behmor_roast/src/timer/services/timer_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,8 +15,7 @@ class ControlButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controls = ref.watch(controlLogsProvider);
-    final running =
-        ref.watch(timerStateProvider).value == RoastTimerState.roasting;
+    final running = ref.watch(roastStateProvider) == RoastState.roasting;
 
     final pwrLevel = controls
         .cast<ControlLog?>()

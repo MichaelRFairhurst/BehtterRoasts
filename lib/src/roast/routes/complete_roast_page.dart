@@ -1,7 +1,7 @@
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/widgets/roast_summary_widget.dart';
-import 'package:behmor_roast/src/timer/services/timer_service.dart';
+import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/widgets/roast_pop_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,7 +23,7 @@ class CompleteRoastPageState extends ConsumerState<CompleteRoastPage> {
   @override
   Widget build(BuildContext context) {
     return RoastPopScope(
-      state: RoastTimerState.done,
+      state: RoastState.done,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Roast complete'),
