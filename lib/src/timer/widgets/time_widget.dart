@@ -11,7 +11,12 @@ class TimeWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(timerStateProvider).value;
-    final time = ref.watch(secondsProvider).value;
+    Duration? time;
+    if (state == RoastTimerState.preheating) {
+      time = ref.watch(secondsTotalProvider).value;
+    } else {
+      time = ref.watch(secondsRoastProvider).value;
+    }
 
     if (state == RoastTimerState.waiting ||
         state == RoastTimerState.preheatDone ||

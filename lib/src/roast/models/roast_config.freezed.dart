@@ -21,6 +21,8 @@ RoastConfig _$RoastConfigFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$RoastConfig {
   int get tempInterval => throw _privateConstructorUsedError;
+  int? get preheatTarget => throw _privateConstructorUsedError;
+  Duration? get preheatTimeEst => throw _privateConstructorUsedError;
   double get targetDevelopment => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,7 +37,11 @@ abstract class $RoastConfigCopyWith<$Res> {
           RoastConfig value, $Res Function(RoastConfig) then) =
       _$RoastConfigCopyWithImpl<$Res, RoastConfig>;
   @useResult
-  $Res call({int tempInterval, double targetDevelopment});
+  $Res call(
+      {int tempInterval,
+      int? preheatTarget,
+      Duration? preheatTimeEst,
+      double targetDevelopment});
 }
 
 /// @nodoc
@@ -52,6 +58,8 @@ class _$RoastConfigCopyWithImpl<$Res, $Val extends RoastConfig>
   @override
   $Res call({
     Object? tempInterval = null,
+    Object? preheatTarget = freezed,
+    Object? preheatTimeEst = freezed,
     Object? targetDevelopment = null,
   }) {
     return _then(_value.copyWith(
@@ -59,6 +67,14 @@ class _$RoastConfigCopyWithImpl<$Res, $Val extends RoastConfig>
           ? _value.tempInterval
           : tempInterval // ignore: cast_nullable_to_non_nullable
               as int,
+      preheatTarget: freezed == preheatTarget
+          ? _value.preheatTarget
+          : preheatTarget // ignore: cast_nullable_to_non_nullable
+              as int?,
+      preheatTimeEst: freezed == preheatTimeEst
+          ? _value.preheatTimeEst
+          : preheatTimeEst // ignore: cast_nullable_to_non_nullable
+              as Duration?,
       targetDevelopment: null == targetDevelopment
           ? _value.targetDevelopment
           : targetDevelopment // ignore: cast_nullable_to_non_nullable
@@ -75,7 +91,11 @@ abstract class _$$_RoastConfigCopyWith<$Res>
       __$$_RoastConfigCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int tempInterval, double targetDevelopment});
+  $Res call(
+      {int tempInterval,
+      int? preheatTarget,
+      Duration? preheatTimeEst,
+      double targetDevelopment});
 }
 
 /// @nodoc
@@ -90,6 +110,8 @@ class __$$_RoastConfigCopyWithImpl<$Res>
   @override
   $Res call({
     Object? tempInterval = null,
+    Object? preheatTarget = freezed,
+    Object? preheatTimeEst = freezed,
     Object? targetDevelopment = null,
   }) {
     return _then(_$_RoastConfig(
@@ -97,6 +119,14 @@ class __$$_RoastConfigCopyWithImpl<$Res>
           ? _value.tempInterval
           : tempInterval // ignore: cast_nullable_to_non_nullable
               as int,
+      preheatTarget: freezed == preheatTarget
+          ? _value.preheatTarget
+          : preheatTarget // ignore: cast_nullable_to_non_nullable
+              as int?,
+      preheatTimeEst: freezed == preheatTimeEst
+          ? _value.preheatTimeEst
+          : preheatTimeEst // ignore: cast_nullable_to_non_nullable
+              as Duration?,
       targetDevelopment: null == targetDevelopment
           ? _value.targetDevelopment
           : targetDevelopment // ignore: cast_nullable_to_non_nullable
@@ -109,7 +139,10 @@ class __$$_RoastConfigCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_RoastConfig implements _RoastConfig {
   const _$_RoastConfig(
-      {required this.tempInterval, required this.targetDevelopment});
+      {required this.tempInterval,
+      this.preheatTarget,
+      this.preheatTimeEst,
+      required this.targetDevelopment});
 
   factory _$_RoastConfig.fromJson(Map<String, dynamic> json) =>
       _$$_RoastConfigFromJson(json);
@@ -117,11 +150,15 @@ class _$_RoastConfig implements _RoastConfig {
   @override
   final int tempInterval;
   @override
+  final int? preheatTarget;
+  @override
+  final Duration? preheatTimeEst;
+  @override
   final double targetDevelopment;
 
   @override
   String toString() {
-    return 'RoastConfig(tempInterval: $tempInterval, targetDevelopment: $targetDevelopment)';
+    return 'RoastConfig(tempInterval: $tempInterval, preheatTarget: $preheatTarget, preheatTimeEst: $preheatTimeEst, targetDevelopment: $targetDevelopment)';
   }
 
   @override
@@ -131,13 +168,18 @@ class _$_RoastConfig implements _RoastConfig {
             other is _$_RoastConfig &&
             (identical(other.tempInterval, tempInterval) ||
                 other.tempInterval == tempInterval) &&
+            (identical(other.preheatTarget, preheatTarget) ||
+                other.preheatTarget == preheatTarget) &&
+            (identical(other.preheatTimeEst, preheatTimeEst) ||
+                other.preheatTimeEst == preheatTimeEst) &&
             (identical(other.targetDevelopment, targetDevelopment) ||
                 other.targetDevelopment == targetDevelopment));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, tempInterval, targetDevelopment);
+  int get hashCode => Object.hash(runtimeType, tempInterval, preheatTarget,
+      preheatTimeEst, targetDevelopment);
 
   @JsonKey(ignore: true)
   @override
@@ -156,6 +198,8 @@ class _$_RoastConfig implements _RoastConfig {
 abstract class _RoastConfig implements RoastConfig {
   const factory _RoastConfig(
       {required final int tempInterval,
+      final int? preheatTarget,
+      final Duration? preheatTimeEst,
       required final double targetDevelopment}) = _$_RoastConfig;
 
   factory _RoastConfig.fromJson(Map<String, dynamic> json) =
@@ -163,6 +207,10 @@ abstract class _RoastConfig implements RoastConfig {
 
   @override
   int get tempInterval;
+  @override
+  int? get preheatTarget;
+  @override
+  Duration? get preheatTimeEst;
   @override
   double get targetDevelopment;
   @override

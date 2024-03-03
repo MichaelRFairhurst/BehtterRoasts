@@ -1,5 +1,6 @@
 import 'package:behmor_roast/src/behmor/widgets/program_button.dart';
 import 'package:behmor_roast/src/config/theme.dart';
+import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/timer/services/timer_service.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
@@ -18,6 +19,7 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
     text: '180',
   );
 
+  final formKey = GlobalKey<FormState>();
   var duration = const Duration(seconds: 100);
 
   @override
@@ -26,7 +28,7 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
         ref.watch(timerStateProvider).value ?? RoastTimerState.waiting;
 
     if (state == RoastTimerState.preheating) {
-      final time = ref.watch(secondsProvider).value ?? Duration.zero;
+      final time = ref.watch(secondsTotalProvider).value ?? Duration.zero;
 
       final remaining = duration - time;
       return Column(
@@ -69,85 +71,103 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
       );
     }
 
-    return Column(
-      children: [
-        Text(
-          'Preheat this roast?',
-          style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 6),
-        const Text(
-          'Simply run your roaster for a minute or two before loading your'
-          " beans, and you'll have a faster / hotter roast profile.",
-          textAlign: TextAlign.center,
-        ),
-        const Spacer(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('Preheat temp: '),
-            SizedBox(
-              width: 100,
-              child: TextField(
-                controller: TextEditingController(
-                  text: '180',
-                ),
-                decoration: const InputDecoration(
-                  suffixText: 'F',
-                ),
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          Text(
+            'Preheat this roast?',
+            style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 6),
+          const Text(
+            'Simply run your roaster for a minute or two before loading your'
+            " beans, and you'll have a faster / hotter roast profile.",
+            textAlign: TextAlign.center,
+          ),
+          const Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Preheat temp: '),
+              SizedBox(
+                width: 100,
+                child: TextFormField(
+                    controller: TextEditingController(
+                      text: '180',
+                    ),
+                    decoration: const InputDecoration(
+                      suffixText: 'F',
+                    ),
+                    validator: (str) {
+                      if (str == null || int.tryParse(str) == null) {
+                        return 'Enter a valid temperature';
+                      }
+                    }),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            const Expanded(
-              child: Text('Estimated time:'),
-            ),
-            IconButton(
-              icon: const Icon(Icons.remove),
-              onPressed: () {
-                setState(() {
-                  duration -= const Duration(seconds: 5);
-                });
-              },
-            ),
-            TimestampWidget.twitter(duration),
-            IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: () {
-                setState(() {
-                  duration += const Duration(seconds: 5);
-                });
-              },
-            ),
-          ],
-        ),
-        const Spacer(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton.icon(
-              style: RoastAppTheme.largeButtonTheme.style,
-              label: const Text('Start Preheat'),
-              icon: const Icon(Icons.local_fire_department),
-              onPressed: () {
-                ref.read(timerServiceProvider).startPreheat();
-              },
-            ),
-            const Text('or'),
-            ElevatedButton(
-              style: RoastAppTheme.limeButtonTheme.style,
-              child: const Text('Skip'),
-              onPressed: () {
-                ref.read(timerServiceProvider).stopPreheat();
-              },
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const Expanded(
+                child: Text('Estimated time:'),
+              ),
+              IconButton(
+                icon: const Icon(Icons.remove),
+                onPressed: () {
+                  setState(() {
+                    duration -= const Duration(seconds: 5);
+                  });
+                },
+              ),
+              TimestampWidget.twitter(duration),
+              IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () {
+                  setState(() {
+                    duration += const Duration(seconds: 5);
+                  });
+                },
+              ),
+            ],
+          ),
+          const Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton.icon(
+                style: RoastAppTheme.largeButtonTheme.style,
+                label: const Text('Start Preheat'),
+                icon: const Icon(Icons.local_fire_department),
+                onPressed: () {
+                  final state = formKey.currentState!;
+                  if (state.validate()) {
+                    ref
+                        .read(roastProvider.notifier)
+                        .update((roast) => roast!.copyWith(
+                              config: roast.config.copyWith(
+                                preheatTarget: int.parse(tempCtrl.text),
+                                preheatTimeEst: duration,
+                              ),
+                            ));
+                    ref.read(timerServiceProvider).startPreheat();
+                  }
+                },
+              ),
+              const Text('or'),
+              ElevatedButton(
+                style: RoastAppTheme.limeButtonTheme.style,
+                child: const Text('Skip'),
+                onPressed: () {
+                  ref.read(timerServiceProvider).stopPreheat();
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

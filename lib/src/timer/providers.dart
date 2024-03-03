@@ -6,6 +6,7 @@ import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/services/roast_log_service.dart';
 import 'package:behmor_roast/src/timer/models/alert.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
+import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/services/alert_service.dart';
 import 'package:behmor_roast/src/timer/services/projection_service.dart';
 import 'package:behmor_roast/src/timer/services/tips_service.dart';
@@ -16,9 +17,14 @@ final timerServiceProvider = Provider((_) {
   return TimerService();
 });
 
-final secondsProvider = StreamProvider<Duration?>((ref) {
+final secondsRoastProvider = StreamProvider<Duration?>((ref) {
   final tService = ref.watch(timerServiceProvider);
-  return tService.seconds;
+  return tService.secondsRoast;
+});
+
+final secondsTotalProvider = StreamProvider<Duration?>((ref) {
+  final tService = ref.watch(timerServiceProvider);
+  return tService.secondsTotal;
 });
 
 final timerStateProvider = StreamProvider<RoastTimerState>((ref) {
@@ -44,13 +50,13 @@ final projectionProvider = Provider<Projection>((ref) {
   final service = ref.watch(projectionServiceProvider);
   final config = ref.watch(roastProvider)!.config;
   final logs = ref.watch(roastLogsProvider);
-  final elapsed = ref.watch(secondsProvider);
+  final elapsed = ref.watch(secondsRoastProvider);
   return service.createProjections(
       roastLogs: logs, roastConfig: config, elapsed: elapsed.value);
 });
 
 final alertsProvider = Provider<List<Alert>>((ref) {
-  final elapsed = ref.watch(secondsProvider).value;
+  final elapsed = ref.watch(secondsRoastProvider).value;
   if (elapsed == null) {
     return [];
   }
@@ -90,4 +96,21 @@ final tipsProvider = Provider<Set<String>>((ref) {
   final running =
       ref.watch(timerStateProvider).value == RoastTimerState.roasting;
   return service.getTips(roastLogs, running);
+});
+
+final roastTimelineProvider = Provider<RoastTimeline>((ref) {
+  final temps = ref.watch(temperatureLogsProvider);
+  final controls = ref.watch(controlLogsProvider);
+  final phases = ref.watch(phaseLogsProvider);
+  try {
+    return RoastTimeline.fromRawLogs([
+      ...temps,
+      ...controls,
+      ...phases,
+    ]);
+  } catch (e, st) {
+    print(e);
+    print(st);
+    rethrow;
+  }
 });

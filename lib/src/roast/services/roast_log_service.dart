@@ -41,7 +41,13 @@ class RoastLogService {
       }
 
       if (log is PhaseLog) {
-        if (log.phase == Phase.dryEnd) {
+        if (log.phase == Phase.start) {
+          result.add(RoastLog(time: log.time, phase: RoastPhase.start));
+        } else if (log.phase == Phase.preheatEnd) {
+          result.add(
+              const RoastLog(time: Duration.zero, phase: RoastPhase.preheat));
+          result.add(RoastLog(time: log.time, phase: RoastPhase.preheatEnd));
+        } else if (log.phase == Phase.dryEnd) {
           result.add(RoastLog(time: log.time, phase: RoastPhase.dryEnd));
         } else if (log.phase == Phase.done) {
           result.add(RoastLog(time: log.time, phase: RoastPhase.done));

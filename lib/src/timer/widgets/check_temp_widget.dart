@@ -32,7 +32,7 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
       [4, 5, 6],
       [7, 8, 9]
     ];
-    final seconds = overrideTime ?? ref.watch(secondsProvider).value!;
+    final seconds = overrideTime ?? ref.watch(secondsRoastProvider).value!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

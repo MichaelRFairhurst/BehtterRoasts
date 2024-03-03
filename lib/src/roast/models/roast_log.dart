@@ -4,6 +4,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'roast_log.freezed.dart';
 
 enum RoastPhase {
+  preheat,
+  preheatEnd,
+  start,
   dryEnd,
   firstCrackStart,
   firstCrackEnd,

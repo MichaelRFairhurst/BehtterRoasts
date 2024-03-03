@@ -37,6 +37,10 @@ class ControlsWidget extends ConsumerWidget {
     final Widget icon;
     final String label;
     switch (phaseType) {
+      case Phase.preheatEnd:
+      case Phase.start:
+        throw 'unreachable';
+
       case Phase.dryEnd:
         icon = const Icon(Icons.air);
         label = 'Dry end';

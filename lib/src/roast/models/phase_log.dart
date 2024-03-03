@@ -5,6 +5,8 @@ part 'phase_log.freezed.dart';
 part 'phase_log.g.dart';
 
 enum Phase {
+  preheatEnd,
+  start,
   dryEnd,
   firstCrack,
   secondCrack,

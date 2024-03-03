@@ -1,5 +1,6 @@
 import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/config/theme.dart';
+import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
@@ -41,6 +42,11 @@ class TimerPage extends ConsumerWidget {
         onPressed: () {
           final roast = ref.read(roastProvider);
           tService.start(roast!.config.tempInterval);
+          ref.read(phaseLogsProvider.notifier).update((state) => state.toList()
+            ..add(PhaseLog(
+              time: tService.elapsed()!,
+              phase: Phase.start,
+            )));
         },
       );
     } else if (state == RoastTimerState.done) {
@@ -68,6 +74,11 @@ class TimerPage extends ConsumerWidget {
         icon: const Icon(Icons.stop_circle, size: 28.0),
         label: const Text('Stop Preheat'),
         onPressed: () {
+          ref.read(phaseLogsProvider.notifier).update((state) => state.toList()
+            ..add(PhaseLog(
+              time: tService.elapsed()!,
+              phase: Phase.preheatEnd,
+            )));
           tService.stopPreheat();
         },
       );
@@ -138,6 +149,8 @@ class TimerPage extends ConsumerWidget {
                       child: CheckTempWidget(
                         shownTime: showTempInputTime,
                         onSubmit: (time, temp) {
+                          final timeline = ref.read(roastTimelineProvider);
+                          time += timeline.startTime!;
                           ref.read(temperatureLogsProvider.notifier).update(
                               (logs) => logs.toList()
                                 ..add(TempLog(temp: temp, time: time)));

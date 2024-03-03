@@ -7,6 +7,8 @@ part 'roast_config.g.dart';
 class RoastConfig with _$RoastConfig {
   const factory RoastConfig({
     required int tempInterval,
+    int? preheatTarget,
+    Duration? preheatTimeEst,
     required double targetDevelopment,
   }) = _RoastConfig;
 
