@@ -15,7 +15,7 @@ class TempLogWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final startTime =
-        ref.read(roastTimelineProvider).startTime ?? Duration.zero;
+        ref.read(roastTimelineProvider).roastTimeOffset ?? Duration.zero;
     return DataTable(
       dataRowHeight: 20,
       columnSpacing: 10,

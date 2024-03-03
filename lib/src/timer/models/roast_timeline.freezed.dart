@@ -17,9 +17,9 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$RoastTimeline {
   List<BaseLog> get rawLogs => throw _privateConstructorUsedError;
-  Duration? get preheatStart => throw _privateConstructorUsedError;
+  DateTime? get preheatStart => throw _privateConstructorUsedError;
   Duration? get preheatEnd => throw _privateConstructorUsedError;
-  Duration? get startTime => throw _privateConstructorUsedError;
+  DateTime? get startTime => throw _privateConstructorUsedError;
   Duration? get dryEnd => throw _privateConstructorUsedError;
   Duration? get firstCrackStart => throw _privateConstructorUsedError;
   Duration? get firstCrackEnd => throw _privateConstructorUsedError;
@@ -39,9 +39,9 @@ abstract class $RoastTimelineCopyWith<$Res> {
   @useResult
   $Res call(
       {List<BaseLog> rawLogs,
-      Duration? preheatStart,
+      DateTime? preheatStart,
       Duration? preheatEnd,
-      Duration? startTime,
+      DateTime? startTime,
       Duration? dryEnd,
       Duration? firstCrackStart,
       Duration? firstCrackEnd,
@@ -80,7 +80,7 @@ class _$RoastTimelineCopyWithImpl<$Res, $Val extends RoastTimeline>
       preheatStart: freezed == preheatStart
           ? _value.preheatStart
           : preheatStart // ignore: cast_nullable_to_non_nullable
-              as Duration?,
+              as DateTime?,
       preheatEnd: freezed == preheatEnd
           ? _value.preheatEnd
           : preheatEnd // ignore: cast_nullable_to_non_nullable
@@ -88,7 +88,7 @@ class _$RoastTimelineCopyWithImpl<$Res, $Val extends RoastTimeline>
       startTime: freezed == startTime
           ? _value.startTime
           : startTime // ignore: cast_nullable_to_non_nullable
-              as Duration?,
+              as DateTime?,
       dryEnd: freezed == dryEnd
           ? _value.dryEnd
           : dryEnd // ignore: cast_nullable_to_non_nullable
@@ -123,9 +123,9 @@ abstract class _$$_RoastTimelineCopyWith<$Res>
   @useResult
   $Res call(
       {List<BaseLog> rawLogs,
-      Duration? preheatStart,
+      DateTime? preheatStart,
       Duration? preheatEnd,
-      Duration? startTime,
+      DateTime? startTime,
       Duration? dryEnd,
       Duration? firstCrackStart,
       Duration? firstCrackEnd,
@@ -162,7 +162,7 @@ class __$$_RoastTimelineCopyWithImpl<$Res>
       preheatStart: freezed == preheatStart
           ? _value.preheatStart
           : preheatStart // ignore: cast_nullable_to_non_nullable
-              as Duration?,
+              as DateTime?,
       preheatEnd: freezed == preheatEnd
           ? _value.preheatEnd
           : preheatEnd // ignore: cast_nullable_to_non_nullable
@@ -170,7 +170,7 @@ class __$$_RoastTimelineCopyWithImpl<$Res>
       startTime: freezed == startTime
           ? _value.startTime
           : startTime // ignore: cast_nullable_to_non_nullable
-              as Duration?,
+              as DateTime?,
       dryEnd: freezed == dryEnd
           ? _value.dryEnd
           : dryEnd // ignore: cast_nullable_to_non_nullable
@@ -220,11 +220,11 @@ class _$_RoastTimeline extends _RoastTimeline {
   }
 
   @override
-  final Duration? preheatStart;
+  final DateTime? preheatStart;
   @override
   final Duration? preheatEnd;
   @override
-  final Duration? startTime;
+  final DateTime? startTime;
   @override
   final Duration? dryEnd;
   @override
@@ -286,9 +286,9 @@ class _$_RoastTimeline extends _RoastTimeline {
 abstract class _RoastTimeline extends RoastTimeline {
   const factory _RoastTimeline(
       {required final List<BaseLog> rawLogs,
-      final Duration? preheatStart,
+      final DateTime? preheatStart,
       final Duration? preheatEnd,
-      final Duration? startTime,
+      final DateTime? startTime,
       final Duration? dryEnd,
       final Duration? firstCrackStart,
       final Duration? firstCrackEnd,
@@ -299,11 +299,11 @@ abstract class _RoastTimeline extends RoastTimeline {
   @override
   List<BaseLog> get rawLogs;
   @override
-  Duration? get preheatStart;
+  DateTime? get preheatStart;
   @override
   Duration? get preheatEnd;
   @override
-  Duration? get startTime;
+  DateTime? get startTime;
   @override
   Duration? get dryEnd;
   @override

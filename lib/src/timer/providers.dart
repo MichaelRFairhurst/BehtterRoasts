@@ -99,18 +99,13 @@ final tipsProvider = Provider<Set<String>>((ref) {
 });
 
 final roastTimelineProvider = Provider<RoastTimeline>((ref) {
+  final tService = ref.watch(timerServiceProvider);
   final temps = ref.watch(temperatureLogsProvider);
   final controls = ref.watch(controlLogsProvider);
   final phases = ref.watch(phaseLogsProvider);
-  try {
-    return RoastTimeline.fromRawLogs([
-      ...temps,
-      ...controls,
-      ...phases,
-    ]);
-  } catch (e, st) {
-    print(e);
-    print(st);
-    rethrow;
-  }
+  return RoastTimeline.fromRawLogs(rawLogs: [
+    ...temps,
+    ...controls,
+    ...phases,
+  ], startTime: tService.roastTime, preheatStart: tService.startTime);
 });

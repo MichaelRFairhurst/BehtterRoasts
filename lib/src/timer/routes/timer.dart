@@ -150,7 +150,7 @@ class TimerPage extends ConsumerWidget {
                         shownTime: showTempInputTime,
                         onSubmit: (time, temp) {
                           final timeline = ref.read(roastTimelineProvider);
-                          time += timeline.startTime!;
+                          time += timeline.roastTimeOffset!;
                           ref.read(temperatureLogsProvider.notifier).update(
                               (logs) => logs.toList()
                                 ..add(TempLog(temp: temp, time: time)));

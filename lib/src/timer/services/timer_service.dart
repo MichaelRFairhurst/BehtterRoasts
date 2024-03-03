@@ -102,6 +102,7 @@ class TimerService {
   Stream<Duration?> get secondsTotal => _secondsTotal.stream;
   Stream<Duration?> get secondsRoast => _secondsRoast.stream;
   DateTime? get startTime => _startTime;
+  DateTime? get roastTime => _roastTime;
 
   Future<void> smokeSuppressTimer(Duration warningTime) async {
     final completeTime = _smokeSuppressorTime - warningTime;

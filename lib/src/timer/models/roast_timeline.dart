@@ -18,8 +18,9 @@ class RoastTimeline with _$RoastTimeline {
 
   const factory RoastTimeline({
     required List<BaseLog> rawLogs,
+    DateTime? preheatStart,
     Duration? preheatEnd,
-    Duration? startTime,
+    DateTime? startTime,
     Duration? dryEnd,
     Duration? firstCrackStart,
     Duration? firstCrackEnd,
@@ -27,9 +28,12 @@ class RoastTimeline with _$RoastTimeline {
     Duration? done,
   }) = _RoastTimeline;
 
-  factory RoastTimeline.fromRawLogs(List<BaseLog> rawLogs) {
+  factory RoastTimeline.fromRawLogs({
+    required List<BaseLog> rawLogs,
+    DateTime? startTime,
+    DateTime? preheatStart,
+  }) {
     Duration? preheatEnd;
-    Duration? startTime;
     Duration? dryEnd;
     Duration? firstCrackStart;
     Duration? firstCrackEnd;
@@ -41,9 +45,6 @@ class RoastTimeline with _$RoastTimeline {
         switch (log.phase) {
           case Phase.preheatEnd:
             preheatEnd = log.time;
-            break;
-          case Phase.start:
-            startTime = log.time;
             break;
           case Phase.dryEnd:
             dryEnd = log.time;
@@ -64,6 +65,7 @@ class RoastTimeline with _$RoastTimeline {
 
     return RoastTimeline(
       rawLogs: rawLogs,
+      preheatStart: preheatStart,
       preheatEnd: preheatEnd,
       startTime: startTime,
       dryEnd: dryEnd,
@@ -73,6 +75,10 @@ class RoastTimeline with _$RoastTimeline {
       done: done,
     );
   }
+
+  Duration? get roastTimeOffset => preheatStart == null
+      ? Duration.zero
+      : startTime?.difference(preheatStart!);
 
   RoastState get roastState {
     if (done != null) {
@@ -87,11 +93,9 @@ class RoastTimeline with _$RoastTimeline {
       return RoastState.preheatDone;
     }
 
-    /*
     if (preheatStart != null) {
       return RoastState.preheating;
     }
-	*/
 
     return RoastState.waiting;
   }

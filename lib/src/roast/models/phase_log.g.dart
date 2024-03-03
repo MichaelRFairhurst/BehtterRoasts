@@ -18,6 +18,8 @@ Map<String, dynamic> _$$_PhaseLogToJson(_$_PhaseLog instance) =>
     };
 
 const _$PhaseEnumMap = {
+  Phase.preheatEnd: 'preheatEnd',
+  Phase.start: 'start',
   Phase.dryEnd: 'dryEnd',
   Phase.firstCrack: 'firstCrack',
   Phase.secondCrack: 'secondCrack',
