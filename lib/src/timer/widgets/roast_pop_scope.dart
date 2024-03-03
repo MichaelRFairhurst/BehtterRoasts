@@ -47,7 +47,8 @@ class RoastPopScope extends ConsumerWidget {
                   ElevatedButton(
                     style: RoastAppTheme.cancelButtonTheme.style,
                     onPressed: () {
-                      ref.read(timerServiceProvider).stop();
+                      ref.read(roastTimerProvider).stop();
+                      ref.read(preheatTimerProvider).stop();
                       Navigator.pop(context);
                       Navigator.pop(context);
                     },

@@ -25,7 +25,7 @@ class TimerPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tService = ref.watch(timerServiceProvider);
+    final tService = ref.watch(roastTimerProvider);
     final state = ref.watch(roastStateProvider);
     final showTempInputTime = ref.watch(showTempInputTimeProvider);
     final alerts = ref.watch(alertsProvider);
@@ -73,9 +73,10 @@ class TimerPage extends ConsumerWidget {
         icon: const Icon(Icons.stop_circle, size: 28.0),
         label: const Text('Stop Preheat'),
         onPressed: () {
+          final preheatService = ref.read(preheatTimerProvider);
           ref.read(phaseLogsProvider.notifier).update((state) => state.toList()
             ..add(PhaseLog(
-              time: tService.elapsed()!,
+              time: preheatService.elapsed()!,
               phase: Phase.preheatEnd,
             )));
         },
@@ -145,8 +146,6 @@ class TimerPage extends ConsumerWidget {
                       child: CheckTempWidget(
                         shownTime: showTempInputTime,
                         onSubmit: (time, temp) {
-                          final timeline = ref.read(roastTimelineProvider);
-                          time += timeline.roastTimeOffset!;
                           ref.read(temperatureLogsProvider.notifier).update(
                               (logs) => logs.toList()
                                 ..add(TempLog(temp: temp, time: time)));

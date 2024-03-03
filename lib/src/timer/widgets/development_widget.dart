@@ -22,7 +22,7 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget>
     super.initState();
     ticker = createTicker((_) {
       setState(() {
-        time = ref.read(timerServiceProvider).elapsed()!;
+        time = ref.read(roastTimerProvider).elapsed()!;
       });
     })
       ..start();

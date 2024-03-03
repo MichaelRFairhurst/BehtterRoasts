@@ -76,10 +76,6 @@ class RoastTimeline with _$RoastTimeline {
     );
   }
 
-  Duration? get roastTimeOffset => preheatStart == null
-      ? Duration.zero
-      : startTime?.difference(preheatStart!);
-
   RoastState get roastState {
     if (done != null) {
       return RoastState.done;

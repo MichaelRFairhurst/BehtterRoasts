@@ -13,22 +13,26 @@ import 'package:behmor_roast/src/timer/services/tips_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:behmor_roast/src/timer/services/timer_service.dart';
 
-final timerServiceProvider = Provider((_) {
+final roastTimerProvider = Provider((_) {
+  return TimerService();
+});
+
+final preheatTimerProvider = Provider((_) {
   return TimerService();
 });
 
 final secondsRoastProvider = StreamProvider<Duration?>((ref) {
-  final tService = ref.watch(timerServiceProvider);
-  return tService.secondsRoast;
+  final tService = ref.watch(roastTimerProvider);
+  return tService.seconds;
 });
 
-final secondsTotalProvider = StreamProvider<Duration?>((ref) {
-  final tService = ref.watch(timerServiceProvider);
-  return tService.secondsTotal;
+final secondsPreheatProvider = StreamProvider<Duration?>((ref) {
+  final tService = ref.watch(preheatTimerProvider);
+  return tService.seconds;
 });
 
 final checkTempStreamProvider = StreamProvider<Duration>((ref) {
-  final tService = ref.watch(timerServiceProvider);
+  final tService = ref.watch(roastTimerProvider);
   return tService.checkTemp;
 });
 
@@ -93,7 +97,7 @@ final tipsProvider = Provider<Set<String>>((ref) {
 });
 
 final roastTimelineProvider = Provider<RoastTimeline>((ref) {
-  final tService = ref.watch(timerServiceProvider);
+  final tService = ref.watch(roastTimerProvider);
   final preheatTime = ref.watch(preheatStartTimeProvider);
   final temps = ref.watch(temperatureLogsProvider);
   final controls = ref.watch(controlLogsProvider);
@@ -102,7 +106,7 @@ final roastTimelineProvider = Provider<RoastTimeline>((ref) {
     ...temps,
     ...controls,
     ...phases,
-  ], startTime: tService.roastTime, preheatStart: preheatTime);
+  ], startTime: tService.startTime, preheatStart: preheatTime);
 });
 
 final preheatStartTimeProvider = StateProvider<DateTime?>((ref) => null);

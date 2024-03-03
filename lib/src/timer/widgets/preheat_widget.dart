@@ -28,7 +28,7 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
     final state = ref.watch(roastStateProvider);
 
     if (state == RoastState.preheating) {
-      final time = ref.watch(secondsTotalProvider).value ?? Duration.zero;
+      final time = ref.watch(secondsPreheatProvider).value ?? Duration.zero;
 
       final remaining = duration - time;
       return Column(
@@ -154,7 +154,7 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
                             ));
                     ref.read(preheatStartTimeProvider.notifier).state =
                         DateTime.now();
-                    ref.read(timerServiceProvider).startPreheat();
+                    ref.read(preheatTimerProvider).start(null);
                   }
                 },
               ),

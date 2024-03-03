@@ -66,7 +66,7 @@ class ControlsWidget extends ConsumerWidget {
         onPressed: !running
             ? null
             : () {
-                final tService = ref.read(timerServiceProvider);
+                final tService = ref.read(roastTimerProvider);
                 final now = tService.elapsed()!;
                 final newLog = PhaseLog(time: now, phase: phaseType);
                 ref

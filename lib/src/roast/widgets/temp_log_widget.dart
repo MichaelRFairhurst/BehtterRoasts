@@ -1,5 +1,4 @@
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
-import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
@@ -14,8 +13,6 @@ class TempLogWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final startTime =
-        ref.read(roastTimelineProvider).roastTimeOffset ?? Duration.zero;
     return DataTable(
       dataRowHeight: 20,
       columnSpacing: 10,
@@ -47,11 +44,11 @@ class TempLogWidget extends ConsumerWidget {
           ),
         ),
       ],
-      rows: getRows(logs, startTime),
+      rows: getRows(logs),
     );
   }
 
-  List<DataRow> getRows(List<RoastLog> logs, Duration startTime) {
+  List<DataRow> getRows(List<RoastLog> logs) {
     if (logs.isEmpty) {
       return const [
         DataRow(
@@ -69,7 +66,7 @@ class TempLogWidget extends ConsumerWidget {
     return logs
         .map((log) => DataRow(
               cells: [
-                DataCell(TimestampWidget(log.time - startTime)),
+                DataCell(TimestampWidget(log.time)),
                 tempCell(log),
                 powerCell(log),
                 phaseCell(log),

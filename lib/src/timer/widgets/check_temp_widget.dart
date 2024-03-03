@@ -70,7 +70,7 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
                               overrideTime = null;
                             } else {
                               overrideTime =
-                                  ref.read(timerServiceProvider).elapsed()!;
+                                  ref.read(roastTimerProvider).elapsed()!;
                             }
                           });
                         },
@@ -153,7 +153,7 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
       label: digit.toString(),
       onPressed: () {
         setState(() {
-          overrideTime ??= ref.read(timerServiceProvider).elapsed()!;
+          overrideTime ??= ref.read(roastTimerProvider).elapsed()!;
           state = state * 10 + digit;
         });
       },

@@ -13,7 +13,7 @@ class TimeWidget extends ConsumerWidget {
     final state = ref.watch(roastStateProvider);
     Duration? time;
     if (state == RoastState.preheating) {
-      time = ref.watch(secondsTotalProvider).value;
+      time = ref.watch(secondsPreheatProvider).value;
     } else {
       time = ref.watch(secondsRoastProvider).value;
     }

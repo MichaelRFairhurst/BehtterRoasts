@@ -32,7 +32,7 @@ class ControlButton extends ConsumerWidget {
       onPressed: disabled
           ? null
           : () {
-              final tService = ref.read(timerServiceProvider);
+              final tService = ref.read(roastTimerProvider);
               final now = tService.elapsed() ?? const Duration(seconds: 0);
               final newLog = ControlLog(
                 time: now,

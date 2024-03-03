@@ -171,7 +171,8 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                           ref.read(temperatureLogsProvider.notifier).state = [];
                           ref.read(phaseLogsProvider.notifier).state = [];
                           ref.read(controlLogsProvider.notifier).state = [];
-                          ref.read(timerServiceProvider).reset();
+                          ref.read(roastTimerProvider).reset();
+                          ref.read(preheatTimerProvider).reset();
                           ref.read(preheatStartTimeProvider.notifier).state =
                               null;
                           context.replace(Routes.timer);
