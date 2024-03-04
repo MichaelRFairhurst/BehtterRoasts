@@ -6,6 +6,7 @@ import 'package:behmor_roast/src/roast/models/roast_config.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/widgets/bean_select.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_interval_select.dart';
+import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -168,13 +169,10 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                             ),
                           );
                           ref.read(roastProvider.notifier).state = roast;
-                          ref.read(temperatureLogsProvider.notifier).state = [];
-                          ref.read(phaseLogsProvider.notifier).state = [];
-                          ref.read(controlLogsProvider.notifier).state = [];
+                          ref.read(roastTimelineProvider.notifier).state =
+                              RoastTimeline.fromRawLogs(rawLogs: []);
                           ref.read(roastTimerProvider).reset();
                           ref.read(preheatTimerProvider).reset();
-                          ref.read(preheatStartTimeProvider.notifier).state =
-                              null;
                           context.replace(Routes.timer);
                         }
                       },

@@ -152,8 +152,8 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
                                 preheatTimeEst: duration,
                               ),
                             ));
-                    ref.read(preheatStartTimeProvider.notifier).state =
-                        DateTime.now();
+                    ref.read(roastTimelineProvider.notifier).update((state) =>
+                        state.copyWith(preheatStart: DateTime.now()));
                     ref.read(preheatTimerProvider).start(null);
                   }
                 },
@@ -164,12 +164,11 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
                 child: const Text('Skip'),
                 onPressed: () {
                   ref
-                      .read(phaseLogsProvider.notifier)
-                      .update((state) => state.toList()
-                        ..add(const PhaseLog(
-                          time: Duration.zero,
-                          phase: Phase.preheatEnd,
-                        )));
+                      .read(roastTimelineProvider.notifier)
+                      .update((state) => state.addLog(const PhaseLog(
+                            time: Duration.zero,
+                            phase: Phase.preheatEnd,
+                          )));
                 },
               ),
             ],

@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ControlsWidget extends ConsumerWidget {
   const ControlsWidget({Key? key}) : super(key: key);
 
-  List<Phase> phaseButtonTypes(List<PhaseLog> phaseLogs) {
+  List<Phase> phaseButtonTypes(Iterable<PhaseLog> phaseLogs) {
     final results = <Phase>[];
 
     if (!phaseLogs.any((p) => p.phase == Phase.dryEnd)) {
@@ -70,8 +70,8 @@ class ControlsWidget extends ConsumerWidget {
                 final now = tService.elapsed()!;
                 final newLog = PhaseLog(time: now, phase: phaseType);
                 ref
-                    .read(phaseLogsProvider.notifier)
-                    .update((logs) => logs.toList()..add(newLog));
+                    .read(roastTimelineProvider.notifier)
+                    .update((state) => state.addLog(newLog));
 
                 if (phaseType == Phase.done) {
                   tService.stop();
@@ -83,7 +83,8 @@ class ControlsWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final phaseLogs = ref.watch(phaseLogsProvider);
+    final phaseLogs =
+        ref.watch(roastTimelineProvider).rawLogs.whereType<PhaseLog>();
     final running = ref.watch(roastStateProvider) == RoastState.roasting;
 
     return Column(

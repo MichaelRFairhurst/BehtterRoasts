@@ -43,7 +43,8 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget>
   }
 
   List<Widget> developmentTimeParts() {
-    final phases = ref.watch(phaseLogsProvider);
+    final phases =
+        ref.watch(roastTimelineProvider).rawLogs.whereType<PhaseLog>();
     final roast = ref.watch(roastProvider);
     if (!phases.any((phase) => phase.phase == Phase.dryEnd)) {
       return [const Text('Waiting for dry end.')];

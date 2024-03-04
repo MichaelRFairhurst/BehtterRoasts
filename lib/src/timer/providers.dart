@@ -70,22 +70,11 @@ final alertsProvider = Provider<List<Alert>>((ref) {
   );
 });
 
-final temperatureLogsProvider = StateProvider<List<TempLog>>(
-  (ref) => [],
-);
-
-final controlLogsProvider = StateProvider<List<ControlLog>>(
-  (ref) => [],
-);
-
-final phaseLogsProvider = StateProvider<List<PhaseLog>>(
-  (ref) => [],
-);
-
 final roastLogsProvider = Provider<List<RoastLog>>((ref) {
-  final temps = ref.watch(temperatureLogsProvider);
-  final controls = ref.watch(controlLogsProvider);
-  final phases = ref.watch(phaseLogsProvider);
+  final timeline = ref.watch(roastTimelineProvider);
+  final temps = timeline.rawLogs.whereType<TempLog>().toList();
+  final controls = timeline.rawLogs.whereType<ControlLog>().toList();
+  final phases = timeline.rawLogs.whereType<PhaseLog>().toList();
   return RoastLogService().aggregate(temps, phases, controls);
 });
 
@@ -96,20 +85,8 @@ final tipsProvider = Provider<Set<String>>((ref) {
   return service.getTips(roastLogs, running);
 });
 
-final roastTimelineProvider = Provider<RoastTimeline>((ref) {
-  final tService = ref.watch(roastTimerProvider);
-  final preheatTime = ref.watch(preheatStartTimeProvider);
-  final temps = ref.watch(temperatureLogsProvider);
-  final controls = ref.watch(controlLogsProvider);
-  final phases = ref.watch(phaseLogsProvider);
-  return RoastTimeline.fromRawLogs(rawLogs: [
-    ...temps,
-    ...controls,
-    ...phases,
-  ], startTime: tService.startTime, preheatStart: preheatTime);
-});
-
-final preheatStartTimeProvider = StateProvider<DateTime?>((ref) => null);
+final roastTimelineProvider =
+    StateProvider<RoastTimeline>((ref) => const RoastTimeline(rawLogs: []));
 
 final roastStateProvider = Provider<RoastState>((ref) {
   return ref.watch(roastTimelineProvider).roastState;

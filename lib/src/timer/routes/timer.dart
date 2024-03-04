@@ -1,5 +1,6 @@
 import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/config/theme.dart';
+import 'package:behmor_roast/src/roast/models/control_log.dart';
 import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
@@ -41,11 +42,12 @@ class TimerPage extends ConsumerWidget {
         onPressed: () {
           final roast = ref.read(roastProvider);
           tService.start(roast!.config.tempInterval);
-          ref.read(phaseLogsProvider.notifier).update((state) => state.toList()
-            ..add(PhaseLog(
-              time: tService.elapsed()!,
-              phase: Phase.start,
-            )));
+          ref.read(roastTimelineProvider.notifier).update((state) => state
+              .addLog(PhaseLog(
+                time: tService.elapsed()!,
+                phase: Phase.start,
+              ))
+              .copyWith(startTime: tService.startTime));
         },
       );
     } else if (state == RoastState.done) {
@@ -55,9 +57,10 @@ class TimerPage extends ConsumerWidget {
         icon: const Text('Continue'),
         onPressed: () {
           final roast = ref.read(roastProvider);
-          final tempLogs = ref.read(temperatureLogsProvider);
-          final controlLogs = ref.read(controlLogsProvider);
-          final phaseLogs = ref.read(phaseLogsProvider);
+          final timeline = ref.read(roastTimelineProvider);
+          final tempLogs = timeline.rawLogs.whereType<TempLog>().toList();
+          final controlLogs = timeline.rawLogs.whereType<ControlLog>().toList();
+          final phaseLogs = timeline.rawLogs.whereType<PhaseLog>().toList();
           final toAdd = roast!.copyWith(
               roasted: tService.startTime!,
               tempLogs: tempLogs,
@@ -74,11 +77,12 @@ class TimerPage extends ConsumerWidget {
         label: const Text('Stop Preheat'),
         onPressed: () {
           final preheatService = ref.read(preheatTimerProvider);
-          ref.read(phaseLogsProvider.notifier).update((state) => state.toList()
-            ..add(PhaseLog(
-              time: preheatService.elapsed()!,
-              phase: Phase.preheatEnd,
-            )));
+          ref
+              .read(roastTimelineProvider.notifier)
+              .update((state) => state.addLog(PhaseLog(
+                    time: preheatService.elapsed()!,
+                    phase: Phase.preheatEnd,
+                  )));
         },
       );
     }
@@ -146,9 +150,9 @@ class TimerPage extends ConsumerWidget {
                       child: CheckTempWidget(
                         shownTime: showTempInputTime,
                         onSubmit: (time, temp) {
-                          ref.read(temperatureLogsProvider.notifier).update(
-                              (logs) => logs.toList()
-                                ..add(TempLog(temp: temp, time: time)));
+                          ref.read(roastTimelineProvider.notifier).update(
+                              (state) => state
+                                  .addLog(TempLog(temp: temp, time: time)));
                           ref.read(showTempInputTimeProvider.notifier).state =
                               null;
                         },

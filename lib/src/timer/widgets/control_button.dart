@@ -14,7 +14,8 @@ class ControlButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controls = ref.watch(controlLogsProvider);
+    final controls =
+        ref.watch(roastTimelineProvider).rawLogs.whereType<ControlLog?>();
     final running = ref.watch(roastStateProvider) == RoastState.roasting;
 
     final pwrLevel = controls
@@ -40,8 +41,8 @@ class ControlButton extends ConsumerWidget {
               );
 
               ref
-                  .read(controlLogsProvider.notifier)
-                  .update((ls) => ls.toList()..add(newLog));
+                  .read(roastTimelineProvider.notifier)
+                  .update((state) => state.addLog(newLog));
             },
       child: Text(control.toString().replaceAll('Control.', '').toUpperCase()),
     );

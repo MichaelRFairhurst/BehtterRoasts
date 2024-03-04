@@ -76,6 +76,12 @@ class RoastTimeline with _$RoastTimeline {
     );
   }
 
+  RoastTimeline addLog(BaseLog log) => RoastTimeline.fromRawLogs(
+        rawLogs: rawLogs.toList()..add(log),
+        startTime: startTime,
+        preheatStart: preheatStart,
+      );
+
   RoastState get roastState {
     if (done != null) {
       return RoastState.done;
