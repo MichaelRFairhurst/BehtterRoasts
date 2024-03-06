@@ -26,6 +26,7 @@ mixin _$Roast {
   double get weightIn => throw _privateConstructorUsedError;
   double get weightOut => throw _privateConstructorUsedError;
   DateTime get roasted => throw _privateConstructorUsedError;
+  Preheat? get preheat => throw _privateConstructorUsedError;
   String? get notes => throw _privateConstructorUsedError;
   List<TempLog> get tempLogs => throw _privateConstructorUsedError;
   List<ControlLog> get controlLogs => throw _privateConstructorUsedError;
@@ -48,12 +49,14 @@ abstract class $RoastCopyWith<$Res> {
       double weightIn,
       double weightOut,
       DateTime roasted,
+      Preheat? preheat,
       String? notes,
       List<TempLog> tempLogs,
       List<ControlLog> controlLogs,
       List<_PhaseLog> phaseLogs});
 
   $RoastConfigCopyWith<$Res> get config;
+  $PreheatCopyWith<$Res>? get preheat;
 }
 
 /// @nodoc
@@ -75,6 +78,7 @@ class _$RoastCopyWithImpl<$Res, $Val extends Roast>
     Object? weightIn = null,
     Object? weightOut = null,
     Object? roasted = null,
+    Object? preheat = freezed,
     Object? notes = freezed,
     Object? tempLogs = null,
     Object? controlLogs = null,
@@ -105,6 +109,10 @@ class _$RoastCopyWithImpl<$Res, $Val extends Roast>
           ? _value.roasted
           : roasted // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      preheat: freezed == preheat
+          ? _value.preheat
+          : preheat // ignore: cast_nullable_to_non_nullable
+              as Preheat?,
       notes: freezed == notes
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
@@ -131,6 +139,18 @@ class _$RoastCopyWithImpl<$Res, $Val extends Roast>
       return _then(_value.copyWith(config: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PreheatCopyWith<$Res>? get preheat {
+    if (_value.preheat == null) {
+      return null;
+    }
+
+    return $PreheatCopyWith<$Res>(_value.preheat!, (value) {
+      return _then(_value.copyWith(preheat: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -146,6 +166,7 @@ abstract class _$$_RoastCopyWith<$Res> implements $RoastCopyWith<$Res> {
       double weightIn,
       double weightOut,
       DateTime roasted,
+      Preheat? preheat,
       String? notes,
       List<TempLog> tempLogs,
       List<ControlLog> controlLogs,
@@ -153,6 +174,8 @@ abstract class _$$_RoastCopyWith<$Res> implements $RoastCopyWith<$Res> {
 
   @override
   $RoastConfigCopyWith<$Res> get config;
+  @override
+  $PreheatCopyWith<$Res>? get preheat;
 }
 
 /// @nodoc
@@ -170,6 +193,7 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
     Object? weightIn = null,
     Object? weightOut = null,
     Object? roasted = null,
+    Object? preheat = freezed,
     Object? notes = freezed,
     Object? tempLogs = null,
     Object? controlLogs = null,
@@ -200,6 +224,10 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
           ? _value.roasted
           : roasted // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      preheat: freezed == preheat
+          ? _value.preheat
+          : preheat // ignore: cast_nullable_to_non_nullable
+              as Preheat?,
       notes: freezed == notes
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
@@ -230,6 +258,7 @@ class _$_Roast extends _Roast {
       required this.weightIn,
       required this.weightOut,
       required this.roasted,
+      this.preheat,
       this.notes,
       final List<TempLog> tempLogs = const [],
       final List<ControlLog> controlLogs = const [],
@@ -254,6 +283,8 @@ class _$_Roast extends _Roast {
   final double weightOut;
   @override
   final DateTime roasted;
+  @override
+  final Preheat? preheat;
   @override
   final String? notes;
   final List<TempLog> _tempLogs;
@@ -285,7 +316,7 @@ class _$_Roast extends _Roast {
 
   @override
   String toString() {
-    return 'Roast(beanId: $beanId, config: $config, roastNumber: $roastNumber, weightIn: $weightIn, weightOut: $weightOut, roasted: $roasted, notes: $notes, tempLogs: $tempLogs, controlLogs: $controlLogs, phaseLogs: $phaseLogs)';
+    return 'Roast(beanId: $beanId, config: $config, roastNumber: $roastNumber, weightIn: $weightIn, weightOut: $weightOut, roasted: $roasted, preheat: $preheat, notes: $notes, tempLogs: $tempLogs, controlLogs: $controlLogs, phaseLogs: $phaseLogs)';
   }
 
   @override
@@ -302,6 +333,7 @@ class _$_Roast extends _Roast {
             (identical(other.weightOut, weightOut) ||
                 other.weightOut == weightOut) &&
             (identical(other.roasted, roasted) || other.roasted == roasted) &&
+            (identical(other.preheat, preheat) || other.preheat == preheat) &&
             (identical(other.notes, notes) || other.notes == notes) &&
             const DeepCollectionEquality().equals(other._tempLogs, _tempLogs) &&
             const DeepCollectionEquality()
@@ -320,6 +352,7 @@ class _$_Roast extends _Roast {
       weightIn,
       weightOut,
       roasted,
+      preheat,
       notes,
       const DeepCollectionEquality().hash(_tempLogs),
       const DeepCollectionEquality().hash(_controlLogs),
@@ -347,6 +380,7 @@ abstract class _Roast extends Roast {
       required final double weightIn,
       required final double weightOut,
       required final DateTime roasted,
+      final Preheat? preheat,
       final String? notes,
       final List<TempLog> tempLogs,
       final List<ControlLog> controlLogs,
@@ -367,6 +401,8 @@ abstract class _Roast extends Roast {
   double get weightOut;
   @override
   DateTime get roasted;
+  @override
+  Preheat? get preheat;
   @override
   String? get notes;
   @override

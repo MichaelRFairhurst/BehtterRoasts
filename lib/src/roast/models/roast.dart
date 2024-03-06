@@ -1,4 +1,5 @@
 import 'package:behmor_roast/src/roast/models/control_log.dart';
+import 'package:behmor_roast/src/roast/models/preheat.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -18,6 +19,7 @@ class Roast with _$Roast {
     required double weightIn,
     required double weightOut,
     required DateTime roasted,
+    Preheat? preheat,
     String? notes,
     @Default([]) List<TempLog> tempLogs,
     @Default([]) List<ControlLog> controlLogs,
@@ -27,7 +29,6 @@ class Roast with _$Roast {
   factory Roast.fromJson(Map<String, dynamic> json) => _$RoastFromJson(json);
 
   RoastTimeline toTimeline() {
-    Duration? preheatEnd;
     Duration? dryEnd;
     Duration? firstCrackStart;
     Duration? firstCrackEnd;
@@ -36,9 +37,6 @@ class Roast with _$Roast {
 
     for (final log in phaseLogs) {
       switch (log.phase) {
-        case _Phase.preheatEnd:
-          preheatEnd = log.time;
-          break;
         case _Phase.dryEnd:
           dryEnd = log.time;
           break;
@@ -58,9 +56,9 @@ class Roast with _$Roast {
 
     return RoastTimeline(
       rawLogs: [...tempLogs, ...controlLogs],
-      //preheatStart: preheatStart,
-      preheatEnd: preheatEnd,
-      //startTime: startTime,
+      preheatStart: preheat?.start,
+      preheatEnd: preheat?.end,
+      startTime: roasted,
       dryEnd: dryEnd,
       firstCrackStart: firstCrackStart,
       firstCrackEnd: firstCrackEnd,
@@ -71,6 +69,15 @@ class Roast with _$Roast {
 
   Roast withTimeline(RoastTimeline timeline) {
     final phaseLogs = <_PhaseLog>[];
+    Preheat? preheat;
+    if (timeline.preheatStart != null) {
+      preheat = Preheat(
+        start: timeline.preheatStart!,
+        end: timeline.preheatEnd ?? Duration.zero,
+        temp: 0, // TODO: get the actual temp!
+      );
+    }
+
     if (timeline.dryEnd != null) {
       phaseLogs.add(_PhaseLog(phase: _Phase.dryEnd, time: timeline.dryEnd!));
     }
@@ -95,13 +102,12 @@ class Roast with _$Roast {
       controlLogs: timeline.rawLogs.whereType<ControlLog>().toList(),
       phaseLogs: phaseLogs,
       roasted: timeline.startTime!,
+      preheat: preheat,
     );
   }
 }
 
 enum _Phase {
-  preheatEnd,
-  start,
   dryEnd,
   crack,
   firstCrack,
