@@ -97,9 +97,6 @@ class TempLogWidget extends ConsumerWidget {
     if (log.phase == RoastPhase.preheat) {
       return const DataCell(Text('Preheat'));
     }
-    if (log.phase == RoastPhase.preheatEnd) {
-      return const DataCell(Text('Preheat Done'));
-    }
     if (log.phase == RoastPhase.start) {
       return const DataCell(Text('Start'));
     }

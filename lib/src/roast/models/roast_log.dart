@@ -5,7 +5,6 @@ part 'roast_log.freezed.dart';
 
 enum RoastPhase {
   preheat,
-  preheatEnd,
   start,
   dryEnd,
   firstCrackStart,

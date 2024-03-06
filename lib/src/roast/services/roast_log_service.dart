@@ -34,6 +34,21 @@ class RoastLogService {
       }
     }
 
+    if (timeline.preheatStart != null && timeline.preheatEnd != null) {
+      if (timeline.startTime == null) {
+        result.add(RoastLog(
+            time: timeline.preheatEnd!,
+            temp: timeline.preheatTemp,
+            phase: RoastPhase.preheat));
+      } else {
+        final time = timeline.preheatStart!
+            .add(timeline.preheatEnd!)
+            .difference(timeline.startTime!);
+        result.add(RoastLog(
+            time: time, temp: timeline.preheatTemp, phase: RoastPhase.preheat));
+      }
+    }
+
     if (timeline.dryEnd != null) {
       result.add(RoastLog(time: timeline.dryEnd!, phase: RoastPhase.dryEnd));
     }

@@ -16,7 +16,9 @@ class ProjectionService {
     Duration? roastTime;
     Duration? timeRemaining;
     Duration? timeToOverheat;
-    final tempLogs = roastLogs.where((log) => log.temp != null).toList();
+    final tempLogs = roastLogs
+        .where((log) => log.temp != null && log.phase == null)
+        .toList();
     final phaseLogs = roastLogs.where((log) => log.phase != null).toList();
 
     if (elapsed != null && tempLogs.length > 1) {
