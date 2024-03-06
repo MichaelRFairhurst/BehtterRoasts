@@ -12,6 +12,7 @@ import 'package:behmor_roast/src/timer/widgets/projections_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/roast_pop_scope.dart';
 import 'package:behmor_roast/src/timer/widgets/roast_tip_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/time_widget.dart';
+import 'package:behmor_roast/src/timer/widgets/timed_check_temp_widget.dart';
 import 'package:behmor_roast/src/util/widgets/animated_pop_up.dart';
 import 'package:behmor_roast/src/util/widgets/bottom_sticky_scroll_view.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,7 @@ class TimerPage extends ConsumerWidget {
     final tips = ref.watch(tipsProvider);
 
     Widget? fab;
-    if (state == RoastState.preheatDone) {
+    if (state == RoastState.ready) {
       fab = ElevatedButton.icon(
         style: RoastAppTheme.largeButtonTheme.style,
         icon: const Icon(Icons.local_fire_department_sharp, size: 28.0),
@@ -79,6 +80,26 @@ class TimerPage extends ConsumerWidget {
       body = const Padding(
         padding: EdgeInsets.all(16),
         child: PreheatWidget(),
+      );
+    } else if (state == RoastState.preheatDone) {
+      body = Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(children: [
+          Text('Caution: roaster is hot!',
+              style: RoastAppTheme.materialTheme.textTheme.titleMedium),
+          const SizedBox(height: 16),
+          const Text('Enter the final preheat temperature you recorded, and'
+              ' then carefully load your beans into the hot roasting drum.'),
+          const SizedBox(height: 16),
+          CheckTempWidget(
+            title: const Text('Enter final preheat temperature'),
+            onSubmit: (temp) {
+              ref
+                  .read(roastTimelineProvider.notifier)
+                  .update((state) => state.copyWith(preheatTemp: temp));
+            },
+          ),
+        ]),
       );
     } else {
       body = BottomStickyScrollView(
@@ -134,7 +155,7 @@ class TimerPage extends ConsumerWidget {
                           )
                         ],
                       ),
-                      child: CheckTempWidget(
+                      child: TimedCheckTempWidget(
                         shownTime: showTempInputTime,
                         onSubmit: (time, temp) {
                           ref.read(roastTimelineProvider.notifier).update(

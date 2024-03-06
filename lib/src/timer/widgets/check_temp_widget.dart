@@ -1,20 +1,18 @@
-import 'package:behmor_roast/src/behmor/widgets/program_button.dart';
 import 'package:behmor_roast/src/config/theme.dart';
-import 'package:behmor_roast/src/timer/providers.dart';
-import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
-import 'package:behmor_roast/src/util/widgets/toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CheckTempWidget extends ConsumerStatefulWidget {
   const CheckTempWidget({
-    required this.shownTime,
     required this.onSubmit,
+    required this.title,
+    this.onChanged,
     super.key,
   });
 
-  final Duration shownTime;
-  final void Function(Duration, int) onSubmit;
+  final Widget title;
+  final void Function(int) onSubmit;
+  final void Function()? onChanged;
 
   @override
   CheckTempWidgetState createState() => CheckTempWidgetState();
@@ -22,8 +20,6 @@ class CheckTempWidget extends ConsumerStatefulWidget {
 
 class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
   int state = 0;
-  bool useShownTime = true;
-  Duration? overrideTime;
 
   @override
   Widget build(BuildContext context) {
@@ -32,65 +28,13 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
       [4, 5, 6],
       [7, 8, 9]
     ];
-    final seconds = overrideTime ?? ref.watch(secondsRoastProvider).value!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            const SizedBox(width: 4.0),
-            //const Expanded(
-            //  child: Text('Enter Temperature'),
-            //),
-            Text('Check temperature with ',
-                style: RoastAppTheme.checkTempTextStyle),
-            const SizedBox(
-              height: 32,
-              child: ProgramButton('B'),
-            ),
-            const Spacer(),
-            Text('Time: ', style: RoastAppTheme.checkTempTextStyle),
-            ToggleSwitch<Duration>(
-              widgetLeft: TimestampWidget(widget.shownTime),
-              valueLeft: widget.shownTime,
-              widgetRight: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TimestampWidget(seconds),
-                  if (overrideTime != null)
-                    SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: ElevatedButton(
-                        style: RoastAppTheme.tinyButtonTheme.style,
-                        onPressed: () {
-                          setState(() {
-                            if (useShownTime) {
-                              overrideTime = null;
-                            } else {
-                              overrideTime =
-                                  ref.read(roastTimerProvider).elapsed()!;
-                            }
-                          });
-                        },
-                        child: const Icon(Icons.refresh, size: 12),
-                      ),
-                    ),
-                ],
-              ),
-              valueRight: seconds,
-              onToggle: (value) {
-                setState(() {
-                  useShownTime = value == widget.shownTime;
-                  if (!useShownTime) {
-                    overrideTime = value;
-                  }
-                });
-              },
-            ),
-            const SizedBox(width: 4.0),
-          ],
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: widget.title,
         ),
         const SizedBox(height: 6.0),
         Container(
@@ -117,8 +61,7 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
           buildButton(
             label: "Done",
             onPressed: () {
-              final time = useShownTime ? widget.shownTime : overrideTime!;
-              widget.onSubmit(time, state);
+              widget.onSubmit(state);
             },
           ),
         ]),
@@ -153,8 +96,8 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
       label: digit.toString(),
       onPressed: () {
         setState(() {
-          overrideTime ??= ref.read(roastTimerProvider).elapsed()!;
           state = state * 10 + digit;
+          widget.onChanged?.call();
         });
       },
     );

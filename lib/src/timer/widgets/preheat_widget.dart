@@ -166,7 +166,7 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
                   ref
                       .read(roastTimelineProvider.notifier)
                       .update((state) => state.copyWith(
-                            preheatEnd: Duration.zero,
+                            preheatTemp: -1,
                           ));
                 },
               ),

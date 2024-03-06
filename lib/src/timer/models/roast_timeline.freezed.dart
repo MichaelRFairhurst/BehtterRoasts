@@ -19,6 +19,7 @@ mixin _$RoastTimeline {
   List<BaseLog> get rawLogs => throw _privateConstructorUsedError;
   DateTime? get preheatStart => throw _privateConstructorUsedError;
   Duration? get preheatEnd => throw _privateConstructorUsedError;
+  int? get preheatTemp => throw _privateConstructorUsedError;
   DateTime? get startTime => throw _privateConstructorUsedError;
   Duration? get dryEnd => throw _privateConstructorUsedError;
   Duration? get firstCrackStart => throw _privateConstructorUsedError;
@@ -41,6 +42,7 @@ abstract class $RoastTimelineCopyWith<$Res> {
       {List<BaseLog> rawLogs,
       DateTime? preheatStart,
       Duration? preheatEnd,
+      int? preheatTemp,
       DateTime? startTime,
       Duration? dryEnd,
       Duration? firstCrackStart,
@@ -65,6 +67,7 @@ class _$RoastTimelineCopyWithImpl<$Res, $Val extends RoastTimeline>
     Object? rawLogs = null,
     Object? preheatStart = freezed,
     Object? preheatEnd = freezed,
+    Object? preheatTemp = freezed,
     Object? startTime = freezed,
     Object? dryEnd = freezed,
     Object? firstCrackStart = freezed,
@@ -85,6 +88,10 @@ class _$RoastTimelineCopyWithImpl<$Res, $Val extends RoastTimeline>
           ? _value.preheatEnd
           : preheatEnd // ignore: cast_nullable_to_non_nullable
               as Duration?,
+      preheatTemp: freezed == preheatTemp
+          ? _value.preheatTemp
+          : preheatTemp // ignore: cast_nullable_to_non_nullable
+              as int?,
       startTime: freezed == startTime
           ? _value.startTime
           : startTime // ignore: cast_nullable_to_non_nullable
@@ -125,6 +132,7 @@ abstract class _$$_RoastTimelineCopyWith<$Res>
       {List<BaseLog> rawLogs,
       DateTime? preheatStart,
       Duration? preheatEnd,
+      int? preheatTemp,
       DateTime? startTime,
       Duration? dryEnd,
       Duration? firstCrackStart,
@@ -147,6 +155,7 @@ class __$$_RoastTimelineCopyWithImpl<$Res>
     Object? rawLogs = null,
     Object? preheatStart = freezed,
     Object? preheatEnd = freezed,
+    Object? preheatTemp = freezed,
     Object? startTime = freezed,
     Object? dryEnd = freezed,
     Object? firstCrackStart = freezed,
@@ -167,6 +176,10 @@ class __$$_RoastTimelineCopyWithImpl<$Res>
           ? _value.preheatEnd
           : preheatEnd // ignore: cast_nullable_to_non_nullable
               as Duration?,
+      preheatTemp: freezed == preheatTemp
+          ? _value.preheatTemp
+          : preheatTemp // ignore: cast_nullable_to_non_nullable
+              as int?,
       startTime: freezed == startTime
           ? _value.startTime
           : startTime // ignore: cast_nullable_to_non_nullable
@@ -202,6 +215,7 @@ class _$_RoastTimeline extends _RoastTimeline {
       {required final List<BaseLog> rawLogs,
       this.preheatStart,
       this.preheatEnd,
+      this.preheatTemp,
       this.startTime,
       this.dryEnd,
       this.firstCrackStart,
@@ -224,6 +238,8 @@ class _$_RoastTimeline extends _RoastTimeline {
   @override
   final Duration? preheatEnd;
   @override
+  final int? preheatTemp;
+  @override
   final DateTime? startTime;
   @override
   final Duration? dryEnd;
@@ -238,7 +254,7 @@ class _$_RoastTimeline extends _RoastTimeline {
 
   @override
   String toString() {
-    return 'RoastTimeline(rawLogs: $rawLogs, preheatStart: $preheatStart, preheatEnd: $preheatEnd, startTime: $startTime, dryEnd: $dryEnd, firstCrackStart: $firstCrackStart, firstCrackEnd: $firstCrackEnd, secondCrackStart: $secondCrackStart, done: $done)';
+    return 'RoastTimeline(rawLogs: $rawLogs, preheatStart: $preheatStart, preheatEnd: $preheatEnd, preheatTemp: $preheatTemp, startTime: $startTime, dryEnd: $dryEnd, firstCrackStart: $firstCrackStart, firstCrackEnd: $firstCrackEnd, secondCrackStart: $secondCrackStart, done: $done)';
   }
 
   @override
@@ -251,6 +267,8 @@ class _$_RoastTimeline extends _RoastTimeline {
                 other.preheatStart == preheatStart) &&
             (identical(other.preheatEnd, preheatEnd) ||
                 other.preheatEnd == preheatEnd) &&
+            (identical(other.preheatTemp, preheatTemp) ||
+                other.preheatTemp == preheatTemp) &&
             (identical(other.startTime, startTime) ||
                 other.startTime == startTime) &&
             (identical(other.dryEnd, dryEnd) || other.dryEnd == dryEnd) &&
@@ -269,6 +287,7 @@ class _$_RoastTimeline extends _RoastTimeline {
       const DeepCollectionEquality().hash(_rawLogs),
       preheatStart,
       preheatEnd,
+      preheatTemp,
       startTime,
       dryEnd,
       firstCrackStart,
@@ -288,6 +307,7 @@ abstract class _RoastTimeline extends RoastTimeline {
       {required final List<BaseLog> rawLogs,
       final DateTime? preheatStart,
       final Duration? preheatEnd,
+      final int? preheatTemp,
       final DateTime? startTime,
       final Duration? dryEnd,
       final Duration? firstCrackStart,
@@ -302,6 +322,8 @@ abstract class _RoastTimeline extends RoastTimeline {
   DateTime? get preheatStart;
   @override
   Duration? get preheatEnd;
+  @override
+  int? get preheatTemp;
   @override
   DateTime? get startTime;
   @override

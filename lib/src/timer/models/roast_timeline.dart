@@ -7,6 +7,7 @@ enum RoastState {
   waiting,
   preheating,
   preheatDone,
+  ready,
   roasting,
   done,
 }
@@ -19,6 +20,7 @@ class RoastTimeline with _$RoastTimeline {
     required List<BaseLog> rawLogs,
     DateTime? preheatStart,
     Duration? preheatEnd,
+    int? preheatTemp,
     DateTime? startTime,
     Duration? dryEnd,
     Duration? firstCrackStart,
@@ -38,6 +40,10 @@ class RoastTimeline with _$RoastTimeline {
 
     if (startTime != null) {
       return RoastState.roasting;
+    }
+
+    if (preheatTemp != null) {
+      return RoastState.ready;
     }
 
     if (preheatEnd != null) {

@@ -74,7 +74,7 @@ class Roast with _$Roast {
       preheat = Preheat(
         start: timeline.preheatStart!,
         end: timeline.preheatEnd ?? Duration.zero,
-        temp: 0, // TODO: get the actual temp!
+        temp: timeline.preheatTemp!,
       );
     }
 
