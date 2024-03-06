@@ -5,6 +5,7 @@ import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_beep/flutter_beep.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PreheatWidget extends ConsumerStatefulWidget {
@@ -30,6 +31,20 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
       final time = ref.watch(secondsPreheatProvider).value ?? Duration.zero;
       final timeFloored = Duration(seconds: time.inSeconds);
 
+      ref.listen<AsyncValue<Duration?>>(secondsPreheatProvider, (last, next) {
+        final now = next.value;
+        final earlier = last?.value;
+        if (now == null || earlier == null) {
+          return;
+        }
+        final earlyWarning = duration - const Duration(seconds: 10);
+        if (now >= earlyWarning && earlier < earlyWarning) {
+          FlutterBeep.beep();
+        } else if (now >= duration && earlier < duration) {
+          FlutterBeep.beep(false);
+        }
+      });
+
       final remaining = duration - timeFloored;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -39,34 +54,51 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
             textAlign: TextAlign.center,
             style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
           ),
-          const SizedBox(height: 6),
-          RichText(
-            textAlign: TextAlign.left,
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Press ',
-                  style: RoastAppTheme.materialTheme.textTheme.bodySmall,
-                ),
-                const WidgetSpan(
-                  child: ProgramButton('B'),
-                ),
-                TextSpan(
-                  text: ' to monitor the current temp of your roaster.',
-                  style: RoastAppTheme.materialTheme.textTheme.bodySmall,
-                ),
-              ],
-            ),
-          ),
           const SizedBox(height: 12),
           Text('Target temp: ${tempCtrl.text}F'),
           const SizedBox(height: 12),
           Row(
             children: [
               const Text('Estimated time remaining: '),
-              TimestampWidget.twitter(remaining),
+              TimestampWidget.twitter(
+                remaining,
+                style:
+                    RoastAppTheme.materialTheme.textTheme.bodyMedium!.copyWith(
+                  color: remaining <= Duration.zero
+                      ? RoastAppTheme.errorColor
+                      : null,
+                  fontWeight: remaining <= const Duration(seconds: 10)
+                      ? FontWeight.bold
+                      : null,
+                ),
+              ),
             ],
           ),
+          const Spacer(),
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Press ',
+                  style: RoastAppTheme.materialTheme.textTheme.bodyMedium!
+                      .copyWith(fontStyle: FontStyle.italic),
+                ),
+                const WidgetSpan(
+                  child: ProgramButton('B'),
+                ),
+                TextSpan(
+                  text: ' to monitor the temp of your roaster. When your'
+                      ' roaster reaches your target temperature of '
+                      '${tempCtrl.text}F, press "Stop Preheat."',
+                  style: RoastAppTheme.materialTheme.textTheme.bodyMedium!
+                      .copyWith(fontStyle: FontStyle.italic),
+                ),
+              ],
+            ),
+          ),
+          const Spacer(),
+          const SizedBox(height: 20),
         ],
       );
     }
