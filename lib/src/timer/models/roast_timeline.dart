@@ -56,4 +56,12 @@ class RoastTimeline with _$RoastTimeline {
 
     return RoastState.waiting;
   }
+
+  Duration? get preheatGap {
+    if (startTime == null || preheatStart == null || preheatEnd == null) {
+      return null;
+    }
+
+    return startTime!.difference(preheatStart!.add(preheatEnd!));
+  }
 }

@@ -7,6 +7,8 @@ class RoastSummary with _$RoastSummary {
   const factory RoastSummary({
     required String beanName,
     required Duration totalTime,
+    Duration? preheatTime,
+    Duration? preheatGap,
     required Duration dryPhaseTime,
     required double dryPhasePercent,
     required Duration maillardPhaseTime,

@@ -4,19 +4,22 @@ class TimestampWidget extends StatelessWidget {
   const TimestampWidget(
     this.time, {
     this.twitterFormat = false,
+    this.style,
     super.key,
   });
 
   const TimestampWidget.twitter(
     this.time, {
     super.key,
+    this.style,
   }) : twitterFormat = true;
 
+  final TextStyle? style;
   final Duration time;
   final bool twitterFormat;
 
   @override
-  Widget build(BuildContext context) => Text(formattedTime());
+  Widget build(BuildContext context) => Text(formattedTime(), style: style);
 
   String formattedTime() {
     final minutes = time.abs().inMinutes;

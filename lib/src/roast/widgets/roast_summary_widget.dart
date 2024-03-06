@@ -54,7 +54,7 @@ class RoastSummaryWidget extends StatelessWidget {
             ),
             paddedRow(
               children: [
-                const Text('Development'),
+                const Text('Development:'),
                 phaseDetails(
                   summary.developmentPhaseTime,
                   summary.developmentPercent,
@@ -64,7 +64,7 @@ class RoastSummaryWidget extends StatelessWidget {
             ),
             paddedRow(
               children: [
-                const Text('First Crack Phase'),
+                const Text('First Crack Phase:'),
                 phaseDetails(
                   summary.firstCrackPhaseTime,
                   summary.firstCrackPhasePercent,
@@ -74,7 +74,7 @@ class RoastSummaryWidget extends StatelessWidget {
             if (summary.secondCrackPhaseTime != null)
               paddedRow(
                 children: [
-                  const Text('Second Crack Phase'),
+                  const Text('Second Crack Phase:'),
                   phaseDetails(
                     summary.secondCrackPhaseTime!,
                     summary.secondCrackPhasePercent!,
@@ -83,7 +83,7 @@ class RoastSummaryWidget extends StatelessWidget {
               ),
             paddedRow(
               children: [
-                const Text('Maillard Phase'),
+                const Text('Maillard Phase:'),
                 phaseDetails(
                   summary.maillardPhaseTime,
                   summary.maillardPhasePercent,
@@ -92,13 +92,45 @@ class RoastSummaryWidget extends StatelessWidget {
             ),
             paddedRow(
               children: [
-                const Text('Dry Phase'),
+                const Text('Dry Phase:'),
                 phaseDetails(
                   summary.dryPhaseTime,
                   summary.dryPhasePercent,
                 ),
               ],
             ),
+            if (summary.preheatTime != null)
+              paddedRow(
+                children: [
+                  const Text('Preheat time:'),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: TimestampWidget.twitter(summary.preheatTime!),
+                        ),
+                        TextSpan(
+                          text: ' (',
+                          style:
+                              RoastAppTheme.materialTheme.textTheme.bodySmall,
+                        ),
+                        WidgetSpan(
+                          child: TimestampWidget.twitter(
+                            summary.preheatGap ?? Duration.zero,
+                            style:
+                                RoastAppTheme.materialTheme.textTheme.bodySmall,
+                          ),
+                        ),
+                        TextSpan(
+                          text: ' before roast)',
+                          style:
+                              RoastAppTheme.materialTheme.textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
         if (summary.notes != null)
@@ -114,11 +146,18 @@ class RoastSummaryWidget extends StatelessWidget {
   }
 
   Widget phaseDetails(Duration time, double percent, {String extra = ''}) =>
-      Row(
-        children: [
-          TimestampWidget.twitter(time),
-          Text(' (${formatPercent(percent)}$extra)'),
-        ],
+      RichText(
+        text: TextSpan(
+          children: [
+            WidgetSpan(
+              child: TimestampWidget.twitter(time),
+            ),
+            TextSpan(
+              text: ' (${formatPercent(percent)}$extra)',
+              style: RoastAppTheme.materialTheme.textTheme.bodySmall,
+            ),
+          ],
+        ),
       );
 
   String formatPercent(double val) => '${(val * 100).toStringAsFixed(1)}%';

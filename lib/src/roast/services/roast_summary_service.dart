@@ -24,6 +24,8 @@ class RoastSummaryService {
     return RoastSummary(
       beanName: bean.name,
       totalTime: totalTime,
+      preheatTime: timeline.preheatEnd,
+      preheatGap: timeline.preheatGap,
       dryPhaseTime: dryPhaseTime,
       dryPhasePercent: dryPhaseTime.inMilliseconds / totalTime.inMilliseconds,
       maillardPhaseTime: maillardPhaseTime,

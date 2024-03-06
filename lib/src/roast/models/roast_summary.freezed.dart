@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$RoastSummary {
   String get beanName => throw _privateConstructorUsedError;
   Duration get totalTime => throw _privateConstructorUsedError;
+  Duration? get preheatTime => throw _privateConstructorUsedError;
+  Duration? get preheatGap => throw _privateConstructorUsedError;
   Duration get dryPhaseTime => throw _privateConstructorUsedError;
   double get dryPhasePercent => throw _privateConstructorUsedError;
   Duration get maillardPhaseTime => throw _privateConstructorUsedError;
@@ -46,6 +48,8 @@ abstract class $RoastSummaryCopyWith<$Res> {
   $Res call(
       {String beanName,
       Duration totalTime,
+      Duration? preheatTime,
+      Duration? preheatGap,
       Duration dryPhaseTime,
       double dryPhasePercent,
       Duration maillardPhaseTime,
@@ -76,6 +80,8 @@ class _$RoastSummaryCopyWithImpl<$Res, $Val extends RoastSummary>
   $Res call({
     Object? beanName = null,
     Object? totalTime = null,
+    Object? preheatTime = freezed,
+    Object? preheatGap = freezed,
     Object? dryPhaseTime = null,
     Object? dryPhasePercent = null,
     Object? maillardPhaseTime = null,
@@ -99,6 +105,14 @@ class _$RoastSummaryCopyWithImpl<$Res, $Val extends RoastSummary>
           ? _value.totalTime
           : totalTime // ignore: cast_nullable_to_non_nullable
               as Duration,
+      preheatTime: freezed == preheatTime
+          ? _value.preheatTime
+          : preheatTime // ignore: cast_nullable_to_non_nullable
+              as Duration?,
+      preheatGap: freezed == preheatGap
+          ? _value.preheatGap
+          : preheatGap // ignore: cast_nullable_to_non_nullable
+              as Duration?,
       dryPhaseTime: null == dryPhaseTime
           ? _value.dryPhaseTime
           : dryPhaseTime // ignore: cast_nullable_to_non_nullable
@@ -166,6 +180,8 @@ abstract class _$$_RoastSummaryCopyWith<$Res>
   $Res call(
       {String beanName,
       Duration totalTime,
+      Duration? preheatTime,
+      Duration? preheatGap,
       Duration dryPhaseTime,
       double dryPhasePercent,
       Duration maillardPhaseTime,
@@ -194,6 +210,8 @@ class __$$_RoastSummaryCopyWithImpl<$Res>
   $Res call({
     Object? beanName = null,
     Object? totalTime = null,
+    Object? preheatTime = freezed,
+    Object? preheatGap = freezed,
     Object? dryPhaseTime = null,
     Object? dryPhasePercent = null,
     Object? maillardPhaseTime = null,
@@ -217,6 +235,14 @@ class __$$_RoastSummaryCopyWithImpl<$Res>
           ? _value.totalTime
           : totalTime // ignore: cast_nullable_to_non_nullable
               as Duration,
+      preheatTime: freezed == preheatTime
+          ? _value.preheatTime
+          : preheatTime // ignore: cast_nullable_to_non_nullable
+              as Duration?,
+      preheatGap: freezed == preheatGap
+          ? _value.preheatGap
+          : preheatGap // ignore: cast_nullable_to_non_nullable
+              as Duration?,
       dryPhaseTime: null == dryPhaseTime
           ? _value.dryPhaseTime
           : dryPhaseTime // ignore: cast_nullable_to_non_nullable
@@ -279,6 +305,8 @@ class _$_RoastSummary implements _RoastSummary {
   const _$_RoastSummary(
       {required this.beanName,
       required this.totalTime,
+      this.preheatTime,
+      this.preheatGap,
       required this.dryPhaseTime,
       required this.dryPhasePercent,
       required this.maillardPhaseTime,
@@ -297,6 +325,10 @@ class _$_RoastSummary implements _RoastSummary {
   final String beanName;
   @override
   final Duration totalTime;
+  @override
+  final Duration? preheatTime;
+  @override
+  final Duration? preheatGap;
   @override
   final Duration dryPhaseTime;
   @override
@@ -326,7 +358,7 @@ class _$_RoastSummary implements _RoastSummary {
 
   @override
   String toString() {
-    return 'RoastSummary(beanName: $beanName, totalTime: $totalTime, dryPhaseTime: $dryPhaseTime, dryPhasePercent: $dryPhasePercent, maillardPhaseTime: $maillardPhaseTime, maillardPhasePercent: $maillardPhasePercent, firstCrackPhaseTime: $firstCrackPhaseTime, firstCrackPhasePercent: $firstCrackPhasePercent, secondCrackPhaseTime: $secondCrackPhaseTime, secondCrackPhasePercent: $secondCrackPhasePercent, developmentPhaseTime: $developmentPhaseTime, developmentPercent: $developmentPercent, developmentPercentTarget: $developmentPercentTarget, weightLoss: $weightLoss, notes: $notes)';
+    return 'RoastSummary(beanName: $beanName, totalTime: $totalTime, preheatTime: $preheatTime, preheatGap: $preheatGap, dryPhaseTime: $dryPhaseTime, dryPhasePercent: $dryPhasePercent, maillardPhaseTime: $maillardPhaseTime, maillardPhasePercent: $maillardPhasePercent, firstCrackPhaseTime: $firstCrackPhaseTime, firstCrackPhasePercent: $firstCrackPhasePercent, secondCrackPhaseTime: $secondCrackPhaseTime, secondCrackPhasePercent: $secondCrackPhasePercent, developmentPhaseTime: $developmentPhaseTime, developmentPercent: $developmentPercent, developmentPercentTarget: $developmentPercentTarget, weightLoss: $weightLoss, notes: $notes)';
   }
 
   @override
@@ -338,6 +370,10 @@ class _$_RoastSummary implements _RoastSummary {
                 other.beanName == beanName) &&
             (identical(other.totalTime, totalTime) ||
                 other.totalTime == totalTime) &&
+            (identical(other.preheatTime, preheatTime) ||
+                other.preheatTime == preheatTime) &&
+            (identical(other.preheatGap, preheatGap) ||
+                other.preheatGap == preheatGap) &&
             (identical(other.dryPhaseTime, dryPhaseTime) ||
                 other.dryPhaseTime == dryPhaseTime) &&
             (identical(other.dryPhasePercent, dryPhasePercent) ||
@@ -372,6 +408,8 @@ class _$_RoastSummary implements _RoastSummary {
       runtimeType,
       beanName,
       totalTime,
+      preheatTime,
+      preheatGap,
       dryPhaseTime,
       dryPhasePercent,
       maillardPhaseTime,
@@ -397,6 +435,8 @@ abstract class _RoastSummary implements RoastSummary {
   const factory _RoastSummary(
       {required final String beanName,
       required final Duration totalTime,
+      final Duration? preheatTime,
+      final Duration? preheatGap,
       required final Duration dryPhaseTime,
       required final double dryPhasePercent,
       required final Duration maillardPhaseTime,
@@ -415,6 +455,10 @@ abstract class _RoastSummary implements RoastSummary {
   String get beanName;
   @override
   Duration get totalTime;
+  @override
+  Duration? get preheatTime;
+  @override
+  Duration? get preheatGap;
   @override
   Duration get dryPhaseTime;
   @override
