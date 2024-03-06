@@ -28,8 +28,9 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
 
     if (state == RoastState.preheating) {
       final time = ref.watch(secondsPreheatProvider).value ?? Duration.zero;
+      final timeFloored = Duration(seconds: time.inSeconds);
 
-      final remaining = duration - time;
+      final remaining = duration - timeFloored;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
