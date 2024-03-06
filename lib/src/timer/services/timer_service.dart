@@ -6,8 +6,8 @@ class TimerService {
   DateTime? _startTime;
   DateTime? _stopTime;
   int? _tempCheckInterval;
-  final _checkTemp = StreamController<Duration>.broadcast();
-  final _seconds = StreamController<Duration?>.broadcast();
+  final _checkTemp = StreamController<Duration>();
+  final _seconds = StreamController<Duration?>();
 
   void start(int? tempCheckInterval) {
     _startTime = DateTime.now();
