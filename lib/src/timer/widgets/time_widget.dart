@@ -24,12 +24,15 @@ class TimeWidget extends ConsumerWidget {
       return const Text('Not roasting.');
     }
 
+    final showRoastInfo =
+        state == RoastState.roasting || state == RoastState.done;
+
     return Row(
       children: [
         const SizedBox(width: 20),
-        if (state == RoastState.roasting) const DevelopmentWidget(),
+        if (showRoastInfo) const DevelopmentWidget(),
         const Spacer(),
-        if (state == RoastState.roasting) const Text('Roast time: '),
+        if (showRoastInfo) const Text('Roast time: '),
         if (state == RoastState.preheating) const Text('Preheat time: '),
         TimestampWidget.twitter(time),
         const SizedBox(width: 20),
