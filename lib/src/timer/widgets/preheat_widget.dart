@@ -94,9 +94,7 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
               SizedBox(
                 width: 100,
                 child: TextFormField(
-                    controller: TextEditingController(
-                      text: '180',
-                    ),
+                    controller: tempCtrl,
                     decoration: const InputDecoration(
                       suffixText: 'F',
                     ),
