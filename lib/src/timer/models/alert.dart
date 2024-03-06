@@ -8,6 +8,7 @@ enum Severity {
 }
 
 enum AlertKind {
+  preheatMax,
   smokeSuppressor,
   willOverheat,
   willShutOff,

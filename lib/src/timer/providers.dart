@@ -53,17 +53,16 @@ final projectionProvider = Provider<Projection>((ref) {
 
 final alertsProvider = Provider<List<Alert>>((ref) {
   final elapsed = ref.watch(secondsRoastProvider).value;
-  if (elapsed == null) {
-    return [];
-  }
+  final elapsedPreheat = ref.watch(secondsPreheatProvider).value;
 
   final service = AlertService();
   final projection = ref.watch(projectionProvider);
-  final logs = ref.watch(roastLogsProvider);
+  final timeline = ref.watch(roastTimelineProvider);
   return service.getAlerts(
     projections: projection,
-    roastLogs: logs,
+    timeline: timeline,
     elapsed: elapsed,
+    elapsedPreheat: elapsedPreheat,
   );
 });
 
@@ -74,9 +73,9 @@ final roastLogsProvider = Provider<List<RoastLog>>((ref) {
 
 final tipsProvider = Provider<Set<String>>((ref) {
   final service = TipsService();
+  final timeline = ref.watch(roastTimelineProvider);
   final roastLogs = ref.watch(roastLogsProvider);
-  final running = ref.watch(roastStateProvider) == RoastState.roasting;
-  return service.getTips(roastLogs, running);
+  return service.getTips(timeline, roastLogs);
 });
 
 final roastTimelineProvider =

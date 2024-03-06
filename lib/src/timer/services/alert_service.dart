@@ -1,21 +1,37 @@
-import 'package:behmor_roast/src/roast/models/roast_log.dart';
 import 'package:behmor_roast/src/timer/models/alert.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
+import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 
 const _smokeSuppressorTime = Duration(seconds: 7 * 60 + 45);
 // Technically, this is 75% of roast time. This is correct for 1lb P5 roasts.
 const _pressStartTime = Duration(seconds: 13 * 60 + 30);
 
+const _maxRecommendedPreheat = Duration(seconds: 60 + 45);
+
 class AlertService {
   List<Alert> getAlerts({
-    required List<RoastLog> roastLogs,
+    required RoastTimeline timeline,
     required Projection projections,
-    required Duration elapsed,
+    Duration? elapsed,
+    Duration? elapsedPreheat,
   }) {
     final results = <Alert>[];
     final timeToOverheat = projections.timeToOverheat;
 
-    if (roastLogs.any((log) => log.phase == RoastPhase.secondCrackStart)) {
+    if (timeline.roastState == RoastState.preheating &&
+        elapsedPreheat! > _maxRecommendedPreheat) {
+      results.add(const Alert(
+        kind: AlertKind.preheatMax,
+        severity: Severity.warning,
+        message: 'It is not recommended to preheat for longer than 1m45s',
+      ));
+    }
+
+    if (elapsed == null || timeline.roastState != RoastState.roasting) {
+      return results;
+    }
+
+    if (timeline.secondCrackStart != null) {
       results.add(const Alert(
         kind: AlertKind.pastSecondCrack,
         severity: Severity.warning,
