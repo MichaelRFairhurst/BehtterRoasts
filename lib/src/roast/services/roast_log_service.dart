@@ -1,28 +1,17 @@
-import 'package:behmor_roast/src/roast/models/base_log.dart';
 import 'package:behmor_roast/src/roast/models/control_log.dart';
-import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
+import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 
 class RoastLogService {
   List<RoastLog> aggregate(
-    List<TempLog> temps,
-    List<PhaseLog> phases,
-    List<ControlLog> controls,
+    RoastTimeline timeline,
   ) {
     final result = <RoastLog>[];
 
     TempLog? previousTemp;
 
-    final logs = <BaseLog>[...temps, ...phases, ...controls]
-      ..sort((a, b) => a.time.compareTo(b.time));
-
-    final fstCrackLogs = phases.where((p) => p.phase == Phase.firstCrack);
-    final firstCrackStart = fstCrackLogs.isEmpty ? null : fstCrackLogs.first;
-    final firstCrackEnd = fstCrackLogs.length < 2 ? null : fstCrackLogs.last;
-
-    final sndCrackLogs =
-        phases.where((p) => p.phase == Phase.secondCrack).toList();
+    final logs = timeline.rawLogs;
 
     for (final log in logs) {
       if (log is TempLog) {
@@ -40,28 +29,36 @@ class RoastLogService {
         previousTemp = log;
       }
 
-      if (log is PhaseLog) {
-        if (log.phase == Phase.start || log.phase == Phase.preheatEnd) {
-          continue;
-        } else if (log.phase == Phase.dryEnd) {
-          result.add(RoastLog(time: log.time, phase: RoastPhase.dryEnd));
-        } else if (log.phase == Phase.done) {
-          result.add(RoastLog(time: log.time, phase: RoastPhase.done));
-        } else if (identical(log, firstCrackStart)) {
-          result
-              .add(RoastLog(time: log.time, phase: RoastPhase.firstCrackStart));
-        } else if (identical(log, firstCrackEnd)) {
-          result.add(RoastLog(time: log.time, phase: RoastPhase.firstCrackEnd));
-        } else if (identical(log, sndCrackLogs[0])) {
-          result.add(
-              RoastLog(time: log.time, phase: RoastPhase.secondCrackStart));
-        }
-      }
-
       if (log is ControlLog) {
         result.add(RoastLog(time: log.time, control: log.control));
       }
     }
+
+    if (timeline.dryEnd != null) {
+      result.add(RoastLog(time: timeline.dryEnd!, phase: RoastPhase.dryEnd));
+    }
+
+    if (timeline.firstCrackStart != null) {
+      result.add(RoastLog(
+          time: timeline.firstCrackStart!, phase: RoastPhase.firstCrackStart));
+    }
+
+    if (timeline.firstCrackEnd != null) {
+      result.add(RoastLog(
+          time: timeline.firstCrackEnd!, phase: RoastPhase.firstCrackEnd));
+    }
+
+    if (timeline.secondCrackStart != null) {
+      result.add(RoastLog(
+          time: timeline.secondCrackStart!,
+          phase: RoastPhase.secondCrackStart));
+    }
+
+    if (timeline.done != null) {
+      result.add(RoastLog(time: timeline.done!, phase: RoastPhase.done));
+    }
+
+    result.sort((a, b) => a.time.compareTo(b.time));
 
     return result;
   }

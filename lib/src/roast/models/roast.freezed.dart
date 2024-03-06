@@ -29,7 +29,7 @@ mixin _$Roast {
   String? get notes => throw _privateConstructorUsedError;
   List<TempLog> get tempLogs => throw _privateConstructorUsedError;
   List<ControlLog> get controlLogs => throw _privateConstructorUsedError;
-  List<PhaseLog> get phaseLogs => throw _privateConstructorUsedError;
+  List<_PhaseLog> get phaseLogs => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -51,7 +51,7 @@ abstract class $RoastCopyWith<$Res> {
       String? notes,
       List<TempLog> tempLogs,
       List<ControlLog> controlLogs,
-      List<PhaseLog> phaseLogs});
+      List<_PhaseLog> phaseLogs});
 
   $RoastConfigCopyWith<$Res> get config;
 }
@@ -120,7 +120,7 @@ class _$RoastCopyWithImpl<$Res, $Val extends Roast>
       phaseLogs: null == phaseLogs
           ? _value.phaseLogs
           : phaseLogs // ignore: cast_nullable_to_non_nullable
-              as List<PhaseLog>,
+              as List<_PhaseLog>,
     ) as $Val);
   }
 
@@ -149,7 +149,7 @@ abstract class _$$_RoastCopyWith<$Res> implements $RoastCopyWith<$Res> {
       String? notes,
       List<TempLog> tempLogs,
       List<ControlLog> controlLogs,
-      List<PhaseLog> phaseLogs});
+      List<_PhaseLog> phaseLogs});
 
   @override
   $RoastConfigCopyWith<$Res> get config;
@@ -215,14 +215,14 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
       phaseLogs: null == phaseLogs
           ? _value._phaseLogs
           : phaseLogs // ignore: cast_nullable_to_non_nullable
-              as List<PhaseLog>,
+              as List<_PhaseLog>,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_Roast implements _Roast {
+class _$_Roast extends _Roast {
   const _$_Roast(
       {required this.beanId,
       required this.config,
@@ -233,10 +233,11 @@ class _$_Roast implements _Roast {
       this.notes,
       final List<TempLog> tempLogs = const [],
       final List<ControlLog> controlLogs = const [],
-      final List<PhaseLog> phaseLogs = const []})
+      final List<_PhaseLog> phaseLogs = const []})
       : _tempLogs = tempLogs,
         _controlLogs = controlLogs,
-        _phaseLogs = phaseLogs;
+        _phaseLogs = phaseLogs,
+        super._();
 
   factory _$_Roast.fromJson(Map<String, dynamic> json) =>
       _$$_RoastFromJson(json);
@@ -273,10 +274,10 @@ class _$_Roast implements _Roast {
     return EqualUnmodifiableListView(_controlLogs);
   }
 
-  final List<PhaseLog> _phaseLogs;
+  final List<_PhaseLog> _phaseLogs;
   @override
   @JsonKey()
-  List<PhaseLog> get phaseLogs {
+  List<_PhaseLog> get phaseLogs {
     if (_phaseLogs is EqualUnmodifiableListView) return _phaseLogs;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_phaseLogs);
@@ -338,7 +339,7 @@ class _$_Roast implements _Roast {
   }
 }
 
-abstract class _Roast implements Roast {
+abstract class _Roast extends Roast {
   const factory _Roast(
       {required final String beanId,
       required final RoastConfig config,
@@ -349,7 +350,8 @@ abstract class _Roast implements Roast {
       final String? notes,
       final List<TempLog> tempLogs,
       final List<ControlLog> controlLogs,
-      final List<PhaseLog> phaseLogs}) = _$_Roast;
+      final List<_PhaseLog> phaseLogs}) = _$_Roast;
+  const _Roast._() : super._();
 
   factory _Roast.fromJson(Map<String, dynamic> json) = _$_Roast.fromJson;
 
@@ -372,7 +374,7 @@ abstract class _Roast implements Roast {
   @override
   List<ControlLog> get controlLogs;
   @override
-  List<PhaseLog> get phaseLogs;
+  List<_PhaseLog> get phaseLogs;
   @override
   @JsonKey(ignore: true)
   _$$_RoastCopyWith<_$_Roast> get copyWith =>

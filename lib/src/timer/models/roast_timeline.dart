@@ -1,5 +1,4 @@
 import 'package:behmor_roast/src/roast/models/base_log.dart';
-import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'roast_timeline.freezed.dart';
@@ -28,58 +27,8 @@ class RoastTimeline with _$RoastTimeline {
     Duration? done,
   }) = _RoastTimeline;
 
-  factory RoastTimeline.fromRawLogs({
-    required List<BaseLog> rawLogs,
-    DateTime? startTime,
-    DateTime? preheatStart,
-  }) {
-    Duration? preheatEnd;
-    Duration? dryEnd;
-    Duration? firstCrackStart;
-    Duration? firstCrackEnd;
-    Duration? secondCrackStart;
-    Duration? done;
-
-    for (final log in rawLogs) {
-      if (log is PhaseLog) {
-        switch (log.phase) {
-          case Phase.preheatEnd:
-            preheatEnd = log.time;
-            break;
-          case Phase.dryEnd:
-            dryEnd = log.time;
-            break;
-          case Phase.firstCrack:
-            firstCrackStart ??= log.time;
-            firstCrackEnd = log.time;
-            break;
-          case Phase.secondCrack:
-            secondCrackStart = log.time;
-            break;
-          case Phase.done:
-            done = log.time;
-            break;
-        }
-      }
-    }
-
-    return RoastTimeline(
-      rawLogs: rawLogs,
-      preheatStart: preheatStart,
-      preheatEnd: preheatEnd,
-      startTime: startTime,
-      dryEnd: dryEnd,
-      firstCrackStart: firstCrackStart,
-      firstCrackEnd: firstCrackEnd,
-      secondCrackStart: secondCrackStart,
-      done: done,
-    );
-  }
-
-  RoastTimeline addLog(BaseLog log) => RoastTimeline.fromRawLogs(
+  RoastTimeline addLog(BaseLog log) => copyWith(
         rawLogs: rawLogs.toList()..add(log),
-        startTime: startTime,
-        preheatStart: preheatStart,
       );
 
   RoastState get roastState {

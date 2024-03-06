@@ -1,29 +1,22 @@
 import 'package:behmor_roast/src/roast/models/bean.dart';
-import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/roast/models/roast.dart';
 import 'package:behmor_roast/src/roast/models/roast_summary.dart';
 
 class RoastSummaryService {
   RoastSummary summarize(Roast roast, Bean bean) {
-    final dryPhaseLog =
-        roast.phaseLogs.singleWhere((p) => p.phase == Phase.dryEnd);
-    final firstCrackLog =
-        roast.phaseLogs.firstWhere((p) => p.phase == Phase.firstCrack);
-    final firstCrackEndLog =
-        roast.phaseLogs.lastWhere((p) => p.phase == Phase.firstCrack);
-
-    final totalTime = roast.phaseLogs.last.time;
-    final dryPhaseTime = dryPhaseLog.time;
-    final maillardPhaseTime = firstCrackLog.time - dryPhaseLog.time;
+    final timeline = roast.toTimeline();
+    final totalTime = timeline.done!;
+    final dryPhaseTime = timeline.dryEnd!;
+    final maillardPhaseTime = timeline.firstCrackStart! - dryPhaseTime;
     // TODO: Should this do something different when first crack is last crack?
-    final firstCrackPhaseTime = firstCrackEndLog.time - firstCrackLog.time;
-    final developmentPhaseTime = totalTime - firstCrackEndLog.time;
+    final firstCrackPhaseTime =
+        timeline.firstCrackEnd! - timeline.firstCrackStart!;
+    final developmentPhaseTime = totalTime - timeline.firstCrackEnd!;
 
     Duration? secondCrackPhaseTime;
     double? secondCrackPhasePercent;
-    if (roast.phaseLogs.any((p) => p.phase == Phase.secondCrack)) {
-      secondCrackPhaseTime =
-          roast.phaseLogs.singleWhere((p) => p.phase == Phase.secondCrack).time;
+    if (timeline.secondCrackStart != null) {
+      secondCrackPhaseTime = totalTime - timeline.secondCrackStart!;
       secondCrackPhasePercent =
           secondCrackPhaseTime.inMilliseconds / totalTime.inMilliseconds;
     }

@@ -1,7 +1,4 @@
-import 'package:behmor_roast/src/roast/models/control_log.dart';
-import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
-import 'package:behmor_roast/src/roast/models/temp_log.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/services/roast_log_service.dart';
 import 'package:behmor_roast/src/timer/models/alert.dart';
@@ -72,10 +69,7 @@ final alertsProvider = Provider<List<Alert>>((ref) {
 
 final roastLogsProvider = Provider<List<RoastLog>>((ref) {
   final timeline = ref.watch(roastTimelineProvider);
-  final temps = timeline.rawLogs.whereType<TempLog>().toList();
-  final controls = timeline.rawLogs.whereType<ControlLog>().toList();
-  final phases = timeline.rawLogs.whereType<PhaseLog>().toList();
-  return RoastLogService().aggregate(temps, phases, controls);
+  return RoastLogService().aggregate(timeline);
 });
 
 final tipsProvider = Provider<Set<String>>((ref) {

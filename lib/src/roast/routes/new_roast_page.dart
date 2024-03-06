@@ -170,7 +170,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                           );
                           ref.read(roastProvider.notifier).state = roast;
                           ref.read(roastTimelineProvider.notifier).state =
-                              RoastTimeline.fromRawLogs(rawLogs: []);
+                              const RoastTimeline(rawLogs: []);
                           ref.read(roastTimerProvider).reset();
                           ref.read(preheatTimerProvider).reset();
                           context.replace(Routes.timer);

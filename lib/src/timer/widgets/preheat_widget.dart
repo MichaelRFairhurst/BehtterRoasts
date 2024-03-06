@@ -1,6 +1,5 @@
 import 'package:behmor_roast/src/behmor/widgets/program_button.dart';
 import 'package:behmor_roast/src/config/theme.dart';
-import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
@@ -165,10 +164,9 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
                 onPressed: () {
                   ref
                       .read(roastTimelineProvider.notifier)
-                      .update((state) => state.addLog(const PhaseLog(
-                            time: Duration.zero,
-                            phase: Phase.preheatEnd,
-                          )));
+                      .update((state) => state.copyWith(
+                            preheatEnd: Duration.zero,
+                          ));
                 },
               ),
             ],

@@ -1,4 +1,3 @@
-import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:flutter/material.dart';
@@ -43,20 +42,17 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget>
   }
 
   List<Widget> developmentTimeParts() {
-    final phases =
-        ref.watch(roastTimelineProvider).rawLogs.whereType<PhaseLog>();
+    final timeline = ref.watch(roastTimelineProvider);
     final roast = ref.watch(roastProvider);
-    if (!phases.any((phase) => phase.phase == Phase.dryEnd)) {
+    if (timeline.dryEnd == null) {
       return [const Text('Waiting for dry end.')];
     }
 
-    final firstCracks =
-        phases.where((phase) => phase.phase == Phase.firstCrack);
-    if (firstCracks.isEmpty) {
+    final firstCrackEnd = timeline.firstCrackEnd;
+    if (firstCrackEnd == null) {
       return [const Text('Waiting for first crack.')];
     }
 
-    final firstCrackEnd = firstCracks.last.time;
     final development =
         (time! - firstCrackEnd).inMilliseconds / time!.inMilliseconds;
 

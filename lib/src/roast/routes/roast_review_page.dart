@@ -154,9 +154,7 @@ class RoastReviewPageState extends ConsumerState<RoastReviewPage> {
                 ),
                 TempLogWidget(
                   logs: roastLogService.aggregate(
-                    roast.tempLogs,
-                    roast.phaseLogs,
-                    roast.controlLogs,
+                    roast.toTimeline(),
                   ),
                 ),
               ],

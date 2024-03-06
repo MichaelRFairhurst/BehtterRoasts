@@ -1,5 +1,4 @@
 import 'package:behmor_roast/src/roast/models/control_log.dart';
-import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/timer/widgets/control_button.dart';
@@ -10,54 +9,72 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ControlsWidget extends ConsumerWidget {
   const ControlsWidget({Key? key}) : super(key: key);
 
-  List<Phase> phaseButtonTypes(Iterable<PhaseLog> phaseLogs) {
-    final results = <Phase>[];
+  List<Widget> phaseButtons(
+      WidgetRef ref, RoastTimeline timeline, bool running) {
+    final results = <Widget>[];
 
-    if (!phaseLogs.any((p) => p.phase == Phase.dryEnd)) {
-      results.add(Phase.dryEnd);
+    if (timeline.dryEnd == null) {
+      results.add(phaseButton(
+        ref,
+        updater: (timeline, time) => timeline.copyWith(dryEnd: time),
+        icon: const Icon(Icons.air),
+        label: 'Dry end',
+        running: running,
+      ));
     } else {
-      final hasFirstCrack = phaseLogs.any((p) => p.phase == Phase.firstCrack);
+      final hasFirstCrack = timeline.firstCrackStart != null;
 
-      if (!phaseLogs.any((p) => p.phase == Phase.secondCrack)) {
-        results.add(Phase.firstCrack);
+      if (timeline.secondCrackStart == null) {
+        results.add(phaseButton(
+          ref,
+          updater: (timeline, time) => timeline.copyWith(
+            firstCrackStart: timeline.firstCrackStart ?? time,
+            firstCrackEnd: time,
+          ),
+          icon: const CrackIcon(),
+          label: '1st crack',
+          running: running,
+        ));
+
         if (hasFirstCrack) {
-          results.add(Phase.secondCrack);
+          results.add(phaseButton(
+            ref,
+            updater: (timeline, time) => timeline.copyWith(
+              secondCrackStart: time,
+            ),
+            icon: const CrackIcon(),
+            label: '2nd crack',
+            running: running,
+          ));
         }
       }
 
       if (hasFirstCrack) {
-        results.add(Phase.done);
+        results.add(phaseButton(
+          ref,
+          updater: (timeline, time) => timeline.copyWith(done: time),
+          icon: const Icon(Icons.check),
+          label: 'Done',
+          running: running,
+          extra: () {
+            final tService = ref.read(roastTimerProvider);
+            tService.stop();
+          },
+        ));
       }
     }
 
     return results;
   }
 
-  Widget phaseButton(Phase phaseType, WidgetRef ref, bool running) {
-    final Widget icon;
-    final String label;
-    switch (phaseType) {
-      case Phase.preheatEnd:
-      case Phase.start:
-        throw 'unreachable';
-
-      case Phase.dryEnd:
-        icon = const Icon(Icons.air);
-        label = 'Dry end';
-        break;
-      case Phase.firstCrack:
-        icon = const CrackIcon();
-        label = '1st crack';
-        break;
-      case Phase.secondCrack:
-        icon = const CrackIcon();
-        label = '2nd crack';
-        break;
-      case Phase.done:
-        icon = const Icon(Icons.check);
-        label = 'Done';
-    }
-
+  Widget phaseButton(
+    WidgetRef ref, {
+    required RoastTimeline Function(RoastTimeline, Duration) updater,
+    required Widget icon,
+    required String label,
+    required bool running,
+    void Function()? extra,
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: ElevatedButton.icon(
@@ -68,13 +85,13 @@ class ControlsWidget extends ConsumerWidget {
             : () {
                 final tService = ref.read(roastTimerProvider);
                 final now = tService.elapsed()!;
-                final newLog = PhaseLog(time: now, phase: phaseType);
+
                 ref
                     .read(roastTimelineProvider.notifier)
-                    .update((state) => state.addLog(newLog));
+                    .update((state) => updater(state, now));
 
-                if (phaseType == Phase.done) {
-                  tService.stop();
+                if (extra != null) {
+                  extra();
                 }
               },
       ),
@@ -83,8 +100,7 @@ class ControlsWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final phaseLogs =
-        ref.watch(roastTimelineProvider).rawLogs.whereType<PhaseLog>();
+    final timeline = ref.watch(roastTimelineProvider);
     final running = ref.watch(roastStateProvider) == RoastState.roasting;
 
     return Column(
@@ -100,9 +116,7 @@ class ControlsWidget extends ConsumerWidget {
           ],
         ),
         Wrap(
-          children: phaseButtonTypes(phaseLogs)
-              .map((type) => phaseButton(type, ref, running))
-              .toList(),
+          children: phaseButtons(ref, timeline, running),
         ),
       ],
     );

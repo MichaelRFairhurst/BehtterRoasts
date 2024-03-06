@@ -1,7 +1,5 @@
 import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/config/theme.dart';
-import 'package:behmor_roast/src/roast/models/control_log.dart';
-import 'package:behmor_roast/src/roast/models/phase_log.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
@@ -42,12 +40,9 @@ class TimerPage extends ConsumerWidget {
         onPressed: () {
           final roast = ref.read(roastProvider);
           tService.start(roast!.config.tempInterval);
-          ref.read(roastTimelineProvider.notifier).update((state) => state
-              .addLog(PhaseLog(
-                time: tService.elapsed()!,
-                phase: Phase.start,
-              ))
-              .copyWith(startTime: tService.startTime));
+          ref
+              .read(roastTimelineProvider.notifier)
+              .update((state) => state.copyWith(startTime: tService.startTime));
         },
       );
     } else if (state == RoastState.done) {
@@ -56,17 +51,10 @@ class TimerPage extends ConsumerWidget {
         label: const Icon(Icons.navigate_next, size: 28.0),
         icon: const Text('Continue'),
         onPressed: () {
-          final roast = ref.read(roastProvider);
           final timeline = ref.read(roastTimelineProvider);
-          final tempLogs = timeline.rawLogs.whereType<TempLog>().toList();
-          final controlLogs = timeline.rawLogs.whereType<ControlLog>().toList();
-          final phaseLogs = timeline.rawLogs.whereType<PhaseLog>().toList();
-          final toAdd = roast!.copyWith(
-              roasted: tService.startTime!,
-              tempLogs: tempLogs,
-              controlLogs: controlLogs,
-              phaseLogs: phaseLogs);
-          ref.read(roastProvider.notifier).state = toAdd;
+          ref
+              .read(roastProvider.notifier)
+              .update((state) => state!.withTimeline(timeline));
           context.replace(Routes.completeRoast);
         },
       );
@@ -79,10 +67,9 @@ class TimerPage extends ConsumerWidget {
           final preheatService = ref.read(preheatTimerProvider);
           ref
               .read(roastTimelineProvider.notifier)
-              .update((state) => state.addLog(PhaseLog(
-                    time: preheatService.elapsed()!,
-                    phase: Phase.preheatEnd,
-                  )));
+              .update((state) => state.copyWith(
+                    preheatEnd: preheatService.elapsed()!,
+                  ));
         },
       );
     }

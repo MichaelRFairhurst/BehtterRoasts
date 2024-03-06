@@ -18,6 +18,16 @@ class RoastService {
           .where('beanId', isEqualTo: beanId)
           .snapshots()
           .map((record) {
-        return record.docs.map((doc) => Roast.fromJson(doc.data())).toList();
+        return record.docs
+            .map((doc) {
+              try {
+                return Roast.fromJson(doc.data());
+              } catch (e, st) {
+                print('Error parsing ${doc.id}: $e\n$st');
+                return null;
+              }
+            })
+            .whereType<Roast>()
+            .toList();
       });
 }

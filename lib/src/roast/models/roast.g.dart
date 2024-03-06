@@ -23,7 +23,9 @@ _$_Roast _$$_RoastFromJson(Map<String, dynamic> json) => _$_Roast(
               .toList() ??
           const [],
       phaseLogs: (json['phaseLogs'] as List<dynamic>?)
-              ?.map((e) => PhaseLog.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => _PhaseLog.fromJson((e as Map<String, dynamic>).map(
+                    (k, e) => MapEntry(k, e as Object),
+                  )))
               .toList() ??
           const [],
     );
