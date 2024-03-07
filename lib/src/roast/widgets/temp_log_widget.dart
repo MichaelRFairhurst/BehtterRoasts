@@ -1,4 +1,7 @@
+import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
+import 'package:behmor_roast/src/timer/providers.dart';
+import 'package:behmor_roast/src/timer/widgets/check_temp_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
@@ -6,49 +9,58 @@ import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 class TempLogWidget extends ConsumerWidget {
   const TempLogWidget({
     required this.logs,
+    this.editable = false,
     super.key,
   });
 
+  final bool editable;
   final List<RoastLog> logs;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return DataTable(
-      dataRowHeight: 20,
-      columnSpacing: 10,
-      headingRowHeight: 26,
-      columns: const [
-        DataColumn(
-          label: Expanded(
-            child: Text('Time'),
+    return IconTheme(
+      data: const IconThemeData(
+        color: RoastAppTheme.metalLight,
+        size: 4,
+      ),
+      child: DataTable(
+        dataRowHeight: 20,
+        columnSpacing: 10,
+        headingRowHeight: 26,
+        columns: const [
+          DataColumn(
+            label: Expanded(
+              child: Text('Time'),
+            ),
           ),
-        ),
-        DataColumn(
-          label: Expanded(
-            child: Text('Temp'),
+          DataColumn(
+            label: Expanded(
+              child: Text('Temp'),
+            ),
           ),
-        ),
-        DataColumn(
-          label: Expanded(
-            child: Text('Power'),
+          DataColumn(
+            label: Expanded(
+              child: Text('Power'),
+            ),
           ),
-        ),
-        DataColumn(
-          label: Expanded(
-            child: Text('Phase'),
+          DataColumn(
+            label: Expanded(
+              child: Text('Phase'),
+            ),
           ),
-        ),
-        DataColumn(
-          label: Expanded(
-            child: Text('Rate of Rise'),
+          DataColumn(
+            label: Expanded(
+              child: Text('Rate of Rise'),
+            ),
           ),
-        ),
-      ],
-      rows: getRows(logs),
+        ],
+        rows: getRows(logs, context, ref),
+      ),
     );
   }
 
-  List<DataRow> getRows(List<RoastLog> logs) {
+  List<DataRow> getRows(
+      List<RoastLog> logs, BuildContext context, WidgetRef ref) {
     if (logs.isEmpty) {
       return const [
         DataRow(
@@ -63,11 +75,12 @@ class TempLogWidget extends ConsumerWidget {
       ];
     }
 
+    final lastTemp = logs.lastWhere((log) => log.temp != null);
     return logs
         .map((log) => DataRow(
               cells: [
                 DataCell(TimestampWidget(log.time)),
-                tempCell(log),
+                tempCell(log, context, ref, isLast: log == lastTemp),
                 powerCell(log),
                 phaseCell(log),
                 rorCell(log),
@@ -76,12 +89,59 @@ class TempLogWidget extends ConsumerWidget {
         .toList();
   }
 
-  DataCell tempCell(RoastLog log) {
+  DataCell tempCell(RoastLog log, BuildContext context, WidgetRef ref,
+      {required bool isLast}) {
     if (log.temp == null) {
       return const DataCell(Text(''));
     }
 
-    return DataCell(Text('${log.temp}°F'));
+    void updateTemp() {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: Container(
+              color: RoastAppTheme.metalLight,
+              margin: const EdgeInsets.all(30),
+              padding: const EdgeInsets.all(16),
+              child: IntrinsicHeight(
+                child: CheckTempWidget(
+                  title: Row(
+                    children: [
+                      const Text('Enter temperature for '),
+                      if (log.phase == RoastPhase.preheat)
+                        const Text('preheat')
+                      else
+                        TimestampWidget.twitter(log.time),
+                      const Text(':'),
+                    ],
+                  ),
+                  onSubmit: (newTemp) {
+                    if (log.phase == RoastPhase.preheat) {
+                      ref
+                          .read(roastTimelineProvider.notifier)
+                          .update((tl) => tl.copyWith(preheatTemp: newTemp));
+                    } else {
+                      ref
+                          .read(roastTimelineProvider.notifier)
+                          .update((tl) => tl.updateTemp(log.time, newTemp));
+                    }
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }
+
+    return DataCell(
+      Text('${log.temp}°F'),
+      showEditIcon: editable && isLast,
+      onTap: editable && isLast ? updateTemp : null,
+      onLongPress: editable ? updateTemp : null,
+    );
   }
 
   DataCell powerCell(RoastLog log) {

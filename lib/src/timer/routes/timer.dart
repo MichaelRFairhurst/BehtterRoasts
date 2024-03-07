@@ -104,7 +104,10 @@ class TimerPage extends ConsumerWidget {
     } else {
       body = BottomStickyScrollView(
         children: [
-          TempLogWidget(logs: logs),
+          TempLogWidget(
+            logs: logs,
+            editable: true,
+          ),
           const ProjectionsWidget(),
         ],
       );

@@ -1,4 +1,5 @@
 import 'package:behmor_roast/src/roast/models/base_log.dart';
+import 'package:behmor_roast/src/roast/models/temp_log.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'roast_timeline.freezed.dart';
@@ -31,6 +32,15 @@ class RoastTimeline with _$RoastTimeline {
 
   RoastTimeline addLog(BaseLog log) => copyWith(
         rawLogs: rawLogs.toList()..add(log),
+      );
+
+  RoastTimeline updateTemp(Duration time, int temp) => copyWith(
+        rawLogs: rawLogs.map((log) {
+          if (log is TempLog && log.time == time) {
+            return log.copyWith(temp: temp);
+          }
+          return log;
+        }).toList(),
       );
 
   RoastState get roastState {
