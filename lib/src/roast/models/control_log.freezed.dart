@@ -22,6 +22,7 @@ ControlLog _$ControlLogFromJson(Map<String, dynamic> json) {
 mixin _$ControlLog {
   Duration get time => throw _privateConstructorUsedError;
   Control get control => throw _privateConstructorUsedError;
+  Duration? get instructionTimeDiff => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,7 @@ abstract class $ControlLogCopyWith<$Res> {
           ControlLog value, $Res Function(ControlLog) then) =
       _$ControlLogCopyWithImpl<$Res, ControlLog>;
   @useResult
-  $Res call({Duration time, Control control});
+  $Res call({Duration time, Control control, Duration? instructionTimeDiff});
 }
 
 /// @nodoc
@@ -53,6 +54,7 @@ class _$ControlLogCopyWithImpl<$Res, $Val extends ControlLog>
   $Res call({
     Object? time = null,
     Object? control = null,
+    Object? instructionTimeDiff = freezed,
   }) {
     return _then(_value.copyWith(
       time: null == time
@@ -63,6 +65,10 @@ class _$ControlLogCopyWithImpl<$Res, $Val extends ControlLog>
           ? _value.control
           : control // ignore: cast_nullable_to_non_nullable
               as Control,
+      instructionTimeDiff: freezed == instructionTimeDiff
+          ? _value.instructionTimeDiff
+          : instructionTimeDiff // ignore: cast_nullable_to_non_nullable
+              as Duration?,
     ) as $Val);
   }
 }
@@ -75,7 +81,7 @@ abstract class _$$_ControlLogCopyWith<$Res>
       __$$_ControlLogCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Duration time, Control control});
+  $Res call({Duration time, Control control, Duration? instructionTimeDiff});
 }
 
 /// @nodoc
@@ -91,6 +97,7 @@ class __$$_ControlLogCopyWithImpl<$Res>
   $Res call({
     Object? time = null,
     Object? control = null,
+    Object? instructionTimeDiff = freezed,
   }) {
     return _then(_$_ControlLog(
       time: null == time
@@ -101,6 +108,10 @@ class __$$_ControlLogCopyWithImpl<$Res>
           ? _value.control
           : control // ignore: cast_nullable_to_non_nullable
               as Control,
+      instructionTimeDiff: freezed == instructionTimeDiff
+          ? _value.instructionTimeDiff
+          : instructionTimeDiff // ignore: cast_nullable_to_non_nullable
+              as Duration?,
     ));
   }
 }
@@ -108,7 +119,8 @@ class __$$_ControlLogCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_ControlLog implements _ControlLog {
-  const _$_ControlLog({required this.time, required this.control});
+  const _$_ControlLog(
+      {required this.time, required this.control, this.instructionTimeDiff});
 
   factory _$_ControlLog.fromJson(Map<String, dynamic> json) =>
       _$$_ControlLogFromJson(json);
@@ -117,10 +129,12 @@ class _$_ControlLog implements _ControlLog {
   final Duration time;
   @override
   final Control control;
+  @override
+  final Duration? instructionTimeDiff;
 
   @override
   String toString() {
-    return 'ControlLog(time: $time, control: $control)';
+    return 'ControlLog(time: $time, control: $control, instructionTimeDiff: $instructionTimeDiff)';
   }
 
   @override
@@ -129,12 +143,15 @@ class _$_ControlLog implements _ControlLog {
         (other.runtimeType == runtimeType &&
             other is _$_ControlLog &&
             (identical(other.time, time) || other.time == time) &&
-            (identical(other.control, control) || other.control == control));
+            (identical(other.control, control) || other.control == control) &&
+            (identical(other.instructionTimeDiff, instructionTimeDiff) ||
+                other.instructionTimeDiff == instructionTimeDiff));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, time, control);
+  int get hashCode =>
+      Object.hash(runtimeType, time, control, instructionTimeDiff);
 
   @JsonKey(ignore: true)
   @override
@@ -153,7 +170,8 @@ class _$_ControlLog implements _ControlLog {
 abstract class _ControlLog implements ControlLog {
   const factory _ControlLog(
       {required final Duration time,
-      required final Control control}) = _$_ControlLog;
+      required final Control control,
+      final Duration? instructionTimeDiff}) = _$_ControlLog;
 
   factory _ControlLog.fromJson(Map<String, dynamic> json) =
       _$_ControlLog.fromJson;
@@ -162,6 +180,8 @@ abstract class _ControlLog implements ControlLog {
   Duration get time;
   @override
   Control get control;
+  @override
+  Duration? get instructionTimeDiff;
   @override
   @JsonKey(ignore: true)
   _$$_ControlLogCopyWith<_$_ControlLog> get copyWith =>

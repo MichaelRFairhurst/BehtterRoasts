@@ -30,7 +30,30 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
   bool beanErr = false;
 
   @override
+  void initState() {
+    super.initState();
+    final copy = ref.read(copyOfRoastProvider);
+    if (copy != null) {
+      devel.text = (copy.config.targetDevelopment * 100).toString();
+      weight.text = copy.weightIn.toString();
+      tempInterval = copy.config.tempInterval;
+      final beans = ref.read(beansProvider);
+      beans.whenData((beans) {
+        setState(() {
+          selectedBean = beans.singleWhere((bean) => bean.id == copy.beanId);
+        });
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final copy = ref.watch(copyOfRoastProvider);
+    final beans = ref.watch(beansProvider);
+    final bean = beans.valueOrNull
+        ?.cast<Bean?>()
+        .singleWhere((bean) => bean?.id == copy?.beanId, orElse: () => null);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Start a New Roast"),
@@ -42,6 +65,25 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
           child: CustomScrollView(
             slivers: [
               const SliverPadding(padding: EdgeInsets.only(top: 16.0)),
+              if (copy != null && bean != null)
+                SliverToBoxAdapter(
+                  child: InputChip(
+                    label: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        const Text('Copying '),
+                        Flexible(
+                          child:
+                              Text(bean.name, overflow: TextOverflow.ellipsis),
+                        ),
+                        Text(' roast #${copy.roastNumber}'),
+                      ],
+                    ),
+                    onDeleted: () {
+                      ref.read(copyOfRoastProvider.notifier).state = null;
+                    },
+                  ),
+                ),
               if (beanErr)
                 SliverToBoxAdapter(
                   child: Text(
@@ -159,6 +201,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                         if (!beanErr && formValid) {
                           final roast = Roast(
                             beanId: selectedBean!.id!,
+                            copyOfRoastId: copy?.id,
                             roasted: DateTime.now(), // Replaced later.
                             roastNumber: int.parse(number.text),
                             weightIn: double.parse(weight.text),

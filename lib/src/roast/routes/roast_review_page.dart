@@ -1,3 +1,4 @@
+import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:behmor_roast/src/roast/models/roast.dart';
@@ -6,8 +7,10 @@ import 'package:behmor_roast/src/roast/services/roast_log_service.dart';
 import 'package:behmor_roast/src/roast/services/roast_summary_service.dart';
 import 'package:behmor_roast/src/roast/widgets/roast_summary_widget.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
+import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class RoastReviewPage extends ConsumerStatefulWidget {
@@ -155,6 +158,16 @@ class RoastReviewPageState extends ConsumerState<RoastReviewPage> {
                 TempLogWidget(
                   logs: roastLogService.aggregate(
                     roast.toTimeline(),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      ref.read(copyOfRoastProvider.notifier).state = roast;
+                      context.replace(Routes.newRoast);
+                    },
+                    child: const Text('Replicate Roast'),
                   ),
                 ),
               ],

@@ -23,11 +23,13 @@ class TimerService {
 
   void _fireSeconds() async {
     while (_stopTime == null) {
-      final now = elapsed();
+      final unrounded = elapsed();
 
-      if (now == null) {
+      if (unrounded == null) {
         return;
       }
+
+      final now = _round(unrounded);
 
       if (_tempCheckInterval != null &&
           now.inSeconds % _tempCheckInterval! == 0) {
@@ -36,10 +38,12 @@ class TimerService {
       }
       _seconds.add(now);
 
-      final millisToNext = 1000 - (now.inMilliseconds % 1000);
+      final millisToNext = 1000 - (unrounded.inMilliseconds % 1000);
       await Future.delayed(Duration(milliseconds: millisToNext));
     }
   }
+
+  Duration _round(Duration duration) => Duration(seconds: duration.inSeconds);
 
   void stop() {
     _stopTime = DateTime.now();

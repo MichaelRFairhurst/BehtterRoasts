@@ -10,9 +10,11 @@ class TempLogWidget extends ConsumerWidget {
   const TempLogWidget({
     required this.logs,
     this.editable = false,
+    this.isDiff = false,
     super.key,
   });
 
+  final bool isDiff;
   final bool editable;
   final List<RoastLog> logs;
 
@@ -27,32 +29,39 @@ class TempLogWidget extends ConsumerWidget {
         dataRowHeight: 20,
         columnSpacing: 10,
         headingRowHeight: 26,
-        columns: const [
-          DataColumn(
+        columns: [
+          const DataColumn(
             label: Expanded(
               child: Text('Time'),
             ),
           ),
-          DataColumn(
+          const DataColumn(
             label: Expanded(
               child: Text('Temp'),
             ),
           ),
-          DataColumn(
+          const DataColumn(
             label: Expanded(
               child: Text('Power'),
             ),
           ),
-          DataColumn(
+          const DataColumn(
             label: Expanded(
               child: Text('Phase'),
             ),
           ),
-          DataColumn(
-            label: Expanded(
-              child: Text('Rate of Rise'),
+          if (isDiff)
+            const DataColumn(
+              label: Expanded(
+                child: Text('Temp Diff'),
+              ),
+            )
+          else
+            const DataColumn(
+              label: Expanded(
+                child: Text('Rate of Rise'),
+              ),
             ),
-          ),
         ],
         rows: getRows(logs, context, ref),
       ),
@@ -83,7 +92,7 @@ class TempLogWidget extends ConsumerWidget {
                 tempCell(log, context, ref, isLast: log == lastTemp),
                 powerCell(log),
                 phaseCell(log),
-                rorCell(log),
+                if (isDiff) diffCell(log) else rorCell(log),
               ],
             ))
         .toList();
@@ -182,5 +191,65 @@ class TempLogWidget extends ConsumerWidget {
     }
 
     return DataCell(Text('${log.rateOfRise!.toStringAsFixed(1)}°F/m'));
+  }
+
+  DataCell diffCell(RoastLog log) {
+    if (log.tempDiff != null) {
+      return tempDiffCell(log);
+    } else if (log.timeDiff != null) {
+      return timeDiffCell(log);
+    } else {
+      return const DataCell(Text(''));
+    }
+  }
+
+  DataCell tempDiffCell(RoastLog log) {
+    final tempDiff = log.tempDiff;
+    if (tempDiff == null) {
+      return const DataCell(Text(''));
+    }
+
+    if (tempDiff == 0) {
+      return const DataCell(Text('0°F'));
+    } else if (tempDiff > 0) {
+      return DataCell(Text(
+        '$tempDiff°F hot',
+        style: const TextStyle(
+          color: RoastAppTheme.errorColor,
+        ),
+      ));
+    } else {
+      return DataCell(Text(
+        '${-tempDiff}°F low',
+        style: const TextStyle(
+          color: RoastAppTheme.indigo,
+        ),
+      ));
+    }
+  }
+
+  DataCell timeDiffCell(RoastLog log) {
+    final timeDiff = log.timeDiff;
+    if (timeDiff == null) {
+      return const DataCell(Text(''));
+    }
+
+    if (timeDiff.abs().inSeconds < 1) {
+      return const DataCell(Text(''));
+    } else if (timeDiff.isNegative) {
+      return DataCell(Row(
+        children: [
+          TimestampWidget.twitter(-timeDiff),
+          const Text(' late'),
+        ],
+      ));
+    } else {
+      return DataCell(Row(
+        children: [
+          TimestampWidget.twitter(timeDiff),
+          const Text(' early'),
+        ],
+      ));
+    }
   }
 }

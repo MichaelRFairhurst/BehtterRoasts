@@ -1,5 +1,6 @@
 import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/config/theme.dart';
+import 'package:behmor_roast/src/instructions/widgets/instructions_widget.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
@@ -31,6 +32,7 @@ class TimerPage extends ConsumerWidget {
     final alerts = ref.watch(alertsProvider);
     final logs = ref.watch(roastLogsProvider);
     final tips = ref.watch(tipsProvider);
+    final copyingRoast = ref.watch(copyOfRoastProvider);
 
     Widget? fab;
     if (state == RoastState.ready) {
@@ -105,9 +107,8 @@ class TimerPage extends ConsumerWidget {
       body = BottomStickyScrollView(
         children: [
           TempLogWidget(
-            logs: logs,
-            editable: true,
-          ),
+              logs: logs, editable: true, isDiff: copyingRoast != null),
+          if (copyingRoast != null) const InstructionsWidget(),
           const ProjectionsWidget(),
         ],
       );

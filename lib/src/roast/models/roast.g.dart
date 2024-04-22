@@ -8,6 +8,8 @@ part of 'roast.dart';
 
 _$_Roast _$$_RoastFromJson(Map<String, dynamic> json) => _$_Roast(
       beanId: json['beanId'] as String,
+      id: json['id'] as String?,
+      copyOfRoastId: json['copyOfRoastId'] as String?,
       config: RoastConfig.fromJson(json['config'] as Map<String, dynamic>),
       roastNumber: json['roastNumber'] as int,
       weightIn: (json['weightIn'] as num).toDouble(),
@@ -35,6 +37,8 @@ _$_Roast _$$_RoastFromJson(Map<String, dynamic> json) => _$_Roast(
 
 Map<String, dynamic> _$$_RoastToJson(_$_Roast instance) => <String, dynamic>{
       'beanId': instance.beanId,
+      'id': instance.id,
+      'copyOfRoastId': instance.copyOfRoastId,
       'config': instance.config.toJson(),
       'roastNumber': instance.roastNumber,
       'weightIn': instance.weightIn,

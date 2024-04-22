@@ -1,3 +1,4 @@
+import 'package:behmor_roast/src/roast/models/roast.dart';
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/services/roast_log_service.dart';
@@ -13,6 +14,8 @@ import 'package:behmor_roast/src/timer/services/timer_service.dart';
 final roastTimerProvider = Provider((_) {
   return TimerService();
 });
+
+final copyOfRoastProvider = StateProvider<Roast?>((ref) => null);
 
 final preheatTimerProvider = Provider((_) {
   return TimerService();
@@ -68,7 +71,8 @@ final alertsProvider = Provider<List<Alert>>((ref) {
 
 final roastLogsProvider = Provider<List<RoastLog>>((ref) {
   final timeline = ref.watch(roastTimelineProvider);
-  return RoastLogService().aggregate(timeline);
+  final copy = ref.watch(copyOfRoastProvider);
+  return RoastLogService().aggregate(timeline, copy: copy?.toTimeline());
 });
 
 final tipsProvider = Provider<Set<String>>((ref) {

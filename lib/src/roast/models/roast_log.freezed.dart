@@ -17,7 +17,9 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$RoastLog {
   Duration get time => throw _privateConstructorUsedError;
+  Duration? get timeDiff => throw _privateConstructorUsedError;
   int? get temp => throw _privateConstructorUsedError;
+  int? get tempDiff => throw _privateConstructorUsedError;
   RoastPhase? get phase => throw _privateConstructorUsedError;
   Control? get control => throw _privateConstructorUsedError;
   double? get rateOfRise => throw _privateConstructorUsedError;
@@ -34,7 +36,9 @@ abstract class $RoastLogCopyWith<$Res> {
   @useResult
   $Res call(
       {Duration time,
+      Duration? timeDiff,
       int? temp,
+      int? tempDiff,
       RoastPhase? phase,
       Control? control,
       double? rateOfRise});
@@ -54,7 +58,9 @@ class _$RoastLogCopyWithImpl<$Res, $Val extends RoastLog>
   @override
   $Res call({
     Object? time = null,
+    Object? timeDiff = freezed,
     Object? temp = freezed,
+    Object? tempDiff = freezed,
     Object? phase = freezed,
     Object? control = freezed,
     Object? rateOfRise = freezed,
@@ -64,9 +70,17 @@ class _$RoastLogCopyWithImpl<$Res, $Val extends RoastLog>
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as Duration,
+      timeDiff: freezed == timeDiff
+          ? _value.timeDiff
+          : timeDiff // ignore: cast_nullable_to_non_nullable
+              as Duration?,
       temp: freezed == temp
           ? _value.temp
           : temp // ignore: cast_nullable_to_non_nullable
+              as int?,
+      tempDiff: freezed == tempDiff
+          ? _value.tempDiff
+          : tempDiff // ignore: cast_nullable_to_non_nullable
               as int?,
       phase: freezed == phase
           ? _value.phase
@@ -93,7 +107,9 @@ abstract class _$$_RoastLogCopyWith<$Res> implements $RoastLogCopyWith<$Res> {
   @useResult
   $Res call(
       {Duration time,
+      Duration? timeDiff,
       int? temp,
+      int? tempDiff,
       RoastPhase? phase,
       Control? control,
       double? rateOfRise});
@@ -111,7 +127,9 @@ class __$$_RoastLogCopyWithImpl<$Res>
   @override
   $Res call({
     Object? time = null,
+    Object? timeDiff = freezed,
     Object? temp = freezed,
+    Object? tempDiff = freezed,
     Object? phase = freezed,
     Object? control = freezed,
     Object? rateOfRise = freezed,
@@ -121,9 +139,17 @@ class __$$_RoastLogCopyWithImpl<$Res>
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as Duration,
+      timeDiff: freezed == timeDiff
+          ? _value.timeDiff
+          : timeDiff // ignore: cast_nullable_to_non_nullable
+              as Duration?,
       temp: freezed == temp
           ? _value.temp
           : temp // ignore: cast_nullable_to_non_nullable
+              as int?,
+      tempDiff: freezed == tempDiff
+          ? _value.tempDiff
+          : tempDiff // ignore: cast_nullable_to_non_nullable
               as int?,
       phase: freezed == phase
           ? _value.phase
@@ -146,7 +172,9 @@ class __$$_RoastLogCopyWithImpl<$Res>
 class _$_RoastLog implements _RoastLog {
   const _$_RoastLog(
       {required this.time,
+      this.timeDiff,
       this.temp,
+      this.tempDiff,
       this.phase,
       this.control,
       this.rateOfRise});
@@ -154,7 +182,11 @@ class _$_RoastLog implements _RoastLog {
   @override
   final Duration time;
   @override
+  final Duration? timeDiff;
+  @override
   final int? temp;
+  @override
+  final int? tempDiff;
   @override
   final RoastPhase? phase;
   @override
@@ -164,7 +196,7 @@ class _$_RoastLog implements _RoastLog {
 
   @override
   String toString() {
-    return 'RoastLog(time: $time, temp: $temp, phase: $phase, control: $control, rateOfRise: $rateOfRise)';
+    return 'RoastLog(time: $time, timeDiff: $timeDiff, temp: $temp, tempDiff: $tempDiff, phase: $phase, control: $control, rateOfRise: $rateOfRise)';
   }
 
   @override
@@ -173,7 +205,11 @@ class _$_RoastLog implements _RoastLog {
         (other.runtimeType == runtimeType &&
             other is _$_RoastLog &&
             (identical(other.time, time) || other.time == time) &&
+            (identical(other.timeDiff, timeDiff) ||
+                other.timeDiff == timeDiff) &&
             (identical(other.temp, temp) || other.temp == temp) &&
+            (identical(other.tempDiff, tempDiff) ||
+                other.tempDiff == tempDiff) &&
             (identical(other.phase, phase) || other.phase == phase) &&
             (identical(other.control, control) || other.control == control) &&
             (identical(other.rateOfRise, rateOfRise) ||
@@ -181,8 +217,8 @@ class _$_RoastLog implements _RoastLog {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, time, temp, phase, control, rateOfRise);
+  int get hashCode => Object.hash(
+      runtimeType, time, timeDiff, temp, tempDiff, phase, control, rateOfRise);
 
   @JsonKey(ignore: true)
   @override
@@ -194,7 +230,9 @@ class _$_RoastLog implements _RoastLog {
 abstract class _RoastLog implements RoastLog {
   const factory _RoastLog(
       {required final Duration time,
+      final Duration? timeDiff,
       final int? temp,
+      final int? tempDiff,
       final RoastPhase? phase,
       final Control? control,
       final double? rateOfRise}) = _$_RoastLog;
@@ -202,7 +240,11 @@ abstract class _RoastLog implements RoastLog {
   @override
   Duration get time;
   @override
+  Duration? get timeDiff;
+  @override
   int? get temp;
+  @override
+  int? get tempDiff;
   @override
   RoastPhase? get phase;
   @override

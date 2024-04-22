@@ -17,7 +17,9 @@ enum RoastPhase {
 class RoastLog with _$RoastLog {
   const factory RoastLog({
     required Duration time,
+    Duration? timeDiff,
     int? temp,
+    int? tempDiff,
     RoastPhase? phase,
     Control? control,
     double? rateOfRise,

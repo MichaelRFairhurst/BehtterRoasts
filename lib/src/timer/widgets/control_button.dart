@@ -6,14 +6,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ControlButton extends ConsumerWidget {
   final Control control;
+  final bool? disabled;
+  final void Function()? onPressed;
+  final Duration? instructionTimeDiff;
 
   const ControlButton({
     required this.control,
+    this.disabled,
+    this.onPressed,
+    this.instructionTimeDiff,
     super.key,
   });
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  bool isDisabled(WidgetRef ref) {
+    if (disabled != null) {
+      return disabled!;
+    }
+
     final controls =
         ref.watch(roastTimelineProvider).rawLogs.whereType<ControlLog?>();
     final running = ref.watch(roastStateProvider) == RoastState.roasting;
@@ -23,14 +32,17 @@ class ControlButton extends ConsumerWidget {
         .lastWhere((c) => c?.control != Control.d, orElse: () => null)
         ?.control;
 
-    final disabled = !running || pwrLevel == control;
+    return !running || pwrLevel == control;
+  }
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
         minimumSize: const Size(30, 30),
       ),
-      onPressed: disabled
+      onPressed: isDisabled(ref)
           ? null
           : () {
               final tService = ref.read(roastTimerProvider);
@@ -38,11 +50,16 @@ class ControlButton extends ConsumerWidget {
               final newLog = ControlLog(
                 time: now,
                 control: control,
+                instructionTimeDiff: instructionTimeDiff,
               );
 
               ref
                   .read(roastTimelineProvider.notifier)
                   .update((state) => state.addLog(newLog));
+
+              if (onPressed != null) {
+                onPressed!();
+              }
             },
       child: Text(control.toString().replaceAll('Control.', '').toUpperCase()),
     );

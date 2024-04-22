@@ -10,12 +10,16 @@ _$_ControlLog _$$_ControlLogFromJson(Map<String, dynamic> json) =>
     _$_ControlLog(
       time: Duration(microseconds: json['time'] as int),
       control: $enumDecode(_$ControlEnumMap, json['control']),
+      instructionTimeDiff: json['instructionTimeDiff'] == null
+          ? null
+          : Duration(microseconds: json['instructionTimeDiff'] as int),
     );
 
 Map<String, dynamic> _$$_ControlLogToJson(_$_ControlLog instance) =>
     <String, dynamic>{
       'time': instance.time.inMicroseconds,
       'control': _$ControlEnumMap[instance.control]!,
+      'instructionTimeDiff': instance.instructionTimeDiff?.inMicroseconds,
     };
 
 const _$ControlEnumMap = {

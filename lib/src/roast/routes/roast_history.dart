@@ -1,6 +1,7 @@
 import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
+import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -54,6 +55,7 @@ class RoastHistoryPage extends ConsumerWidget {
           icon: const Icon(Icons.add),
           label: const Text('New Roast'),
           onPressed: () {
+            ref.read(copyOfRoastProvider.notifier).state = null;
             context.push(Routes.newRoast);
           }),
     );

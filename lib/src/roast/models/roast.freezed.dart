@@ -21,6 +21,8 @@ Roast _$RoastFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Roast {
   String get beanId => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
+  String? get copyOfRoastId => throw _privateConstructorUsedError;
   RoastConfig get config => throw _privateConstructorUsedError;
   int get roastNumber => throw _privateConstructorUsedError;
   double get weightIn => throw _privateConstructorUsedError;
@@ -44,6 +46,8 @@ abstract class $RoastCopyWith<$Res> {
   @useResult
   $Res call(
       {String beanId,
+      String? id,
+      String? copyOfRoastId,
       RoastConfig config,
       int roastNumber,
       double weightIn,
@@ -73,6 +77,8 @@ class _$RoastCopyWithImpl<$Res, $Val extends Roast>
   @override
   $Res call({
     Object? beanId = null,
+    Object? id = freezed,
+    Object? copyOfRoastId = freezed,
     Object? config = null,
     Object? roastNumber = null,
     Object? weightIn = null,
@@ -89,6 +95,14 @@ class _$RoastCopyWithImpl<$Res, $Val extends Roast>
           ? _value.beanId
           : beanId // ignore: cast_nullable_to_non_nullable
               as String,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      copyOfRoastId: freezed == copyOfRoastId
+          ? _value.copyOfRoastId
+          : copyOfRoastId // ignore: cast_nullable_to_non_nullable
+              as String?,
       config: null == config
           ? _value.config
           : config // ignore: cast_nullable_to_non_nullable
@@ -161,6 +175,8 @@ abstract class _$$_RoastCopyWith<$Res> implements $RoastCopyWith<$Res> {
   @useResult
   $Res call(
       {String beanId,
+      String? id,
+      String? copyOfRoastId,
       RoastConfig config,
       int roastNumber,
       double weightIn,
@@ -188,6 +204,8 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
   @override
   $Res call({
     Object? beanId = null,
+    Object? id = freezed,
+    Object? copyOfRoastId = freezed,
     Object? config = null,
     Object? roastNumber = null,
     Object? weightIn = null,
@@ -204,6 +222,14 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
           ? _value.beanId
           : beanId // ignore: cast_nullable_to_non_nullable
               as String,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      copyOfRoastId: freezed == copyOfRoastId
+          ? _value.copyOfRoastId
+          : copyOfRoastId // ignore: cast_nullable_to_non_nullable
+              as String?,
       config: null == config
           ? _value.config
           : config // ignore: cast_nullable_to_non_nullable
@@ -253,6 +279,8 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
 class _$_Roast extends _Roast {
   const _$_Roast(
       {required this.beanId,
+      this.id,
+      this.copyOfRoastId,
       required this.config,
       required this.roastNumber,
       required this.weightIn,
@@ -273,6 +301,10 @@ class _$_Roast extends _Roast {
 
   @override
   final String beanId;
+  @override
+  final String? id;
+  @override
+  final String? copyOfRoastId;
   @override
   final RoastConfig config;
   @override
@@ -316,7 +348,7 @@ class _$_Roast extends _Roast {
 
   @override
   String toString() {
-    return 'Roast(beanId: $beanId, config: $config, roastNumber: $roastNumber, weightIn: $weightIn, weightOut: $weightOut, roasted: $roasted, preheat: $preheat, notes: $notes, tempLogs: $tempLogs, controlLogs: $controlLogs, phaseLogs: $phaseLogs)';
+    return 'Roast(beanId: $beanId, id: $id, copyOfRoastId: $copyOfRoastId, config: $config, roastNumber: $roastNumber, weightIn: $weightIn, weightOut: $weightOut, roasted: $roasted, preheat: $preheat, notes: $notes, tempLogs: $tempLogs, controlLogs: $controlLogs, phaseLogs: $phaseLogs)';
   }
 
   @override
@@ -325,6 +357,9 @@ class _$_Roast extends _Roast {
         (other.runtimeType == runtimeType &&
             other is _$_Roast &&
             (identical(other.beanId, beanId) || other.beanId == beanId) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.copyOfRoastId, copyOfRoastId) ||
+                other.copyOfRoastId == copyOfRoastId) &&
             (identical(other.config, config) || other.config == config) &&
             (identical(other.roastNumber, roastNumber) ||
                 other.roastNumber == roastNumber) &&
@@ -347,6 +382,8 @@ class _$_Roast extends _Roast {
   int get hashCode => Object.hash(
       runtimeType,
       beanId,
+      id,
+      copyOfRoastId,
       config,
       roastNumber,
       weightIn,
@@ -375,6 +412,8 @@ class _$_Roast extends _Roast {
 abstract class _Roast extends Roast {
   const factory _Roast(
       {required final String beanId,
+      final String? id,
+      final String? copyOfRoastId,
       required final RoastConfig config,
       required final int roastNumber,
       required final double weightIn,
@@ -391,6 +430,10 @@ abstract class _Roast extends Roast {
 
   @override
   String get beanId;
+  @override
+  String? get id;
+  @override
+  String? get copyOfRoastId;
   @override
   RoastConfig get config;
   @override

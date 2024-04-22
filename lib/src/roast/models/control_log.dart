@@ -18,6 +18,7 @@ class ControlLog with _$ControlLog implements BaseLog {
   const factory ControlLog({
     required Duration time,
     required Control control,
+    Duration? instructionTimeDiff,
   }) = _ControlLog;
 
   factory ControlLog.fromJson(Map<String, dynamic> json) =>

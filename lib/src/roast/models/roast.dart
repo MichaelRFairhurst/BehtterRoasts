@@ -14,6 +14,8 @@ class Roast with _$Roast {
 
   const factory Roast({
     required String beanId,
+    String? id,
+    String? copyOfRoastId,
     required RoastConfig config,
     required int roastNumber,
     required double weightIn,

@@ -21,7 +21,7 @@ class RoastService {
         return record.docs
             .map((doc) {
               try {
-                return Roast.fromJson(doc.data());
+                return Roast.fromJson(doc.data()).copyWith(id: doc.id);
               } catch (e, st) {
                 print('Error parsing ${doc.id}: $e\n$st');
                 return null;
