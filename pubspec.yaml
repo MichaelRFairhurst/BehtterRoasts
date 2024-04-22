@@ -45,6 +45,8 @@ dependencies:
   flutter_beep: ^1.0.0
   intl: ^0.18.1
   google_fonts: ^4.0.4
+  google_sign_in: ^6.1.4
+  firebase_auth: ^4.16.0
 
 dev_dependencies:
   flutter_test:

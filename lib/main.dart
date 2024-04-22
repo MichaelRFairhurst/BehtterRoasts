@@ -1,4 +1,5 @@
 import 'package:behmor_roast/firebase_options.dart';
+import 'package:behmor_roast/src/sign_in/widgets/stay_signed_in.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -22,11 +23,13 @@ class BehmorRoastApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
-      child: MaterialApp.router(
-        title: 'Behmor Roaster',
-        theme: RoastAppTheme.materialTheme,
-        routerConfig: router,
-        debugShowCheckedModeBanner: false,
+      child: StaySignedIn(
+        builder: (refresh, redirect) => MaterialApp.router(
+          title: 'Behmor Roaster',
+          theme: RoastAppTheme.materialTheme,
+          routerConfig: createRouter(refresh, redirect),
+          debugShowCheckedModeBanner: false,
+        ),
       ),
     );
   }
