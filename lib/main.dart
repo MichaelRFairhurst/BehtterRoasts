@@ -22,6 +22,7 @@ class BehmorRoastApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GoRouteInformationParser? x;
     return ProviderScope(
       child: StaySignedIn(
         builder: (refresh, redirect) => MaterialApp.router(

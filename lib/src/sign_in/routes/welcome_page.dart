@@ -12,7 +12,7 @@ class WelcomePage extends ConsumerWidget {
     final user = ref.read(authProvider).value;
 
     Future.delayed(const Duration(seconds: 2)).then((_) {
-      context.replace(Routes.roastHistory);
+      context.go(Routes.roastHistory);
     });
 
     return Scaffold(

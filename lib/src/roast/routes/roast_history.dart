@@ -1,6 +1,7 @@
 import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
+import 'package:behmor_roast/src/sign_in/widgets/signed_in_drawer.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +18,7 @@ class RoastHistoryPage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Roast History'),
       ),
+      drawer: const SignedInDrawer(),
       body: roasts.when(
         data: (items) {
           return ListView.builder(

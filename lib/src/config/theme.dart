@@ -104,6 +104,10 @@ class RoastAppTheme {
         ),
       ),
       canvasColor: cremaLight,
+      drawerTheme: const DrawerThemeData(
+        backgroundColor: crema,
+        scrimColor: capuccino,
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           foregroundColor: capuccino,
