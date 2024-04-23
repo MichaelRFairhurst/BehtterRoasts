@@ -1,4 +1,5 @@
 import 'package:behmor_roast/src/config/routes.dart';
+import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/sign_in/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +18,11 @@ class WelcomePage extends ConsumerWidget {
 
     return Scaffold(
       body: Center(
-        child: Text('Welcome ${user!.displayName}!'),
+        child: Text(
+          'Welcome ${user!.displayName}!',
+          style: RoastAppTheme.welcomeTextStyle,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }

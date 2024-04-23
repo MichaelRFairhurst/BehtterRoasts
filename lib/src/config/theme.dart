@@ -23,6 +23,11 @@ class RoastAppTheme {
     fontWeight: FontWeight.bold,
   );
 
+  static final welcomeTextStyle =
+      materialTheme.textTheme.displayMedium!.copyWith(
+    color: RoastAppTheme.capuccinoLight,
+  );
+
   static final tinyButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       foregroundColor: capuccino,
