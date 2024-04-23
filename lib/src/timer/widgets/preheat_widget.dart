@@ -24,8 +24,22 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
   var duration = const Duration(seconds: 100);
 
   @override
+  void initState() {
+    super.initState();
+    final copy = ref.read(copyOfRoastProvider);
+    final copyPreheat = copy?.preheat;
+
+    if (copyPreheat != null) {
+      tempCtrl.text = copyPreheat.temp.toString();
+      duration = copyPreheat.end;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final state = ref.watch(roastStateProvider);
+    final copy = ref.watch(copyOfRoastProvider);
+    final suggestPreheat = copy == null || copy.preheat != null;
 
     if (state == RoastState.preheating) {
       final time = ref.watch(secondsPreheatProvider).value ?? Duration.zero;
@@ -107,17 +121,42 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
       key: formKey,
       child: Column(
         children: [
-          Text(
-            'Preheat this roast?',
-            style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 6),
-          const Text(
-            'Simply run your roaster for a minute or two before loading your'
-            " beans, and you'll have a faster / hotter roast profile.",
-            textAlign: TextAlign.center,
-          ),
+          if (copy == null) ...[
+            Text(
+              'Preheat this roast?',
+              style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              'Simply run your roaster for a minute or two before loading your'
+              " beans, and you'll have a faster / hotter roast profile.",
+              textAlign: TextAlign.center,
+            ),
+          ] else if (suggestPreheat) ...[
+            Text(
+              'Preheat your roaster!',
+              style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              'Preheat your roaster now to replicate your last roast.',
+              textAlign: TextAlign.center,
+            ),
+          ],
+          if (!suggestPreheat) ...[
+            Text(
+              'Preheat this roast?',
+              style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              'Note that you did NOT preheat this roast last time.',
+              textAlign: TextAlign.center,
+            ),
+          ],
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -168,7 +207,9 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton.icon(
-                style: RoastAppTheme.largeButtonTheme.style,
+                style: suggestPreheat
+                    ? RoastAppTheme.largeButtonTheme.style
+                    : RoastAppTheme.limeButtonTheme.style,
                 label: const Text('Start Preheat'),
                 icon: const Icon(Icons.local_fire_department),
                 onPressed: () {
@@ -190,8 +231,12 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
               ),
               const Text('or'),
               ElevatedButton(
-                style: RoastAppTheme.limeButtonTheme.style,
-                child: const Text('Skip'),
+                style: suggestPreheat
+                    ? RoastAppTheme.limeButtonTheme.style
+                    : RoastAppTheme.largeButtonTheme.style,
+                child: suggestPreheat
+                    ? const Text('Skip')
+                    : const Text('Start Roasting'),
                 onPressed: () {
                   ref
                       .read(roastTimelineProvider.notifier)
