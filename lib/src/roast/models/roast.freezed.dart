@@ -21,6 +21,7 @@ Roast _$RoastFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Roast {
   String get beanId => throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String? get id => throw _privateConstructorUsedError;
   String? get copyOfRoastId => throw _privateConstructorUsedError;
   RoastConfig get config => throw _privateConstructorUsedError;
@@ -46,7 +47,7 @@ abstract class $RoastCopyWith<$Res> {
   @useResult
   $Res call(
       {String beanId,
-      String? id,
+      @JsonKey(includeFromJson: false, includeToJson: false) String? id,
       String? copyOfRoastId,
       RoastConfig config,
       int roastNumber,
@@ -175,7 +176,7 @@ abstract class _$$_RoastCopyWith<$Res> implements $RoastCopyWith<$Res> {
   @useResult
   $Res call(
       {String beanId,
-      String? id,
+      @JsonKey(includeFromJson: false, includeToJson: false) String? id,
       String? copyOfRoastId,
       RoastConfig config,
       int roastNumber,
@@ -279,7 +280,7 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
 class _$_Roast extends _Roast {
   const _$_Roast(
       {required this.beanId,
-      this.id,
+      @JsonKey(includeFromJson: false, includeToJson: false) this.id,
       this.copyOfRoastId,
       required this.config,
       required this.roastNumber,
@@ -302,6 +303,7 @@ class _$_Roast extends _Roast {
   @override
   final String beanId;
   @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final String? id;
   @override
   final String? copyOfRoastId;
@@ -412,7 +414,7 @@ class _$_Roast extends _Roast {
 abstract class _Roast extends Roast {
   const factory _Roast(
       {required final String beanId,
-      final String? id,
+      @JsonKey(includeFromJson: false, includeToJson: false) final String? id,
       final String? copyOfRoastId,
       required final RoastConfig config,
       required final int roastNumber,
@@ -431,6 +433,7 @@ abstract class _Roast extends Roast {
   @override
   String get beanId;
   @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String? get id;
   @override
   String? get copyOfRoastId;
