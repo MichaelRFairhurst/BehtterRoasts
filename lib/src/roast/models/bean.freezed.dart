@@ -23,6 +23,7 @@ mixin _$Bean {
   @JsonKey(includeFromJson: false, includeToJson: false)
   String? get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  String get ownerId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +37,8 @@ abstract class $BeanCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
-      String name});
+      String name,
+      String ownerId});
 }
 
 /// @nodoc
@@ -54,6 +56,7 @@ class _$BeanCopyWithImpl<$Res, $Val extends Bean>
   $Res call({
     Object? id = freezed,
     Object? name = null,
+    Object? ownerId = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -63,6 +66,10 @@ class _$BeanCopyWithImpl<$Res, $Val extends Bean>
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      ownerId: null == ownerId
+          ? _value.ownerId
+          : ownerId // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -76,7 +83,8 @@ abstract class _$$_BeanCopyWith<$Res> implements $BeanCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
-      String name});
+      String name,
+      String ownerId});
 }
 
 /// @nodoc
@@ -90,6 +98,7 @@ class __$$_BeanCopyWithImpl<$Res> extends _$BeanCopyWithImpl<$Res, _$_Bean>
   $Res call({
     Object? id = freezed,
     Object? name = null,
+    Object? ownerId = null,
   }) {
     return _then(_$_Bean(
       id: freezed == id
@@ -100,6 +109,10 @@ class __$$_BeanCopyWithImpl<$Res> extends _$BeanCopyWithImpl<$Res, _$_Bean>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      ownerId: null == ownerId
+          ? _value.ownerId
+          : ownerId // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -109,7 +122,8 @@ class __$$_BeanCopyWithImpl<$Res> extends _$BeanCopyWithImpl<$Res, _$_Bean>
 class _$_Bean implements _Bean {
   const _$_Bean(
       {@JsonKey(includeFromJson: false, includeToJson: false) this.id,
-      required this.name});
+      required this.name,
+      required this.ownerId});
 
   factory _$_Bean.fromJson(Map<String, dynamic> json) => _$$_BeanFromJson(json);
 
@@ -118,10 +132,12 @@ class _$_Bean implements _Bean {
   final String? id;
   @override
   final String name;
+  @override
+  final String ownerId;
 
   @override
   String toString() {
-    return 'Bean(id: $id, name: $name)';
+    return 'Bean(id: $id, name: $name, ownerId: $ownerId)';
   }
 
   @override
@@ -130,12 +146,13 @@ class _$_Bean implements _Bean {
         (other.runtimeType == runtimeType &&
             other is _$_Bean &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name));
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.ownerId, ownerId) || other.ownerId == ownerId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name);
+  int get hashCode => Object.hash(runtimeType, id, name, ownerId);
 
   @JsonKey(ignore: true)
   @override
@@ -154,7 +171,8 @@ class _$_Bean implements _Bean {
 abstract class _Bean implements Bean {
   const factory _Bean(
       {@JsonKey(includeFromJson: false, includeToJson: false) final String? id,
-      required final String name}) = _$_Bean;
+      required final String name,
+      required final String ownerId}) = _$_Bean;
 
   factory _Bean.fromJson(Map<String, dynamic> json) = _$_Bean.fromJson;
 
@@ -163,6 +181,8 @@ abstract class _Bean implements Bean {
   String? get id;
   @override
   String get name;
+  @override
+  String get ownerId;
   @override
   @JsonKey(ignore: true)
   _$$_BeanCopyWith<_$_Bean> get copyWith => throw _privateConstructorUsedError;

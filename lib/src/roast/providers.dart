@@ -5,6 +5,7 @@ import 'package:behmor_roast/src/roast/services/bean_service.dart';
 import 'package:behmor_roast/src/roast/services/roast_log_service.dart';
 import 'package:behmor_roast/src/roast/services/roast_service.dart';
 import 'package:behmor_roast/src/roast/services/roast_summary_service.dart';
+import 'package:behmor_roast/src/sign_in/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final roastProvider = StateProvider<Roast?>((ref) => null);
@@ -36,7 +37,9 @@ final roastsForBeanProvider =
   return roastService.roastsForBean(beanId);
 });
 
-final beanServiceProvider = Provider<BeanService>((ref) => BeanService());
+final beanServiceProvider = Provider<BeanService>((ref) {
+  return BeanService(ref.read(authProvider).value!);
+});
 
 final beansProvider = StreamProvider<List<Bean>>((ref) {
   final beanService = ref.watch(beanServiceProvider);

@@ -1,6 +1,7 @@
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
+import 'package:behmor_roast/src/sign_in/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -49,9 +50,10 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
               style: RoastAppTheme.limeButtonTheme.style,
               onPressed: () async {
                 if (newBeanForm.currentState!.validate()) {
-                  final bean = await ref
-                      .read(beanServiceProvider)
-                      .add(Bean(name: newBeanName.text));
+                  final bean = await ref.read(beanServiceProvider).add(Bean(
+                        name: newBeanName.text,
+                        ownerId: ref.read(authProvider).value!.uid,
+                      ));
                   addNew = false;
                   widget.onChanged(bean);
                 }
