@@ -84,7 +84,8 @@ class TempLogWidget extends ConsumerWidget {
       ];
     }
 
-    final lastTemp = logs.lastWhere((log) => log.temp != null);
+    final lastTemp = logs.lastWhere((log) => log.temp != null,
+        orElse: () => const RoastLog(time: Duration.zero));
     return logs
         .map((log) => DataRow(
               cells: [
