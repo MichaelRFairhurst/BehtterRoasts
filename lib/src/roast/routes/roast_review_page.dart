@@ -1,9 +1,6 @@
 import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/config/theme.dart';
-import 'package:behmor_roast/src/roast/models/bean.dart';
-import 'package:behmor_roast/src/roast/models/roast.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
-import 'package:behmor_roast/src/roast/services/roast_log_service.dart';
 import 'package:behmor_roast/src/roast/services/roast_summary_service.dart';
 import 'package:behmor_roast/src/roast/widgets/roast_summary_widget.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
@@ -13,186 +10,93 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-class RoastReviewPage extends ConsumerStatefulWidget {
+class RoastReviewPage extends ConsumerWidget {
   const RoastReviewPage({
-    required this.beanId,
+    required this.roastId,
     super.key,
   });
 
-  final String beanId;
+  final String roastId;
 
   @override
-  RoastReviewPageState createState() => RoastReviewPageState();
-}
-
-class RoastReviewPageState extends ConsumerState<RoastReviewPage> {
-  final pageController = PageController();
-  bool showPrev = false;
-  bool showNext = false;
-  List<Roast> roasts = const [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    pageController.addListener(pageControllerUpdate);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    pageController.dispose();
-  }
-
-  void pageControllerUpdate() {
-    setState(() {
-      showPrev = pageController.page != 0;
-      showNext = pageController.page! < roasts.length - 1;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final roasts = ref.watch(roastsForBeanProvider(widget.beanId)).value ?? [];
-    if (roasts.length > this.roasts.length) {
-      showNext = roasts.length > 1;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final roast = ref.watch(roastByIdProvider(roastId)).value;
+    if (roast == null) {
+      return Container();
     }
-    this.roasts = roasts;
+    final copy = roast.copyOfRoastId == null
+        ? null
+        : ref.watch(roastByIdProvider(roast.copyOfRoastId!)).value;
     final bean = ref
         .watch(beansProvider)
         .value
-        ?.singleWhere((bean) => bean.id == widget.beanId);
+        ?.singleWhere((bean) => bean.id == roast.beanId);
     final roastLogService = ref.watch(roastLogServiceProvider);
     if (bean == null) {
       return Container();
     }
 
+    final dateFormat = DateFormat.yMd();
     return Scaffold(
       appBar: AppBar(
         title: Text('Roasts for ${bean.name}'),
       ),
-      body: PageView(
-        controller: pageController,
-        children: getRoastPages(bean, roasts, roastLogService),
-      ),
-      floatingActionButton: Stack(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              padding: const EdgeInsets.only(left: 30),
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 150),
-                opacity: showPrev ? 1.0 : 0.0,
-                child: FloatingActionButton(
-                  heroTag: 'fab2',
-                  onPressed: () {
-                    pageController.previousPage(
-                      duration: const Duration(milliseconds: 200),
-                      curve: Curves.easeInOut,
-                    );
-                  },
-                  child: const Icon(Icons.navigate_before),
-                ),
+          Text(
+            'Roast #${roast.roastNumber}',
+            style: RoastAppTheme.materialTheme.textTheme.subtitle1,
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            'Roasted: ${dateFormat.format(roast.roasted)}',
+            style: RoastAppTheme.materialTheme.textTheme.subtitle1,
+            textAlign: TextAlign.center,
+          ),
+          if (copy != null)
+            Text(
+              'Copy of roast #${copy.roastNumber}',
+              style: RoastAppTheme.materialTheme.textTheme.subtitle2,
+              textAlign: TextAlign.center,
+            ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 30),
+                    child: RoastSummaryWidget(
+                      summary: RoastSummaryService().summarize(roast, bean),
+                      cellPadding: const EdgeInsets.all(4.0),
+                      showBeanName: false,
+                    ),
+                  ),
+                  TempLogWidget(
+                    logs: roastLogService.aggregate(
+                      roast.toTimeline(),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 150),
-              opacity: showNext ? 1.0 : 0.0,
-              child: FloatingActionButton(
-                onPressed: () {
-                  pageController.nextPage(
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeInOut,
-                  );
-                },
-                child: const Icon(Icons.navigate_next),
-              ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 82,
+              vertical: 15,
+            ),
+            child: ElevatedButton(
+              onPressed: () {
+                ref.read(copyOfRoastProvider.notifier).state = roast;
+                context.replace(Routes.newRoast);
+              },
+              child: const Text('Repeat this roast'),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  List<Widget> getRoastPages(
-      Bean bean, List<Roast> roasts, RoastLogService roastLogService) {
-    if (roasts.isEmpty) {
-      return const [noRoastsPage];
-    }
-
-    return roasts.map((roast) {
-      final Roast? copy;
-      if (roast.copyOfRoastId != null) {
-        copy = roasts.singleWhere((r) => r.id == roast.copyOfRoastId);
-      } else {
-        copy = null;
-      }
-      return singleRoastPage(bean, roast, copy, roastLogService);
-    }).toList();
-  }
-
-  Widget singleRoastPage(
-      Bean bean, Roast roast, Roast? copy, RoastLogService roastLogService) {
-    final dateFormat = DateFormat.yMd();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          'Roast #${roast.roastNumber}',
-          style: RoastAppTheme.materialTheme.textTheme.subtitle1,
-          textAlign: TextAlign.center,
-        ),
-        Text(
-          'Roasted: ${dateFormat.format(roast.roasted)}',
-          style: RoastAppTheme.materialTheme.textTheme.subtitle1,
-          textAlign: TextAlign.center,
-        ),
-        if (copy != null)
-          Text(
-            'Copy of roast #${copy.roastNumber}',
-            style: RoastAppTheme.materialTheme.textTheme.subtitle2,
-            textAlign: TextAlign.center,
-          ),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
-                  child: RoastSummaryWidget(
-                    summary: RoastSummaryService().summarize(roast, bean),
-                    cellPadding: const EdgeInsets.all(4.0),
-                    showBeanName: false,
-                  ),
-                ),
-                TempLogWidget(
-                  logs: roastLogService.aggregate(
-                    roast.toTimeline(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 82,
-            vertical: 15,
-          ),
-          child: ElevatedButton(
-            onPressed: () {
-              ref.read(copyOfRoastProvider.notifier).state = roast;
-              context.replace(Routes.newRoast);
-            },
-            child: const Text('Repeat this roast'),
-          ),
-        ),
-      ],
     );
   }
 

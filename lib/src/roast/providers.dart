@@ -20,6 +20,11 @@ final roastsProvider = StreamProvider<List<Roast>>((ref) {
   return roastService.roasts;
 });
 
+final roastByIdProvider = StreamProvider.family<Roast, String>((ref, roastId) {
+  final roastService = ref.watch(roastServiceProvider);
+  return roastService.roast(roastId);
+});
+
 final roastSummaryProvider = Provider<RoastSummary?>((ref) {
   final roastSummaryService = RoastSummaryService();
   final roast = ref.watch(roastProvider);

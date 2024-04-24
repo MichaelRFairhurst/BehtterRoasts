@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:behmor_roast/src/roast/routes/complete_roast_page.dart';
 import 'package:behmor_roast/src/roast/routes/roast_history.dart';
 import 'package:behmor_roast/src/roast/routes/roast_review_page.dart';
+import 'package:behmor_roast/src/roast/routes/roast_timeline_page.dart';
 import 'package:behmor_roast/src/sign_in/routes/sign_in_page.dart';
 import 'package:behmor_roast/src/sign_in/routes/welcome_page.dart';
 import 'package:flutter/widgets.dart';
@@ -18,10 +19,15 @@ class Routes {
   static const timer = '/timer';
   static const completeRoast = '/completeRoast';
 
-  static const beanIdPart = 'beanId';
+  static const roastIdPart = 'roastId';
   static const roastReviewPart = '/roastReview';
-  static const roastReviewConfigPath = '$roastReviewPart/:$beanIdPart';
-  static String roastReview(String beanId) => '$roastReviewPart/$beanId';
+  static const roastReviewConfigPath = '$roastReviewPart/:$roastIdPart';
+  static String roastReview(String roastId) => '$roastReviewPart/$roastId';
+
+  static const beanIdPart = 'beanId';
+  static const roastTimelinePart = '/roastTimeline';
+  static const roastTimelineConfigPath = '$roastTimelinePart/:$beanIdPart';
+  static String roastTimeline(String beanId) => '$roastTimelinePart/$beanId';
 }
 
 GoRouter createRouter(Listenable refreshListenable,
@@ -45,6 +51,13 @@ GoRouter createRouter(Listenable refreshListenable,
           path: Routes.roastReviewConfigPath,
           builder: (context, state) {
             return RoastReviewPage(
+                roastId: state.pathParameters[Routes.roastIdPart]!);
+          },
+        ),
+        GoRoute(
+          path: Routes.roastTimelineConfigPath,
+          builder: (context, state) {
+            return RoastTimelinePage(
                 beanId: state.pathParameters[Routes.beanIdPart]!);
           },
         ),

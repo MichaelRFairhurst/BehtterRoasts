@@ -28,6 +28,15 @@ class RoastService {
               }
             })
             .whereType<Roast>()
-            .toList();
+            .toList()
+          ..sort((a, b) => a.roasted.compareTo(b.roasted));
+      });
+
+  Stream<Roast> roast(String roastId) => FirebaseFirestore.instance
+          .collection(_roastdb)
+          .doc(roastId)
+          .snapshots()
+          .map((doc) {
+        return Roast.fromJson(doc.data()!).copyWith(id: doc.id);
       });
 }

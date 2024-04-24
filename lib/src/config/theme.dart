@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class RoastAppTheme {
   //static const lilac = Color(0xFF9787B5);
   static const lilac = Color(0xFFA08DB5);
+  static const lilacDark = Color(0xFF6E4A94);
   static const indigo = Color(0xFFACBEE3);
+  static const indigoDark = Color(0xFF517A8F);
   static const crema = Color(0xFFDED8D3);
   static const cremaLight = Color(0xFFFAF5F0);
   static const capuccino = Color(0xFF3B312A);

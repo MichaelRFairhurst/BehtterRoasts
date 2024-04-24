@@ -40,7 +40,7 @@ class RoastHistoryPage extends ConsumerWidget {
                           label: const Text('View Roasts'),
                           style: RoastAppTheme.limeButtonTheme.style,
                           onPressed: () {
-                            context.push(Routes.roastReview(items[i].id!));
+                            context.push(Routes.roastTimeline(items[i].id!));
                           },
                         ),
                       ],
