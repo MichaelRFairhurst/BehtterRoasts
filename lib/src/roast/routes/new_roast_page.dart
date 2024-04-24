@@ -4,6 +4,7 @@ import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:behmor_roast/src/roast/models/roast.dart';
 import 'package:behmor_roast/src/roast/models/roast_config.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
+import 'package:behmor_roast/src/roast/services/roast_number_service.dart';
 import 'package:behmor_roast/src/roast/widgets/bean_select.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_interval_select.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
@@ -20,7 +21,6 @@ class NewRoastPage extends ConsumerStatefulWidget {
 }
 
 class NewRoastPageState extends ConsumerState<NewRoastPage> {
-  final number = TextEditingController(text: '1');
   final weight = TextEditingController(text: '300');
   final devel = TextEditingController(text: '20');
   final roastFormKey = GlobalKey<FormState>();
@@ -53,6 +53,12 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
     final bean = beans.valueOrNull
         ?.cast<Bean?>()
         .singleWhere((bean) => bean?.id == copy?.beanId, orElse: () => null);
+    final otherRoasts = selectedBean == null
+        ? <Roast>[]
+        : ref.watch(roastsForBeanProvider(selectedBean!.id!)).value ?? [];
+
+    final roastNumber =
+        RoastNumberService().getNewRoastNumber(copy?.id, otherRoasts);
 
     return Scaffold(
       appBar: AppBar(
@@ -105,23 +111,13 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                   },
                 ),
               ),
-              /*const SliverPadding(padding: EdgeInsets.only(top: 10)),
-              const SliverToBoxAdapter(
-                child: Text('Roast number'),
-              ),
-              SliverToBoxAdapter(
-                child: TextFormField(
-                    controller: number,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (int.tryParse(value ?? '') == null) {
-                        return 'Enter a valid roast number';
-                      }
-
-                      return null;
-                    }),
-              ),*/
-              const SliverPadding(padding: EdgeInsets.only(top: 10)),
+              if (selectedBean != null) ...[
+                const SliverPadding(padding: EdgeInsets.only(top: 10)),
+                SliverToBoxAdapter(
+                  child: Text('Roast ID: ${selectedBean!.name} #$roastNumber'),
+                ),
+              ],
+              const SliverPadding(padding: EdgeInsets.only(top: 40)),
               const SliverToBoxAdapter(
                 child: Text('Weight (g)'),
               ),
@@ -203,7 +199,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                             beanId: selectedBean!.id!,
                             copyOfRoastId: copy?.id,
                             roasted: DateTime.now(), // Replaced later.
-                            roastNumber: int.parse(number.text),
+                            roastNumber: roastNumber,
                             weightIn: double.parse(weight.text),
                             weightOut: double.parse(weight.text),
                             config: RoastConfig(

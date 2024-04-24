@@ -10,7 +10,7 @@ _$_Roast _$$_RoastFromJson(Map<String, dynamic> json) => _$_Roast(
       beanId: json['beanId'] as String,
       copyOfRoastId: json['copyOfRoastId'] as String?,
       config: RoastConfig.fromJson(json['config'] as Map<String, dynamic>),
-      roastNumber: json['roastNumber'] as int,
+      roastNumber: json['roastNumber'] as String,
       weightIn: (json['weightIn'] as num).toDouble(),
       weightOut: (json['weightOut'] as num).toDouble(),
       roasted: DateTime.parse(json['roasted'] as String),

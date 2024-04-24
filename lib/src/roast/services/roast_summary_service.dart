@@ -23,6 +23,7 @@ class RoastSummaryService {
 
     return RoastSummary(
       beanName: bean.name,
+      roastNumber: roast.roastNumber,
       totalTime: totalTime,
       preheatTime: timeline.preheatEnd,
       preheatGap: timeline.preheatGap,

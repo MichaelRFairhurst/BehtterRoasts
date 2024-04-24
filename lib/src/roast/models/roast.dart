@@ -17,7 +17,7 @@ class Roast with _$Roast {
     @JsonKey(includeFromJson: false, includeToJson: false) String? id,
     String? copyOfRoastId,
     required RoastConfig config,
-    required int roastNumber,
+    required String roastNumber,
     required double weightIn,
     required double weightOut,
     required DateTime roasted,

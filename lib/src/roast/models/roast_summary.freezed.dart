@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$RoastSummary {
   String get beanName => throw _privateConstructorUsedError;
+  String get roastNumber => throw _privateConstructorUsedError;
   Duration get totalTime => throw _privateConstructorUsedError;
   Duration? get preheatTime => throw _privateConstructorUsedError;
   Duration? get preheatGap => throw _privateConstructorUsedError;
@@ -47,6 +48,7 @@ abstract class $RoastSummaryCopyWith<$Res> {
   @useResult
   $Res call(
       {String beanName,
+      String roastNumber,
       Duration totalTime,
       Duration? preheatTime,
       Duration? preheatGap,
@@ -79,6 +81,7 @@ class _$RoastSummaryCopyWithImpl<$Res, $Val extends RoastSummary>
   @override
   $Res call({
     Object? beanName = null,
+    Object? roastNumber = null,
     Object? totalTime = null,
     Object? preheatTime = freezed,
     Object? preheatGap = freezed,
@@ -100,6 +103,10 @@ class _$RoastSummaryCopyWithImpl<$Res, $Val extends RoastSummary>
       beanName: null == beanName
           ? _value.beanName
           : beanName // ignore: cast_nullable_to_non_nullable
+              as String,
+      roastNumber: null == roastNumber
+          ? _value.roastNumber
+          : roastNumber // ignore: cast_nullable_to_non_nullable
               as String,
       totalTime: null == totalTime
           ? _value.totalTime
@@ -179,6 +186,7 @@ abstract class _$$_RoastSummaryCopyWith<$Res>
   @useResult
   $Res call(
       {String beanName,
+      String roastNumber,
       Duration totalTime,
       Duration? preheatTime,
       Duration? preheatGap,
@@ -209,6 +217,7 @@ class __$$_RoastSummaryCopyWithImpl<$Res>
   @override
   $Res call({
     Object? beanName = null,
+    Object? roastNumber = null,
     Object? totalTime = null,
     Object? preheatTime = freezed,
     Object? preheatGap = freezed,
@@ -230,6 +239,10 @@ class __$$_RoastSummaryCopyWithImpl<$Res>
       beanName: null == beanName
           ? _value.beanName
           : beanName // ignore: cast_nullable_to_non_nullable
+              as String,
+      roastNumber: null == roastNumber
+          ? _value.roastNumber
+          : roastNumber // ignore: cast_nullable_to_non_nullable
               as String,
       totalTime: null == totalTime
           ? _value.totalTime
@@ -304,6 +317,7 @@ class __$$_RoastSummaryCopyWithImpl<$Res>
 class _$_RoastSummary implements _RoastSummary {
   const _$_RoastSummary(
       {required this.beanName,
+      required this.roastNumber,
       required this.totalTime,
       this.preheatTime,
       this.preheatGap,
@@ -323,6 +337,8 @@ class _$_RoastSummary implements _RoastSummary {
 
   @override
   final String beanName;
+  @override
+  final String roastNumber;
   @override
   final Duration totalTime;
   @override
@@ -358,7 +374,7 @@ class _$_RoastSummary implements _RoastSummary {
 
   @override
   String toString() {
-    return 'RoastSummary(beanName: $beanName, totalTime: $totalTime, preheatTime: $preheatTime, preheatGap: $preheatGap, dryPhaseTime: $dryPhaseTime, dryPhasePercent: $dryPhasePercent, maillardPhaseTime: $maillardPhaseTime, maillardPhasePercent: $maillardPhasePercent, firstCrackPhaseTime: $firstCrackPhaseTime, firstCrackPhasePercent: $firstCrackPhasePercent, secondCrackPhaseTime: $secondCrackPhaseTime, secondCrackPhasePercent: $secondCrackPhasePercent, developmentPhaseTime: $developmentPhaseTime, developmentPercent: $developmentPercent, developmentPercentTarget: $developmentPercentTarget, weightLoss: $weightLoss, notes: $notes)';
+    return 'RoastSummary(beanName: $beanName, roastNumber: $roastNumber, totalTime: $totalTime, preheatTime: $preheatTime, preheatGap: $preheatGap, dryPhaseTime: $dryPhaseTime, dryPhasePercent: $dryPhasePercent, maillardPhaseTime: $maillardPhaseTime, maillardPhasePercent: $maillardPhasePercent, firstCrackPhaseTime: $firstCrackPhaseTime, firstCrackPhasePercent: $firstCrackPhasePercent, secondCrackPhaseTime: $secondCrackPhaseTime, secondCrackPhasePercent: $secondCrackPhasePercent, developmentPhaseTime: $developmentPhaseTime, developmentPercent: $developmentPercent, developmentPercentTarget: $developmentPercentTarget, weightLoss: $weightLoss, notes: $notes)';
   }
 
   @override
@@ -368,6 +384,8 @@ class _$_RoastSummary implements _RoastSummary {
             other is _$_RoastSummary &&
             (identical(other.beanName, beanName) ||
                 other.beanName == beanName) &&
+            (identical(other.roastNumber, roastNumber) ||
+                other.roastNumber == roastNumber) &&
             (identical(other.totalTime, totalTime) ||
                 other.totalTime == totalTime) &&
             (identical(other.preheatTime, preheatTime) ||
@@ -407,6 +425,7 @@ class _$_RoastSummary implements _RoastSummary {
   int get hashCode => Object.hash(
       runtimeType,
       beanName,
+      roastNumber,
       totalTime,
       preheatTime,
       preheatGap,
@@ -434,6 +453,7 @@ class _$_RoastSummary implements _RoastSummary {
 abstract class _RoastSummary implements RoastSummary {
   const factory _RoastSummary(
       {required final String beanName,
+      required final String roastNumber,
       required final Duration totalTime,
       final Duration? preheatTime,
       final Duration? preheatGap,
@@ -453,6 +473,8 @@ abstract class _RoastSummary implements RoastSummary {
 
   @override
   String get beanName;
+  @override
+  String get roastNumber;
   @override
   Duration get totalTime;
   @override

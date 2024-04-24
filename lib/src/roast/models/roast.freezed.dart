@@ -25,7 +25,7 @@ mixin _$Roast {
   String? get id => throw _privateConstructorUsedError;
   String? get copyOfRoastId => throw _privateConstructorUsedError;
   RoastConfig get config => throw _privateConstructorUsedError;
-  int get roastNumber => throw _privateConstructorUsedError;
+  String get roastNumber => throw _privateConstructorUsedError;
   double get weightIn => throw _privateConstructorUsedError;
   double get weightOut => throw _privateConstructorUsedError;
   DateTime get roasted => throw _privateConstructorUsedError;
@@ -50,7 +50,7 @@ abstract class $RoastCopyWith<$Res> {
       @JsonKey(includeFromJson: false, includeToJson: false) String? id,
       String? copyOfRoastId,
       RoastConfig config,
-      int roastNumber,
+      String roastNumber,
       double weightIn,
       double weightOut,
       DateTime roasted,
@@ -111,7 +111,7 @@ class _$RoastCopyWithImpl<$Res, $Val extends Roast>
       roastNumber: null == roastNumber
           ? _value.roastNumber
           : roastNumber // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       weightIn: null == weightIn
           ? _value.weightIn
           : weightIn // ignore: cast_nullable_to_non_nullable
@@ -179,7 +179,7 @@ abstract class _$$_RoastCopyWith<$Res> implements $RoastCopyWith<$Res> {
       @JsonKey(includeFromJson: false, includeToJson: false) String? id,
       String? copyOfRoastId,
       RoastConfig config,
-      int roastNumber,
+      String roastNumber,
       double weightIn,
       double weightOut,
       DateTime roasted,
@@ -238,7 +238,7 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
       roastNumber: null == roastNumber
           ? _value.roastNumber
           : roastNumber // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       weightIn: null == weightIn
           ? _value.weightIn
           : weightIn // ignore: cast_nullable_to_non_nullable
@@ -310,7 +310,7 @@ class _$_Roast extends _Roast {
   @override
   final RoastConfig config;
   @override
-  final int roastNumber;
+  final String roastNumber;
   @override
   final double weightIn;
   @override
@@ -417,7 +417,7 @@ abstract class _Roast extends Roast {
       @JsonKey(includeFromJson: false, includeToJson: false) final String? id,
       final String? copyOfRoastId,
       required final RoastConfig config,
-      required final int roastNumber,
+      required final String roastNumber,
       required final double weightIn,
       required final double weightOut,
       required final DateTime roasted,
@@ -440,7 +440,7 @@ abstract class _Roast extends Roast {
   @override
   RoastConfig get config;
   @override
-  int get roastNumber;
+  String get roastNumber;
   @override
   double get weightIn;
   @override

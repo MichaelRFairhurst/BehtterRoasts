@@ -42,6 +42,12 @@ class RoastSummaryWidget extends StatelessWidget {
               ),
             paddedRow(
               children: [
+                const Text('Roast Number'),
+                Text(summary.roastNumber),
+              ],
+            ),
+            paddedRow(
+              children: [
                 const Text('Roast time:'),
                 TimestampWidget.twitter(summary.totalTime),
               ],

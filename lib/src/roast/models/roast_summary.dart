@@ -6,6 +6,7 @@ part 'roast_summary.freezed.dart';
 class RoastSummary with _$RoastSummary {
   const factory RoastSummary({
     required String beanName,
+    required String roastNumber,
     required Duration totalTime,
     Duration? preheatTime,
     Duration? preheatGap,
