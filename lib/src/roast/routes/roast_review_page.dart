@@ -124,24 +124,39 @@ class RoastReviewPageState extends ConsumerState<RoastReviewPage> {
       return const [noRoastsPage];
     }
 
-    return roasts
-        .map((roast) => singleRoastPage(bean, roast, roastLogService))
-        .toList();
+    return roasts.map((roast) {
+      final Roast? copy;
+      if (roast.copyOfRoastId != null) {
+        copy = roasts.singleWhere((r) => r.id == roast.copyOfRoastId);
+      } else {
+        copy = null;
+      }
+      return singleRoastPage(bean, roast, copy, roastLogService);
+    }).toList();
   }
 
   Widget singleRoastPage(
-      Bean bean, Roast roast, RoastLogService roastLogService) {
+      Bean bean, Roast roast, Roast? copy, RoastLogService roastLogService) {
     final dateFormat = DateFormat.yMd();
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
           'Roast #${roast.roastNumber}',
           style: RoastAppTheme.materialTheme.textTheme.subtitle1,
+          textAlign: TextAlign.center,
         ),
         Text(
           'Roasted: ${dateFormat.format(roast.roasted)}',
           style: RoastAppTheme.materialTheme.textTheme.subtitle1,
+          textAlign: TextAlign.center,
         ),
+        if (copy != null)
+          Text(
+            'Copy of roast #${copy.roastNumber}',
+            style: RoastAppTheme.materialTheme.textTheme.subtitle2,
+            textAlign: TextAlign.center,
+          ),
         Expanded(
           child: SingleChildScrollView(
             child: Column(
@@ -160,18 +175,21 @@ class RoastReviewPageState extends ConsumerState<RoastReviewPage> {
                     roast.toTimeline(),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(30),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      ref.read(copyOfRoastProvider.notifier).state = roast;
-                      context.replace(Routes.newRoast);
-                    },
-                    child: const Text('Replicate Roast'),
-                  ),
-                ),
               ],
             ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 82,
+            vertical: 15,
+          ),
+          child: ElevatedButton(
+            onPressed: () {
+              ref.read(copyOfRoastProvider.notifier).state = roast;
+              context.replace(Routes.newRoast);
+            },
+            child: const Text('Repeat this roast'),
           ),
         ),
       ],
