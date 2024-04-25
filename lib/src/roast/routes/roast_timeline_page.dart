@@ -26,12 +26,10 @@ class RoastTimelinePage extends ConsumerWidget {
         .value
         ?.singleWhere((bean) => bean.id == beanId);
 
-    final appBar = AppBar(
-      title: Text(bean!.name, overflow: TextOverflow.fade),
-    );
-
     return Scaffold(
-      appBar: appBar,
+      appBar: AppBar(
+        title: Text(bean!.name, overflow: TextOverflow.fade),
+      ),
       body: ListLoader<Roast>(
         asyncValue: roasts,
         empty: () {
