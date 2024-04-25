@@ -43,7 +43,7 @@ final roastsForBeanProvider =
 });
 
 final beanServiceProvider = Provider<BeanService>((ref) {
-  return BeanService(ref.read(authProvider).value!);
+  return BeanService(ref.watch(authProvider).value!);
 });
 
 final beansProvider = StreamProvider<List<Bean>>((ref) {
