@@ -28,14 +28,23 @@ class RoastTimelinePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Roasts for ${bean!.name}'),
+        title: Text(bean!.name, overflow: TextOverflow.fade),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text(
+                  'Your Roast Timeline:',
+                  style: RoastAppTheme.materialTheme.textTheme.titleLarge,
+                ),
+              ),
+              const SizedBox(height: 18),
               for (final date in dates) ...[
                 dateHeader(date),
                 IntrinsicHeight(
