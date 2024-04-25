@@ -5,6 +5,7 @@ import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/widgets/roast_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 class RoastTimelinePage extends ConsumerWidget {
@@ -24,12 +25,43 @@ class RoastTimelinePage extends ConsumerWidget {
         .value
         ?.singleWhere((bean) => bean.id == beanId);
 
+    final appBar = AppBar(
+      title: Text(bean!.name, overflow: TextOverflow.fade),
+    );
+
+    if (roasts.isEmpty) {
+      return Scaffold(
+        appBar: appBar,
+        body: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: SvgPicture.asset('images/beans.svg', height: 80),
+              ),
+              Text(
+                'Nothing here yet!',
+                style: RoastAppTheme.materialTheme.textTheme.displaySmall,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'You have not yet roasted ${bean.name}.',
+                style: RoastAppTheme.materialTheme.textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     final dates = getDates(roasts);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(bean!.name, overflow: TextOverflow.fade),
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(12.0),
