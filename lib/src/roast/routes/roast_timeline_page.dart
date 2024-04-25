@@ -3,6 +3,7 @@ import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/roast.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/widgets/roast_card.dart';
+import 'package:behmor_roast/src/util/widgets/list_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,7 +20,7 @@ class RoastTimelinePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final roasts = ref.watch(roastsForBeanProvider(beanId)).value ?? [];
+    final roasts = ref.watch(roastsForBeanProvider(beanId));
     final bean = ref
         .watch(beansProvider)
         .value
@@ -29,91 +30,92 @@ class RoastTimelinePage extends ConsumerWidget {
       title: Text(bean!.name, overflow: TextOverflow.fade),
     );
 
-    if (roasts.isEmpty) {
-      return Scaffold(
-        appBar: appBar,
-        body: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: SvgPicture.asset('images/beans.svg', height: 80),
-              ),
-              Text(
-                'Nothing here yet!',
-                style: RoastAppTheme.materialTheme.textTheme.displaySmall,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'You have not yet roasted ${bean.name}.',
-                style: RoastAppTheme.materialTheme.textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    final dates = getDates(roasts);
-
     return Scaffold(
       appBar: appBar,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Text(
-                  'Your Roast Timeline:',
-                  style: RoastAppTheme.materialTheme.textTheme.titleLarge,
+      body: ListLoader<Roast>(
+        asyncValue: roasts,
+        empty: () {
+          return Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: SvgPicture.asset('images/beans.svg', height: 80),
                 ),
-              ),
-              const SizedBox(height: 18),
-              for (final date in dates) ...[
-                dateHeader(date),
-                IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const VerticalDivider(
-                        color: RoastAppTheme.capuccinoLight,
-                        width: 12.0,
-                        thickness: 1.0,
-                        //indent: 12.0,
-                        endIndent: 30.0,
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            for (final roast
-                                in roastsForDate(date, roasts)) ...[
-                              Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: RoastCard(
-                                  roast: roast,
-                                  bean: bean,
-                                ),
-                              ),
-                              const SizedBox(height: 10.0),
-                            ],
-                          ],
-                        ),
-                      ),
-                    ],
+                Text(
+                  'Nothing here yet!',
+                  style: RoastAppTheme.materialTheme.textTheme.displaySmall,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'You have not yet roasted ${bean.name}.',
+                  style: RoastAppTheme.materialTheme.textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        },
+        data: (roasts) {
+          final dates = getDates(roasts);
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Text(
+                      'Your Roast Timeline:',
+                      style: RoastAppTheme.materialTheme.textTheme.titleLarge,
+                    ),
                   ),
-                ),
-              ]
-            ],
-          ),
-        ),
+                  const SizedBox(height: 18),
+                  for (final date in dates) ...[
+                    dateHeader(date),
+                    IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const VerticalDivider(
+                            color: RoastAppTheme.capuccinoLight,
+                            width: 12.0,
+                            thickness: 1.0,
+                            //indent: 12.0,
+                            endIndent: 30.0,
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                for (final roast
+                                    in roastsForDate(date, roasts)) ...[
+                                  Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: RoastCard(
+                                      roast: roast,
+                                      bean: bean,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10.0),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
