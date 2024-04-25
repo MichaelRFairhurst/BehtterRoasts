@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:behmor_roast/src/roast/routes/complete_roast_page.dart';
-import 'package:behmor_roast/src/roast/routes/roast_history.dart';
+import 'package:behmor_roast/src/roast/routes/overview_page.dart';
 import 'package:behmor_roast/src/roast/routes/roast_review_page.dart';
 import 'package:behmor_roast/src/roast/routes/roast_timeline_page.dart';
 import 'package:behmor_roast/src/sign_in/routes/sign_in_page.dart';
@@ -14,7 +14,7 @@ import 'package:behmor_roast/src/roast/routes/new_roast_page.dart';
 class Routes {
   static const signIn = '/signIn';
   static const welcome = '/welcome';
-  static const roastHistory = '/roastHistory';
+  static const overview = '/overview';
   static const newRoast = '/newRoast';
   static const timer = '/timer';
   static const completeRoast = '/completeRoast';
@@ -45,8 +45,8 @@ GoRouter createRouter(Listenable refreshListenable,
             path: Routes.newRoast,
             builder: (context, state) => const NewRoastPage()),
         GoRoute(
-            path: Routes.roastHistory,
-            builder: (context, state) => const RoastHistoryPage()),
+            path: Routes.overview,
+            builder: (context, state) => const OverviewPage()),
         GoRoute(
           path: Routes.roastReviewConfigPath,
           builder: (context, state) {

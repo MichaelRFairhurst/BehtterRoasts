@@ -17,7 +17,7 @@ class WelcomePage extends ConsumerWidget {
     ref.read(beansProvider);
 
     Future.delayed(const Duration(seconds: 2)).then((_) {
-      context.go(Routes.roastHistory);
+      context.go(Routes.overview);
     });
 
     return Scaffold(
