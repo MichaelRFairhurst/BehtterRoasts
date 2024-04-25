@@ -5,13 +5,16 @@ import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:behmor_roast/src/roast/models/roast.dart';
 import 'package:behmor_roast/src/roast/models/roast_summary.dart';
 import 'package:behmor_roast/src/roast/services/roast_summary_service.dart';
+import 'package:behmor_roast/src/roast/widgets/roast_summary_widget.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
+import 'package:behmor_roast/src/util/widgets/animated_pop_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
-class RoastCard extends ConsumerWidget {
+class RoastCard extends ConsumerStatefulWidget {
   const RoastCard({
     required this.roast,
     required this.bean,
@@ -22,14 +25,25 @@ class RoastCard extends ConsumerWidget {
   final Bean bean;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  RoastCardState createState() => RoastCardState();
+}
+
+class RoastCardState extends ConsumerState<RoastCard> {
+  var opened = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final roast = widget.roast;
+    final bean = widget.bean;
     final summary = RoastSummaryService().summarize(roast, bean);
 
     return Card(
       elevation: 6.0,
       child: InkWell(
         onTap: () {
-          context.push(Routes.roastReview(roast.id!));
+          setState(() {
+            opened = !opened;
+          });
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -46,13 +60,18 @@ class RoastCard extends ConsumerWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Expanded(
-                    flex: 1,
-                    child: _developmentTime(summary),
+                  Center(
+                    child: SvgPicture.asset('images/beans.svg',
+                        width: 38, height: 38),
                   ),
+                  const SizedBox(width: 6),
                   Expanded(
                     flex: 1,
                     child: _roastTime(),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: _developmentTime(summary),
                   ),
                   Expanded(
                     flex: 1,
@@ -60,23 +79,9 @@ class RoastCard extends ConsumerWidget {
                   ),
                 ],
               ),
-              const Divider(),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 4.0, right: 4.0),
-                  child: SizedBox(
-                    height: 28,
-                    child: ElevatedButton(
-                      style: RoastAppTheme.limeButtonTheme.style,
-                      onPressed: () {
-                        ref.read(copyOfRoastProvider.notifier).state = roast;
-                        context.replace(Routes.newRoast);
-                      },
-                      child: const Text('Roast again'),
-                    ),
-                  ),
-                ),
+              const SizedBox(height: 4.0),
+              AnimatedPopUp(
+                child: _expandedContent(summary),
               ),
             ],
           ),
@@ -89,11 +94,11 @@ class RoastCard extends ConsumerWidget {
         children: [
           Text(
             '${(summary.developmentPercent * 100).toStringAsFixed(1)}%',
-            style: RoastAppTheme.materialTheme.textTheme.titleLarge?.copyWith(
+            style: RoastAppTheme.materialTheme.textTheme.titleMedium?.copyWith(
               color: RoastAppTheme.lilacDark,
             ),
           ),
-          Text('Development %',
+          Text('Development',
               style: RoastAppTheme.materialTheme.textTheme.caption),
         ],
       );
@@ -101,7 +106,7 @@ class RoastCard extends ConsumerWidget {
   Widget _roastTime() => Column(
         children: [
           TimestampWidget(
-            roast.toTimeline().done!,
+            widget.roast.toTimeline().done!,
             style: RoastAppTheme.materialTheme.textTheme.displaySmall?.copyWith(
               color: RoastAppTheme.capuccino,
             ),
@@ -114,7 +119,7 @@ class RoastCard extends ConsumerWidget {
   Widget _weightOut() => Column(
         children: [
           Text(
-            '${roast.weightOut}g',
+            '${widget.roast.weightOut}g',
             style: RoastAppTheme.materialTheme.textTheme.titleMedium?.copyWith(
               color: RoastAppTheme.indigoDark,
             ),
@@ -123,4 +128,40 @@ class RoastCard extends ConsumerWidget {
               style: RoastAppTheme.materialTheme.textTheme.caption),
         ],
       );
+
+  Widget _expandedContent(RoastSummary summary) {
+    if (!opened) {
+      return const SizedBox();
+    }
+    return Column(
+      children: [
+        const Divider(),
+        RoastSummaryWidget(summary: summary, showBeanName: false),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                style: RoastAppTheme.limeButtonTheme.style,
+                onPressed: () {
+                  context.push(Routes.roastReview(widget.roast.id!));
+                },
+                child: const Text('Full details'),
+              ),
+              const SizedBox(width: 12.0),
+              ElevatedButton(
+                style: RoastAppTheme.limeButtonTheme.style,
+                onPressed: () {
+                  ref.read(copyOfRoastProvider.notifier).state = widget.roast;
+                  context.replace(Routes.newRoast);
+                },
+                child: const Text('Roast again'),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
