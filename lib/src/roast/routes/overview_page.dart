@@ -3,6 +3,7 @@ import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/services/bean_service.dart';
+import 'package:behmor_roast/src/roast/widgets/continent_icon.dart';
 import 'package:behmor_roast/src/sign_in/widgets/signed_in_drawer.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/util/widgets/bobble.dart';
@@ -117,34 +118,35 @@ class OverviewPage extends ConsumerWidget {
   Widget beanCard(BuildContext context, Bean bean, BeanService beanService) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-      child: InkWell(
-        onTap: () {
-          context.push(Routes.roastTimeline(bean.id!));
-        },
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: SvgPicture.asset(
-                beanIconPath(bean, beanService),
-                color: RoastAppTheme.capuccinoLightest,
-                height: 36,
-              ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Hero(
+              tag: '${bean.name}Icon',
+              child: ContinentIcon(beanService.continentOf(bean)),
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0, top: 16.0),
-                    child: Text(bean.name),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0, top: 16.0),
+                  child: Hero(
+                    tag: bean.name,
+                    child: Text(bean.name,
+                        style: Theme.of(context).textTheme.bodyMedium),
                   ),
-                  Row(
+                ),
+                SizedBox(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
                         color: RoastAppTheme.limeDark,
+                        tooltip: 'Archive',
                         onPressed: () {
                           //beanService.update(bean.copyWith(archived: true));
                         },
@@ -152,44 +154,33 @@ class OverviewPage extends ConsumerWidget {
                       ),
                       IconButton(
                         color: RoastAppTheme.limeDark,
-                        icon: const Icon(Icons.more_horiz),
+                        icon: const Icon(Icons.timeline),
+                        tooltip: 'Roast Timeline',
                         onPressed: () {
                           context.push(Routes.roastTimeline(bean.id!));
                         },
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 56,
-              child: VerticalDivider(),
-            ),
-            IconButton(
-              iconSize: 48,
-              icon: const Icon(Icons.local_fire_department_sharp),
-              color: RoastAppTheme.errorColor,
-              onPressed: () {
-                context.push(Routes.newRoast, extra: bean);
-              },
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(
+            height: 56,
+            child: VerticalDivider(width: 1),
+          ),
+          IconButton(
+            iconSize: 48,
+            icon: const Icon(Icons.local_fire_department_sharp),
+            color: RoastAppTheme.errorColor,
+            tooltip: 'Roast',
+            onPressed: () {
+              context.push(Routes.newRoast, extra: bean);
+            },
+          ),
+        ],
       ),
     );
-  }
-
-  String beanIconPath(Bean bean, BeanService beanService) {
-    switch (beanService.continentOf(bean)) {
-      case Continent.africa:
-        return 'images/africa.svg';
-      case Continent.southAmerica:
-        return 'images/south_america.svg';
-      case Continent.centralAmerica:
-        return 'images/central_america.svg';
-      case Continent.other:
-        return 'images/bean.svg';
-    }
   }
 }

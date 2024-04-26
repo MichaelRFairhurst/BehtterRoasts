@@ -21,14 +21,14 @@ class ListLoader<T> extends StatelessWidget {
       duration: const Duration(milliseconds: 400),
       switchInCurve: Curves.easeInExpo,
       switchOutCurve: Curves.easeOutExpo,
-      layoutBuilder: (currentChild, previousChildren) {
+      /*layoutBuilder: (currentChild, previousChildren) {
         return Stack(
           children: [
             for (final child in previousChildren) Positioned.fill(child: child),
             if (currentChild != null) Positioned.fill(child: currentChild),
           ],
         );
-      },
+      },*/
       child: asyncValue.when(
         loading: loadingPage,
         error: errorPage,
