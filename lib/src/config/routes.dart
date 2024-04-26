@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:behmor_roast/src/roast/routes/complete_roast_page.dart';
 import 'package:behmor_roast/src/roast/routes/overview_page.dart';
 import 'package:behmor_roast/src/roast/routes/roast_review_page.dart';
@@ -43,7 +44,8 @@ GoRouter createRouter(Listenable refreshListenable,
             builder: (context, state) => const WelcomePage()),
         GoRoute(
             path: Routes.newRoast,
-            builder: (context, state) => const NewRoastPage()),
+            builder: (context, state) =>
+                NewRoastPage(selectedBean: state.extra as Bean?)),
         GoRoute(
             path: Routes.overview,
             builder: (context, state) => const OverviewPage()),

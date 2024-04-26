@@ -24,6 +24,7 @@ mixin _$Bean {
   String? get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get ownerId => throw _privateConstructorUsedError;
+  bool get archived => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -38,7 +39,8 @@ abstract class $BeanCopyWith<$Res> {
   $Res call(
       {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
       String name,
-      String ownerId});
+      String ownerId,
+      bool archived});
 }
 
 /// @nodoc
@@ -57,6 +59,7 @@ class _$BeanCopyWithImpl<$Res, $Val extends Bean>
     Object? id = freezed,
     Object? name = null,
     Object? ownerId = null,
+    Object? archived = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -71,6 +74,10 @@ class _$BeanCopyWithImpl<$Res, $Val extends Bean>
           ? _value.ownerId
           : ownerId // ignore: cast_nullable_to_non_nullable
               as String,
+      archived: null == archived
+          ? _value.archived
+          : archived // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -84,7 +91,8 @@ abstract class _$$_BeanCopyWith<$Res> implements $BeanCopyWith<$Res> {
   $Res call(
       {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
       String name,
-      String ownerId});
+      String ownerId,
+      bool archived});
 }
 
 /// @nodoc
@@ -99,6 +107,7 @@ class __$$_BeanCopyWithImpl<$Res> extends _$BeanCopyWithImpl<$Res, _$_Bean>
     Object? id = freezed,
     Object? name = null,
     Object? ownerId = null,
+    Object? archived = null,
   }) {
     return _then(_$_Bean(
       id: freezed == id
@@ -113,6 +122,10 @@ class __$$_BeanCopyWithImpl<$Res> extends _$BeanCopyWithImpl<$Res, _$_Bean>
           ? _value.ownerId
           : ownerId // ignore: cast_nullable_to_non_nullable
               as String,
+      archived: null == archived
+          ? _value.archived
+          : archived // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -123,7 +136,8 @@ class _$_Bean implements _Bean {
   const _$_Bean(
       {@JsonKey(includeFromJson: false, includeToJson: false) this.id,
       required this.name,
-      required this.ownerId});
+      required this.ownerId,
+      this.archived = false});
 
   factory _$_Bean.fromJson(Map<String, dynamic> json) => _$$_BeanFromJson(json);
 
@@ -134,10 +148,13 @@ class _$_Bean implements _Bean {
   final String name;
   @override
   final String ownerId;
+  @override
+  @JsonKey()
+  final bool archived;
 
   @override
   String toString() {
-    return 'Bean(id: $id, name: $name, ownerId: $ownerId)';
+    return 'Bean(id: $id, name: $name, ownerId: $ownerId, archived: $archived)';
   }
 
   @override
@@ -147,12 +164,14 @@ class _$_Bean implements _Bean {
             other is _$_Bean &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.ownerId, ownerId) || other.ownerId == ownerId));
+            (identical(other.ownerId, ownerId) || other.ownerId == ownerId) &&
+            (identical(other.archived, archived) ||
+                other.archived == archived));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, ownerId);
+  int get hashCode => Object.hash(runtimeType, id, name, ownerId, archived);
 
   @JsonKey(ignore: true)
   @override
@@ -172,7 +191,8 @@ abstract class _Bean implements Bean {
   const factory _Bean(
       {@JsonKey(includeFromJson: false, includeToJson: false) final String? id,
       required final String name,
-      required final String ownerId}) = _$_Bean;
+      required final String ownerId,
+      final bool archived}) = _$_Bean;
 
   factory _Bean.fromJson(Map<String, dynamic> json) = _$_Bean.fromJson;
 
@@ -183,6 +203,8 @@ abstract class _Bean implements Bean {
   String get name;
   @override
   String get ownerId;
+  @override
+  bool get archived;
   @override
   @JsonKey(ignore: true)
   _$$_BeanCopyWith<_$_Bean> get copyWith => throw _privateConstructorUsedError;

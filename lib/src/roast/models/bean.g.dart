@@ -9,9 +9,11 @@ part of 'bean.dart';
 _$_Bean _$$_BeanFromJson(Map<String, dynamic> json) => _$_Bean(
       name: json['name'] as String,
       ownerId: json['ownerId'] as String,
+      archived: json['archived'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$_BeanToJson(_$_Bean instance) => <String, dynamic>{
       'name': instance.name,
       'ownerId': instance.ownerId,
+      'archived': instance.archived,
     };

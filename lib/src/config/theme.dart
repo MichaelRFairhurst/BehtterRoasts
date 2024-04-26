@@ -8,12 +8,15 @@ class RoastAppTheme {
   static const indigoDark = Color(0xFF517A8F);
   static const crema = Color(0xFFDED8D3);
   static const cremaLight = Color(0xFFFAF5F0);
+  static const cremaLightest = Color(0xFFFFFBF8);
   static const capuccino = Color(0xFF3B312A);
   static const capuccinoLight = Color(0xFF4B413A);
+  static const capuccinoLightest = Color(0xFF695344);
   static const metal = Color(0xFF606466);
   static const metalDark = Color(0xFF494F52);
   static const metalLight = Color(0xFFA9A7AB);
   static const lime = Color(0xFFC8E6D6);
+  static const limeDark = Color(0xFF9BCCB0);
   static const errorColor = Color(0xFFB85544);
   static const alertColor = Color(0xFFC9BF3c);
 
@@ -111,6 +114,11 @@ class RoastAppTheme {
         ),
       ),
       canvasColor: cremaLight,
+      cardTheme: const CardTheme(
+        //color: cremaLightest,
+        color: cremaLightest,
+        elevation: 6.0,
+      ),
       drawerTheme: const DrawerThemeData(
         backgroundColor: crema,
         scrimColor: capuccino,
@@ -131,6 +139,7 @@ class RoastAppTheme {
           ),
         ),
       ),
+      dividerColor: RoastAppTheme.metalLight,
     ),
     Typography.material2021().geometryThemeFor(ScriptCategory.englishLike),
   );

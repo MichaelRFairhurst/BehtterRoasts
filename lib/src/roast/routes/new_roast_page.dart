@@ -14,7 +14,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class NewRoastPage extends ConsumerStatefulWidget {
-  const NewRoastPage({Key? key}) : super(key: key);
+  const NewRoastPage({Key? key, this.selectedBean}) : super(key: key);
+
+  final Bean? selectedBean;
 
   @override
   NewRoastPageState createState() => NewRoastPageState();
@@ -32,6 +34,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
   @override
   void initState() {
     super.initState();
+    selectedBean = widget.selectedBean;
     final copy = ref.read(copyOfRoastProvider);
     if (copy != null) {
       devel.text = (copy.config.targetDevelopment * 100).toString();
