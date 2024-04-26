@@ -118,68 +118,77 @@ class OverviewPage extends ConsumerWidget {
   Widget beanCard(BuildContext context, Bean bean, BeanService beanService) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Hero(
-              tag: '${bean.name}Icon',
-              child: ContinentIcon(beanService.continentOf(bean)),
+      child: InkWell(
+        onTap: () {
+          context.push(Routes.roastTimeline(bean.id!));
+        },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Hero(
+                tag: '${bean.name}Icon',
+                child: ContinentIcon(beanService.continentOf(bean)),
+              ),
             ),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0, top: 16.0),
-                  child: Hero(
-                    tag: bean.name,
-                    child: Text(bean.name,
-                        style: Theme.of(context).textTheme.bodyMedium),
-                  ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Hero(
+                  tag: bean.name,
+                  child: Text(bean.name,
+                      style: Theme.of(context).textTheme.bodyLarge),
                 ),
-                SizedBox(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        color: RoastAppTheme.limeDark,
-                        tooltip: 'Archive',
-                        onPressed: () {
-                          //beanService.update(bean.copyWith(archived: true));
-                        },
-                        icon: const Icon(Icons.archive),
-                      ),
-                      IconButton(
-                        color: RoastAppTheme.limeDark,
-                        icon: const Icon(Icons.timeline),
-                        tooltip: 'Roast Timeline',
-                        onPressed: () {
-                          context.push(Routes.roastTimeline(bean.id!));
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 56,
-            child: VerticalDivider(width: 1),
-          ),
-          IconButton(
-            iconSize: 48,
-            icon: const Icon(Icons.local_fire_department_sharp),
-            color: RoastAppTheme.errorColor,
-            tooltip: 'Roast',
-            onPressed: () {
-              context.push(Routes.newRoast, extra: bean);
-            },
-          ),
-        ],
+            PopupMenuButton<void>(
+              tooltip: 'Archive',
+              itemBuilder: (context) {
+                return <PopupMenuItem<void>>[
+                  PopupMenuItem<void>(
+                    child: Row(
+                      children: const [
+                        Icon(Icons.archive),
+                        Text('Archive'),
+                      ],
+                    ),
+                    onTap: () {
+                      //beanService.update(bean.copyWith(archived: true));
+                    },
+                  ),
+                ];
+              },
+              icon: const Icon(Icons.more_vert),
+            ),
+            const SizedBox(
+              height: 56,
+              child: VerticalDivider(width: 1),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  IconButton(
+                    iconSize: 48,
+                    padding: const EdgeInsets.all(0.0),
+                    icon: const Icon(Icons.local_fire_department_sharp),
+                    color: RoastAppTheme.errorColor,
+                    tooltip: 'Roast',
+                    onPressed: () {
+                      context.push(Routes.newRoast, extra: bean);
+                    },
+                  ),
+                  Text(
+                    'ROAST',
+                    style: RoastAppTheme.materialTheme.textTheme.labelSmall
+                        ?.copyWith(color: RoastAppTheme.errorColor),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
