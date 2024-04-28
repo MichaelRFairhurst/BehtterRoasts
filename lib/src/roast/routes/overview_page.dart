@@ -2,10 +2,10 @@ import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
-import 'package:behmor_roast/src/roast/services/bean_service.dart';
-import 'package:behmor_roast/src/roast/widgets/continent_icon.dart';
+import 'package:behmor_roast/src/roast/widgets/bean_card.dart';
 import 'package:behmor_roast/src/sign_in/widgets/signed_in_drawer.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
+import 'package:behmor_roast/src/util/widgets/animated_pop_up.dart';
 import 'package:behmor_roast/src/util/widgets/bobble.dart';
 import 'package:behmor_roast/src/util/widgets/list_loader.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +13,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
-class OverviewPage extends ConsumerWidget {
+class OverviewPage extends ConsumerStatefulWidget {
   const OverviewPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  OverviewPageState createState() => OverviewPageState();
+}
+
+class OverviewPageState extends ConsumerState<OverviewPage> {
+  bool showArchived = false;
+
+  @override
+  Widget build(BuildContext context) {
     final beans = ref.watch(beansProvider);
     final beanService = ref.watch(beanServiceProvider);
 
@@ -73,7 +80,7 @@ class OverviewPage extends ConsumerWidget {
         },
         data: (beans) {
           final unarchived = beans.where((bean) => !bean.archived).toList();
-          //final archived = beans.where((bean) => bean.archived).toList();
+          final archived = beans.where((bean) => bean.archived).toList();
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -86,11 +93,56 @@ class OverviewPage extends ConsumerWidget {
                 ),
                 const SizedBox(height: 24),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: unarchived.length,
-                    itemBuilder: (context, i) {
-                      return beanCard(context, unarchived[i], beanService);
-                    },
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, i) {
+                            return BeanCard(
+                              bean: unarchived[i],
+                              beanService: beanService,
+                            );
+                          },
+                          childCount: unarchived.length,
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 0.0),
+                          child: showArchived
+                              ? TextButton.icon(
+                                  icon: const Icon(Icons.expand_less),
+                                  label: const Text('Hide archived coffees'),
+                                  onPressed: () {
+                                    setState(() {
+                                      showArchived = false;
+                                    });
+                                  },
+                                )
+                              : TextButton.icon(
+                                  icon: const Icon(Icons.expand_more),
+                                  label: Text(
+                                      '${archived.length} archived coffees'),
+                                  onPressed: () {
+                                    setState(() {
+                                      showArchived = true;
+                                    });
+                                  },
+                                ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: AnimatedPopUp(
+                            child: showArchived
+                                ? Column(
+                                    children: archived
+                                        .map((bean) => BeanCard(
+                                            bean: bean,
+                                            beanService: beanService))
+                                        .toList())
+                                : const SizedBox()),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -111,84 +163,6 @@ class OverviewPage extends ConsumerWidget {
                   ref.read(copyOfRoastProvider.notifier).state = null;
                   context.push(Routes.newRoast);
                 }),
-      ),
-    );
-  }
-
-  Widget beanCard(BuildContext context, Bean bean, BeanService beanService) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-      child: InkWell(
-        onTap: () {
-          context.push(Routes.roastTimeline(bean.id!));
-        },
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Hero(
-                tag: '${bean.name}Icon',
-                child: ContinentIcon(beanService.continentOf(bean)),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Hero(
-                  tag: bean.name,
-                  child: Text(bean.name,
-                      style: Theme.of(context).textTheme.bodyLarge),
-                ),
-              ),
-            ),
-            PopupMenuButton<void>(
-              tooltip: 'Archive',
-              itemBuilder: (context) {
-                return <PopupMenuItem<void>>[
-                  PopupMenuItem<void>(
-                    child: Row(
-                      children: const [
-                        Icon(Icons.archive),
-                        Text('Archive'),
-                      ],
-                    ),
-                    onTap: () {
-                      //beanService.update(bean.copyWith(archived: true));
-                    },
-                  ),
-                ];
-              },
-              icon: const Icon(Icons.more_vert),
-            ),
-            const SizedBox(
-              height: 56,
-              child: VerticalDivider(width: 1),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  IconButton(
-                    iconSize: 48,
-                    padding: const EdgeInsets.all(0.0),
-                    icon: const Icon(Icons.local_fire_department_sharp),
-                    color: RoastAppTheme.errorColor,
-                    tooltip: 'Roast',
-                    onPressed: () {
-                      context.push(Routes.newRoast, extra: bean);
-                    },
-                  ),
-                  Text(
-                    'ROAST',
-                    style: RoastAppTheme.materialTheme.textTheme.labelSmall
-                        ?.copyWith(color: RoastAppTheme.errorColor),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
