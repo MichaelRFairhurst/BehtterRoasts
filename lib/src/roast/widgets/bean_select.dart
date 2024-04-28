@@ -26,7 +26,16 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
 
   @override
   Widget build(BuildContext context) {
-    final beans = ref.watch(beansProvider).value ?? [];
+    final beans = ref
+            .watch(beansProvider)
+            .value
+            ?.where((bean) => !bean.archived)
+            .toList() ??
+        [];
+
+    if (widget.selectedBean != null && !beans.contains(widget.selectedBean)) {
+      beans.add(widget.selectedBean!);
+    }
 
     if (addNew) {
       return Form(
