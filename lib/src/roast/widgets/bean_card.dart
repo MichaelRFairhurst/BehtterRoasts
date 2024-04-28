@@ -48,20 +48,23 @@ class BeanCard extends StatelessWidget {
               itemBuilder: (context) {
                 return <PopupMenuItem<void>>[
                   PopupMenuItem<void>(
-                    child: TextButton.icon(
-                      icon: const Icon(Icons.archive),
-                      label: Text(bean.archived ? 'Unarchive' : 'Archive'),
-                      onPressed: () {
+                    child: ListTile(
+                      dense: true,
+                      leading: const Icon(Icons.archive),
+                      title: Text(bean.archived ? 'Unarchive' : 'Archive'),
+                      onTap: () {
+                        context.pop();
                         beanService
                             .update(bean.copyWith(archived: !bean.archived));
                       },
                     ),
                   ),
                   PopupMenuItem<void>(
-                    child: TextButton.icon(
-                      icon: const Icon(Icons.timeline),
-                      label: const Text('Timeline'),
-                      onPressed: () {
+                    child: ListTile(
+                      dense: true,
+                      leading: const Icon(Icons.timeline),
+                      title: const Text('Timeline'),
+                      onTap: () {
                         context.push(Routes.roastTimeline(bean.id!));
                       },
                     ),

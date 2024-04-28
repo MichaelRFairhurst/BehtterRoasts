@@ -106,31 +106,33 @@ class OverviewPageState extends ConsumerState<OverviewPage> {
                           childCount: unarchived.length,
                         ),
                       ),
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 0.0),
-                          child: showArchived
-                              ? TextButton.icon(
-                                  icon: const Icon(Icons.expand_less),
-                                  label: const Text('Hide archived coffees'),
-                                  onPressed: () {
-                                    setState(() {
-                                      showArchived = false;
-                                    });
-                                  },
-                                )
-                              : TextButton.icon(
-                                  icon: const Icon(Icons.expand_more),
-                                  label: Text(
-                                      '${archived.length} archived coffees'),
-                                  onPressed: () {
-                                    setState(() {
-                                      showArchived = true;
-                                    });
-                                  },
-                                ),
+                      if (archived.isNotEmpty)
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 0.0),
+                            child: showArchived
+                                ? TextButton.icon(
+                                    icon: const Icon(Icons.expand_less),
+                                    label: const Text('Hide archived coffees'),
+                                    onPressed: () {
+                                      setState(() {
+                                        showArchived = false;
+                                      });
+                                    },
+                                  )
+                                : TextButton.icon(
+                                    icon: const Icon(Icons.expand_more),
+                                    label: Text(archived.length == 1
+                                        ? '1 archived coffee'
+                                        : '${archived.length} archived coffees'),
+                                    onPressed: () {
+                                      setState(() {
+                                        showArchived = true;
+                                      });
+                                    },
+                                  ),
+                          ),
                         ),
-                      ),
                       SliverToBoxAdapter(
                         child: AnimatedPopUp(
                             child: showArchived
@@ -141,6 +143,9 @@ class OverviewPageState extends ConsumerState<OverviewPage> {
                                             beanService: beanService))
                                         .toList())
                                 : const SizedBox()),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: SizedBox(height: 50),
                       ),
                     ],
                   ),
