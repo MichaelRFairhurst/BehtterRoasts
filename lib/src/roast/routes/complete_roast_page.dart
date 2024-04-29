@@ -3,6 +3,7 @@ import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/widgets/roast_summary_widget.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/widgets/roast_pop_scope.dart';
+import 'package:behmor_roast/src/util/logo_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -26,7 +27,7 @@ class CompleteRoastPageState extends ConsumerState<CompleteRoastPage> {
       state: RoastState.done,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Roast complete'),
+          title: const LogoTitle('Roast complete'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(24.0),

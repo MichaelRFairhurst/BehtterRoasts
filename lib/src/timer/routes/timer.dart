@@ -14,6 +14,7 @@ import 'package:behmor_roast/src/timer/widgets/roast_pop_scope.dart';
 import 'package:behmor_roast/src/timer/widgets/roast_tip_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/time_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/timed_check_temp_widget.dart';
+import 'package:behmor_roast/src/util/logo_title.dart';
 import 'package:behmor_roast/src/util/widgets/animated_pop_up.dart';
 import 'package:behmor_roast/src/util/widgets/bottom_sticky_scroll_view.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +119,7 @@ class TimerPage extends ConsumerWidget {
       state: state,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Roast Controls"),
+          title: const LogoTitle("Roast Controls"),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -4,6 +4,7 @@ import 'package:behmor_roast/src/roast/models/roast.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/widgets/continent_icon.dart';
 import 'package:behmor_roast/src/roast/widgets/roast_card.dart';
+import 'package:behmor_roast/src/util/logo_title.dart';
 import 'package:behmor_roast/src/util/widgets/list_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,7 +31,7 @@ class RoastTimelinePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Timeline'),
+        title: const LogoTitle('Timeline'),
       ),
       body: SingleChildScrollView(
         child: Padding(

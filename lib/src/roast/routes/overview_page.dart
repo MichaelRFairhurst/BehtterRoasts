@@ -23,14 +23,29 @@ class OverviewPage extends ConsumerStatefulWidget {
 class OverviewPageState extends ConsumerState<OverviewPage> {
   bool showArchived = false;
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     final beans = ref.watch(beansProvider);
     final beanService = ref.watch(beanServiceProvider);
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text('Behmor Roast App'),
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SvgPicture.asset('images/logo_transparent.svg'),
+        ),
+        title: const Text('Behtter Roasts'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () {
+              _scaffoldKey.currentState!.openDrawer();
+            },
+          ),
+        ],
       ),
       drawer: const SignedInDrawer(),
       body: ListLoader<Bean>(

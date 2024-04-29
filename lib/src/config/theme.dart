@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class RoastAppTheme {
   //static const lilac = Color(0xFF9787B5);
@@ -95,7 +96,7 @@ class RoastAppTheme {
   static final materialTheme = ThemeData.localize(
     ThemeData(
       brightness: Brightness.light,
-      fontFamily: 'Roboto',
+      fontFamily: 'Noto Sans',
       colorScheme: const ColorScheme.light().copyWith(
         primary: capuccino,
         secondary: indigo,
@@ -140,6 +141,22 @@ class RoastAppTheme {
         ),
       ),
       dividerColor: RoastAppTheme.metalLight,
+      textTheme: TextTheme(
+        displayLarge: GoogleFonts.vollkorn(
+            textStyle: ThemeData.light().textTheme.displayLarge),
+        displayMedium: GoogleFonts.vollkorn(
+            textStyle: ThemeData.light().textTheme.displayMedium),
+        displaySmall: GoogleFonts.vollkorn(
+            textStyle: ThemeData.light().textTheme.displaySmall),
+        headlineLarge: GoogleFonts.vollkorn(
+            textStyle: ThemeData.light().textTheme.headlineLarge),
+        headlineMedium: GoogleFonts.vollkorn(
+            textStyle: ThemeData.light().textTheme.headlineMedium),
+        headlineSmall: GoogleFonts.vollkorn(
+            textStyle: ThemeData.light().textTheme.headlineSmall),
+        titleLarge: GoogleFonts.vollkorn(
+            textStyle: ThemeData.light().textTheme.titleLarge),
+      ),
     ),
     Typography.material2021().geometryThemeFor(ScriptCategory.englishLike),
   );

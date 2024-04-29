@@ -9,6 +9,7 @@ import 'package:behmor_roast/src/roast/widgets/bean_select.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_interval_select.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
+import 'package:behmor_roast/src/util/logo_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -65,7 +66,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Start a New Roast"),
+        title: const LogoTitle("Start a New Roast"),
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),

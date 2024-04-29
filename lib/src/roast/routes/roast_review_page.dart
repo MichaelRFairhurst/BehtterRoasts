@@ -5,6 +5,7 @@ import 'package:behmor_roast/src/roast/services/roast_summary_service.dart';
 import 'package:behmor_roast/src/roast/widgets/roast_summary_widget.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
+import 'package:behmor_roast/src/util/logo_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -39,7 +40,7 @@ class RoastReviewPage extends ConsumerWidget {
     final dateFormat = DateFormat.yMd();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Roasts for ${bean.name}'),
+        title: LogoTitle('${bean.name} #{roast.roastNumber}'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
