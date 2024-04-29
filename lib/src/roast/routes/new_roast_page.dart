@@ -115,12 +115,6 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                   },
                 ),
               ),
-              if (selectedBean != null) ...[
-                const SliverPadding(padding: EdgeInsets.only(top: 10)),
-                SliverToBoxAdapter(
-                  child: Text('Roast ID: ${selectedBean!.name} #$roastNumber'),
-                ),
-              ],
               const SliverPadding(padding: EdgeInsets.only(top: 40)),
               const SliverToBoxAdapter(
                 child: Text('Weight (g)'),
@@ -178,49 +172,58 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
               ),
               SliverFillRemaining(
                 hasScrollBody: false,
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      label: const Icon(Icons.navigate_next),
-                      icon: const Text('Begin roast'),
-                      onPressed: () {
-                        final formValid = roastFormKey.currentState!.validate();
-                        if (selectedBean == null) {
-                          setState(() {
-                            beanErr = true;
-                          });
-                        } else {
-                          setState(() {
-                            beanErr = false;
-                          });
-                        }
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (selectedBean != null)
+                      Text('Roast ID: ${selectedBean!.name} #$roastNumber'),
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          label: const Icon(Icons.navigate_next),
+                          icon: const Text('Begin roast'),
+                          onPressed: () {
+                            final formValid =
+                                roastFormKey.currentState!.validate();
+                            if (selectedBean == null) {
+                              setState(() {
+                                beanErr = true;
+                              });
+                            } else {
+                              setState(() {
+                                beanErr = false;
+                              });
+                            }
 
-                        if (!beanErr && formValid) {
-                          final roast = Roast(
-                            beanId: selectedBean!.id!,
-                            copyOfRoastId: copy?.id,
-                            roasted: DateTime.now(), // Replaced later.
-                            roastNumber: roastNumber,
-                            weightIn: double.parse(weight.text),
-                            weightOut: double.parse(weight.text),
-                            config: RoastConfig(
-                              tempInterval: tempInterval,
-                              targetDevelopment: double.parse(devel.text) / 100,
-                            ),
-                          );
-                          ref.read(roastProvider.notifier).state = roast;
-                          ref.read(roastTimelineProvider.notifier).state =
-                              const RoastTimeline(rawLogs: []);
-                          ref.read(roastTimerProvider).reset();
-                          ref.read(preheatTimerProvider).reset();
-                          context.replace(Routes.timer);
-                        }
-                      },
+                            if (!beanErr && formValid) {
+                              final roast = Roast(
+                                beanId: selectedBean!.id!,
+                                copyOfRoastId: copy?.id,
+                                roasted: DateTime.now(), // Replaced later.
+                                roastNumber: roastNumber,
+                                weightIn: double.parse(weight.text),
+                                weightOut: double.parse(weight.text),
+                                config: RoastConfig(
+                                  tempInterval: tempInterval,
+                                  targetDevelopment:
+                                      double.parse(devel.text) / 100,
+                                ),
+                              );
+                              ref.read(roastProvider.notifier).state = roast;
+                              ref.read(roastTimelineProvider.notifier).state =
+                                  const RoastTimeline(rawLogs: []);
+                              ref.read(roastTimerProvider).reset();
+                              ref.read(preheatTimerProvider).reset();
+                              context.replace(Routes.timer);
+                            }
+                          },
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ],
