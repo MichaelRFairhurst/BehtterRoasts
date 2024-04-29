@@ -153,6 +153,9 @@ class RoastCardState extends ConsumerState<RoastCard> {
               ElevatedButton(
                 style: RoastAppTheme.limeButtonTheme.style,
                 onPressed: () {
+                  // Clear copy state first so that this is a change. Otherwise,
+                  // the roast instruction state isn't properly reset.
+                  ref.read(copyOfRoastProvider.notifier).state = null;
                   ref.read(copyOfRoastProvider.notifier).state = widget.roast;
                   context.replace(Routes.newRoast);
                 },
