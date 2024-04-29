@@ -53,6 +53,16 @@ class InstructionsWidgetState extends ConsumerState<InstructionsWidget> {
                 return SlideTransition(
                     position: position.animate(animation), child: child);
               }),
+          if (instructions.length > 1)
+            TextButton.icon(
+              icon: Icon(expanded ? Icons.expand_less : Icons.expand_more),
+              label: Text('${instructions.length - 1} more'),
+              onPressed: () {
+                setState(() {
+                  expanded = !expanded;
+                });
+              },
+            ),
           AnimatedPopUp(
             child: !expanded
                 ? Container()
@@ -64,35 +74,6 @@ class InstructionsWidgetState extends ConsumerState<InstructionsWidget> {
                       ],
                     ],
                   ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Stack(
-            children: [
-              const Positioned.fill(
-                child: Divider(
-                  height: 12,
-                  color: RoastAppTheme.metal,
-                ),
-              ),
-              Center(
-                child: SizedBox(
-                  width: 50,
-                  height: 6,
-                  child: ElevatedButton(
-                    //style: RoastAppTheme.tinyButtonTheme.style,
-                    style: RoastAppTheme.keypadButtonTheme.style,
-                    onPressed: () {
-                      setState(() {
-                        expanded = !expanded;
-                      });
-                    },
-                    child: const Text('•••'),
-                  ),
-                ),
-              ),
-            ],
           ),
         ],
       ),
@@ -143,14 +124,14 @@ class InstructionsWidgetState extends ConsumerState<InstructionsWidget> {
         const Spacer(),
         SizedBox(
           height: 24,
-          child: ElevatedButton(
-            style: RoastAppTheme.cancelButtonTheme.style,
+          child: IconButton(
             onPressed: () {
               ref.read(coreInstructionsProvider.notifier).update((state) {
                 return InstructionsService().skipInstruction(state!, inst);
               });
             },
-            child: const Text('Skip'),
+            padding: const EdgeInsets.all(0),
+            icon: const Icon(Icons.delete, color: RoastAppTheme.errorColor),
           ),
         ),
       ],
