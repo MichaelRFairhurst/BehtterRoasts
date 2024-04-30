@@ -1,23 +1,27 @@
+import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/control_log.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/timer/widgets/control_button.dart';
-import 'package:behmor_roast/src/util/widgets/crack_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ControlsWidget extends ConsumerWidget {
   const ControlsWidget({Key? key}) : super(key: key);
 
-  List<Widget> phaseButtons(
-      WidgetRef ref, RoastTimeline timeline, bool running) {
+  List<Widget> phaseButtons(BuildContext context, WidgetRef ref,
+      RoastTimeline timeline, bool running) {
     final results = <Widget>[];
-
     if (timeline.dryEnd == null) {
       results.add(phaseButton(
         ref,
         updater: (timeline, time) => timeline.copyWith(dryEnd: time),
-        icon: const Icon(Icons.air),
+        icon: SvgPicture.asset(
+          'images/dry.svg',
+          height: 18,
+          color: RoastAppTheme.capuccino,
+        ),
         label: 'Dry end',
         running: running,
       ));
@@ -31,7 +35,11 @@ class ControlsWidget extends ConsumerWidget {
             firstCrackStart: timeline.firstCrackStart ?? time,
             firstCrackEnd: time,
           ),
-          icon: const CrackIcon(),
+          icon: SvgPicture.asset(
+            'images/crack.svg',
+            height: 18,
+            color: RoastAppTheme.capuccino,
+          ),
           label: '1st crack',
           running: running,
         ));
@@ -42,7 +50,8 @@ class ControlsWidget extends ConsumerWidget {
             updater: (timeline, time) => timeline.copyWith(
               secondCrackStart: time,
             ),
-            icon: const CrackIcon(),
+            icon: SvgPicture.asset('images/2nd_crack.svg',
+                height: 18, color: RoastAppTheme.capuccino),
             label: '2nd crack',
             running: running,
           ));
@@ -116,7 +125,7 @@ class ControlsWidget extends ConsumerWidget {
           ],
         ),
         Wrap(
-          children: phaseButtons(ref, timeline, running),
+          children: phaseButtons(context, ref, timeline, running),
         ),
       ],
     );

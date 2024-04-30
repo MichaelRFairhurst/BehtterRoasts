@@ -12,6 +12,8 @@ class ProjectionsWidget extends ConsumerWidget {
     final projection = ref.watch(projectionProvider);
     final projectionMap = getProjections(projection);
     return DataTable(
+      headingRowHeight: 36,
+      dataRowHeight: 36,
       columns: const [
         DataColumn(
           label: Expanded(

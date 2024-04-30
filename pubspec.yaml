@@ -78,6 +78,9 @@ flutter:
 
   assets:
     - images/logo_transparent.svg
+    - images/crack.svg
+    - images/2nd_crack.svg
+    - images/dry.svg
     - images/bean.svg
     - images/beans.svg
     - images/africa.svg
