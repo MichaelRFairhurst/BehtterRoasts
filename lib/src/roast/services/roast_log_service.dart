@@ -1,7 +1,7 @@
-import 'package:behmor_roast/src/roast/models/base_log.dart';
 import 'package:behmor_roast/src/roast/models/control_log.dart';
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
+import 'package:behmor_roast/src/roast/services/roast_profile_service.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 
 class RoastLogService {
@@ -11,7 +11,9 @@ class RoastLogService {
     TempLog? previousTemp;
 
     final logs = timeline.rawLogs;
-    final copyTempIterator = copy == null ? null : _TempIterator(copy.rawLogs);
+    final copyTempIterator = copy == null
+        ? null
+        : RoastProfileService().iterateProfile(copy.rawLogs);
 
     for (final log in logs) {
       if (log is TempLog) {
@@ -104,48 +106,5 @@ class RoastLogService {
     result.sort((a, b) => a.time.compareTo(b.time));
 
     return result;
-  }
-}
-
-class _TempIterator {
-  final List<TempLog> logs;
-  int offset = 0;
-  RoastLog? prev;
-
-  _TempIterator(Iterable<BaseLog> logs)
-      : logs = logs.whereType<TempLog>().toList();
-
-  int? getTempDiff(TempLog log) {
-    final copyTemp = getTemp(log.time);
-    if (copyTemp == null) {
-      return null;
-    }
-    return log.temp - copyTemp;
-  }
-
-  int? getTemp(Duration time) {
-    // Find the first log which is at or past the requested time.
-    while (logs[offset].time < time) {
-      if (offset + 1 == logs.length) {
-        return null;
-      }
-
-      offset++;
-    }
-
-    final log = logs[offset];
-    if (time.inSeconds == log.time.inSeconds) {
-      return logs[offset].temp;
-    } else {
-      if (offset == 0) {
-        return null;
-      }
-
-      final prev = logs[offset - 1];
-      final gap = log.time - prev.time;
-      final progress = (time - prev.time).inMilliseconds / gap.inMilliseconds;
-      final delta = log.temp - prev.temp;
-      return prev.temp + (delta * progress).toInt();
-    }
   }
 }

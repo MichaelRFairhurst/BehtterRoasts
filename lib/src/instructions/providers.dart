@@ -17,9 +17,11 @@ final roastLogsCopyProvider = Provider<List<RoastLog>?>((ref) {
 final coreInstructionsProvider = StateProvider<List<CoreInstruction>?>((ref) {
   // Watch these so the instructions are rebuilt. Note: this resets which
   // have been skipped.
+  final copyTimeline = ref.watch(copyOfRoastProvider)?.toTimeline();
   final copyLogs = ref.watch(roastLogsCopyProvider);
-  if (copyLogs != null) {
-    return InstructionsService().createCoreCopyInstructions(copyLogs);
+  if (copyLogs != null && copyTimeline != null) {
+    return InstructionsService()
+        .createCoreCopyInstructions(copyLogs, copyTimeline);
   } else {
     return null;
   }

@@ -105,6 +105,8 @@ class InstructionsWidgetState extends ConsumerState<InstructionsWidget> {
 
     return Row(
       children: [
+        Text('${inst.core.index + 1}. ',
+            style: RoastAppTheme.materialTheme.textTheme.labelLarge),
         ...timestampParts,
         const Spacer(),
         const Text('Press'),
@@ -121,6 +123,7 @@ class InstructionsWidgetState extends ConsumerState<InstructionsWidget> {
             },
           ),
         ),
+        Text('at ${inst.core.temp}°F'),
         const Spacer(),
         SizedBox(
           height: 24,
@@ -132,20 +135,6 @@ class InstructionsWidgetState extends ConsumerState<InstructionsWidget> {
             },
             padding: const EdgeInsets.all(0),
             icon: const Icon(Icons.cancel, color: RoastAppTheme.errorColor),
-            //icon: const Icon(Icons.next_plan, color: RoastAppTheme.errorColor),
-            //icon: Stack(
-            //  children: const [
-            //    Padding(
-            //      padding: EdgeInsets.only(right: 24),
-            //      child: Icon(Icons.delete, color: RoastAppTheme.errorColor),
-            //    ),
-            //    Positioned(
-            //      left: 12,
-            //      child: Icon(Icons.chevron_right,
-            //          color: RoastAppTheme.errorColor),
-            //    ),
-            //  ],
-            //),
           ),
         ),
       ],

@@ -6,6 +6,8 @@ part 'instruction.freezed.dart';
 @freezed
 class CoreInstruction with _$CoreInstruction {
   const factory CoreInstruction({
+    required int index,
+    required int? temp,
     required Duration time,
     required Control control,
     @Default(false) bool skipped,

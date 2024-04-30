@@ -16,6 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$CoreInstruction {
+  int get index => throw _privateConstructorUsedError;
+  int? get temp => throw _privateConstructorUsedError;
   Duration get time => throw _privateConstructorUsedError;
   Control get control => throw _privateConstructorUsedError;
   bool get skipped => throw _privateConstructorUsedError;
@@ -31,7 +33,8 @@ abstract class $CoreInstructionCopyWith<$Res> {
           CoreInstruction value, $Res Function(CoreInstruction) then) =
       _$CoreInstructionCopyWithImpl<$Res, CoreInstruction>;
   @useResult
-  $Res call({Duration time, Control control, bool skipped});
+  $Res call(
+      {int index, int? temp, Duration time, Control control, bool skipped});
 }
 
 /// @nodoc
@@ -47,11 +50,21 @@ class _$CoreInstructionCopyWithImpl<$Res, $Val extends CoreInstruction>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? index = null,
+    Object? temp = freezed,
     Object? time = null,
     Object? control = null,
     Object? skipped = null,
   }) {
     return _then(_value.copyWith(
+      index: null == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int,
+      temp: freezed == temp
+          ? _value.temp
+          : temp // ignore: cast_nullable_to_non_nullable
+              as int?,
       time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -76,7 +89,8 @@ abstract class _$$_CoreInstructionCopyWith<$Res>
       __$$_CoreInstructionCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Duration time, Control control, bool skipped});
+  $Res call(
+      {int index, int? temp, Duration time, Control control, bool skipped});
 }
 
 /// @nodoc
@@ -90,11 +104,21 @@ class __$$_CoreInstructionCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? index = null,
+    Object? temp = freezed,
     Object? time = null,
     Object? control = null,
     Object? skipped = null,
   }) {
     return _then(_$_CoreInstruction(
+      index: null == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int,
+      temp: freezed == temp
+          ? _value.temp
+          : temp // ignore: cast_nullable_to_non_nullable
+              as int?,
       time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -115,8 +139,16 @@ class __$$_CoreInstructionCopyWithImpl<$Res>
 
 class _$_CoreInstruction implements _CoreInstruction {
   const _$_CoreInstruction(
-      {required this.time, required this.control, this.skipped = false});
+      {required this.index,
+      required this.temp,
+      required this.time,
+      required this.control,
+      this.skipped = false});
 
+  @override
+  final int index;
+  @override
+  final int? temp;
   @override
   final Duration time;
   @override
@@ -127,7 +159,7 @@ class _$_CoreInstruction implements _CoreInstruction {
 
   @override
   String toString() {
-    return 'CoreInstruction(time: $time, control: $control, skipped: $skipped)';
+    return 'CoreInstruction(index: $index, temp: $temp, time: $time, control: $control, skipped: $skipped)';
   }
 
   @override
@@ -135,13 +167,16 @@ class _$_CoreInstruction implements _CoreInstruction {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CoreInstruction &&
+            (identical(other.index, index) || other.index == index) &&
+            (identical(other.temp, temp) || other.temp == temp) &&
             (identical(other.time, time) || other.time == time) &&
             (identical(other.control, control) || other.control == control) &&
             (identical(other.skipped, skipped) || other.skipped == skipped));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, time, control, skipped);
+  int get hashCode =>
+      Object.hash(runtimeType, index, temp, time, control, skipped);
 
   @JsonKey(ignore: true)
   @override
@@ -152,10 +187,16 @@ class _$_CoreInstruction implements _CoreInstruction {
 
 abstract class _CoreInstruction implements CoreInstruction {
   const factory _CoreInstruction(
-      {required final Duration time,
+      {required final int index,
+      required final int? temp,
+      required final Duration time,
       required final Control control,
       final bool skipped}) = _$_CoreInstruction;
 
+  @override
+  int get index;
+  @override
+  int? get temp;
   @override
   Duration get time;
   @override
