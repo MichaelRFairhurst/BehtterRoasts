@@ -16,9 +16,16 @@ import 'package:flutter/material.dart';
 class AnimatedPopUp extends StatefulWidget {
   const AnimatedPopUp({
     this.child,
+    this.axisAlignment = 1.0,
     super.key,
   });
 
+  const AnimatedPopUp.down({
+    this.child,
+    super.key,
+  }) : axisAlignment = -1.0;
+
+  final double axisAlignment;
   final Widget? child;
 
   @override
@@ -106,6 +113,7 @@ class AnimatedPopUpState extends State<AnimatedPopUp>
   Widget build(BuildContext context) {
     return SizeTransition(
       sizeFactor: animation,
+      axisAlignment: widget.axisAlignment,
       child: showing,
     );
   }

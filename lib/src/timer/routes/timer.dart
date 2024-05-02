@@ -96,7 +96,6 @@ class TimerPage extends ConsumerWidget {
         children: [
           TempLogWidget(
               logs: logs, editable: true, isDiff: copyingRoast != null),
-          if (copyingRoast != null) const InstructionsWidget(),
           const ProjectionsWidget(),
         ],
       );
@@ -132,6 +131,7 @@ class TimerPage extends ConsumerWidget {
             ),
             Expanded(child: body),
             const TimeWidget(),
+            if (copyingRoast != null) const InstructionsWidget(),
             const PhaseControlWidget(),
             RoastTipWidget(tips: tips),
             AnimatedPopUp(
