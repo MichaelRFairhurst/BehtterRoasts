@@ -131,9 +131,11 @@ class TimerPage extends ConsumerWidget {
             ),
             Expanded(child: body),
             const TimeWidget(),
-            if (copyingRoast != null) const InstructionsWidget(),
-            const PhaseControlWidget(),
-            RoastTipWidget(tips: tips),
+            if (showTempInputTime == null) ...[
+              if (copyingRoast != null) const InstructionsWidget(),
+              const PhaseControlWidget(),
+              RoastTipWidget(tips: tips),
+            ],
             AnimatedPopUp(
               child: state != RoastState.roasting || showTempInputTime == null
                   ? null
