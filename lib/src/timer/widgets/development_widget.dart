@@ -1,5 +1,6 @@
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
+import 'package:behmor_roast/src/shapes/progress_circle.dart';
 import 'package:behmor_roast/src/shapes/widgets/oversized_circle.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,43 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget>
 
   @override
   Widget build(BuildContext context) {
+    final roast = ref.watch(roastProvider);
+    final timeline = ref.watch(roastTimelineProvider);
+
+    List<Widget> innerParts;
+    double progress;
+
+    if (timeline.dryEnd == null) {
+      innerParts = [
+        const Text('Waiting for dry end.', textAlign: TextAlign.center)
+      ];
+      progress = 0;
+    } else {
+      final firstCrackEnd = timeline.firstCrackEnd;
+      if (firstCrackEnd == null) {
+        innerParts = [
+          const Text('Waiting for first crack.', textAlign: TextAlign.center)
+        ];
+        progress = 0;
+      } else {
+        final development =
+            (time! - firstCrackEnd).inMilliseconds / time!.inMilliseconds;
+
+        final develFmt = (development * 100).toStringAsFixed(1);
+
+        innerParts = [
+          Text(
+            'development',
+            style: RoastAppTheme.materialTheme.textTheme.labelSmall,
+          ),
+          Text('$develFmt%',
+              style: RoastAppTheme.materialTheme.textTheme.headlineSmall
+                  ?.copyWith(fontFamily: 'Roboto')),
+        ];
+        progress = development / roast!.config.targetDevelopment;
+      }
+    }
+
     return OversizedCircle(
       borderWidth: 1,
       borderColor: RoastAppTheme.metal,
@@ -45,51 +83,25 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget>
       alignment: Alignment.bottomLeft,
       bottomBorder: false,
       child: Container(
-        width: 90,
-        height: 90,
-        margin: const EdgeInsets.only(left: 5, bottom: 8),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: RoastAppTheme.crema,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: developmentTimeParts(),
+        width: 95,
+        height: 95,
+        padding: const EdgeInsets.only(left: 5, bottom: 8),
+        child: ProgressCircle(
+          progress: progress,
+          barWidth: 6.0,
+          fillColor: RoastAppTheme.indigo,
+          overfillColor: RoastAppTheme.errorColor,
+          emptyColor: RoastAppTheme.cremaLight,
+          innerColor: RoastAppTheme.crema,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: innerParts,
+            ),
+          ),
         ),
       ),
     );
-  }
-
-  List<Widget> developmentTimeParts() {
-    final timeline = ref.watch(roastTimelineProvider);
-
-    if (timeline.dryEnd == null) {
-      return [const Text('Waiting for dry end.', textAlign: TextAlign.center)];
-    }
-
-    final firstCrackEnd = timeline.firstCrackEnd;
-    if (firstCrackEnd == null) {
-      return [
-        const Text('Waiting for first crack.', textAlign: TextAlign.center)
-      ];
-    }
-
-    final development =
-        (time! - firstCrackEnd).inMilliseconds / time!.inMilliseconds;
-
-    final develFmt = (development * 100).toStringAsFixed(1);
-    //final targetFmt =
-    //    (roast!.config.targetDevelopment * 100).toStringAsFixed(1);
-
-    return [
-      Text(
-        'development',
-        style: RoastAppTheme.materialTheme.textTheme.labelSmall,
-      ),
-      Text('$develFmt%',
-          style: RoastAppTheme.materialTheme.textTheme.headlineSmall
-              ?.copyWith(fontFamily: 'Roboto')),
-    ];
   }
 }
