@@ -14,6 +14,8 @@ class TimeWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(roastStateProvider);
+    final projections = ref.watch(projectionProvider);
+
     Duration? time;
     if (state == RoastState.preheating) {
       time = ref.watch(secondsPreheatProvider).value;
@@ -57,7 +59,7 @@ class TimeWidget extends ConsumerWidget {
                         'Est. Temp',
                         style: RoastAppTheme.materialTheme.textTheme.labelSmall,
                       ),
-                      Text('270F',
+                      Text(formatTemp(projections.currentTemp),
                           style: RoastAppTheme
                               .materialTheme.textTheme.headlineMedium
                               ?.copyWith(fontFamily: 'Roboto')),
@@ -145,5 +147,13 @@ class TimeWidget extends ConsumerWidget {
       };
     }
     return null;
+  }
+
+  String formatTemp(double? currentTemp) {
+    if (currentTemp == null) {
+      return 'N/A';
+    }
+
+    return '${currentTemp.round()}°F';
   }
 }
