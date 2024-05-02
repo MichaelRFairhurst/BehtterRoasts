@@ -9,6 +9,7 @@ class Projection with _$Projection {
     required Duration? timeRemaining,
     required Duration? timeToOverheat,
     required double? currentTemp,
+    required double? copyRoastTempDiff,
     required double? temp30s,
     required double? temp60s,
   }) = _Projection;

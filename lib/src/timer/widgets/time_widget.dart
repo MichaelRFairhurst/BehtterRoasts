@@ -1,5 +1,6 @@
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/shapes/widgets/oversized_circle.dart';
+import 'package:behmor_roast/src/timer/models/projection.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/timer/widgets/development_widget.dart';
@@ -54,16 +55,7 @@ class TimeWidget extends ConsumerWidget {
                   width: 110,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Est. Temp',
-                        style: RoastAppTheme.materialTheme.textTheme.labelSmall,
-                      ),
-                      Text(formatTemp(projections.currentTemp),
-                          style: RoastAppTheme
-                              .materialTheme.textTheme.headlineMedium
-                              ?.copyWith(fontFamily: 'Roboto')),
-                    ],
+                    children: tempCircleParts(projections),
                   ),
                 ),
               ),
@@ -123,6 +115,45 @@ class TimeWidget extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  List<Widget> tempCircleParts(Projection projections) {
+    final base = [
+      Text(
+        'Est. Temp',
+        style: RoastAppTheme.materialTheme.textTheme.labelSmall,
+      ),
+      Text(formatTemp(projections.currentTemp),
+          style: RoastAppTheme.materialTheme.textTheme.headlineMedium
+              ?.copyWith(fontFamily: 'Roboto')),
+    ];
+
+    final tempDiff = projections.copyRoastTempDiff?.round().toDouble();
+    if (tempDiff == null) {
+      return base;
+    }
+
+    final Color diffColor;
+    final String diffText;
+    if (tempDiff.isNegative) {
+      diffColor = RoastAppTheme.indigo;
+      diffText = 'low';
+    } else if (tempDiff > 0.0) {
+      diffColor = RoastAppTheme.errorColor;
+      diffText = 'hot';
+    } else {
+      diffColor = RoastAppTheme.crema;
+      diffText = 'low';
+    }
+
+    return [
+      ...base,
+      Text(
+        '${formatTemp(tempDiff.abs())} $diffText',
+        style: RoastAppTheme.materialTheme.textTheme.caption
+            ?.copyWith(color: diffColor),
+      ),
+    ];
   }
 
   void Function()? donePressed(RoastState state, WidgetRef ref) {

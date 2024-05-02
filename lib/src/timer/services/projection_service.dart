@@ -1,6 +1,8 @@
 import 'package:behmor_roast/src/roast/models/roast_config.dart';
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
+import 'package:behmor_roast/src/roast/services/roast_profile_service.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
+import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 
 const _overheatTemp = 331.0;
 
@@ -9,8 +11,10 @@ class ProjectionService {
     required RoastConfig roastConfig,
     required List<RoastLog> roastLogs,
     required Duration? elapsed,
+    RoastTimeline? copyOfRoast,
   }) {
     double? currentTemp;
+    double? copyRoastTempDiff;
     double? temp30s;
     double? temp60s;
     Duration? roastTime;
@@ -46,11 +50,21 @@ class ProjectionService {
       }
     }
 
+    if (elapsed != null && currentTemp != null && copyOfRoast != null) {
+      final tempIterator =
+          RoastProfileService().iterateProfile(copyOfRoast.rawLogs);
+      final copyTemp = tempIterator.getTemp(elapsed);
+      if (copyTemp != null) {
+        copyRoastTempDiff = currentTemp - copyTemp;
+      }
+    }
+
     return Projection(
       roastTime: roastTime,
       timeRemaining: timeRemaining,
       timeToOverheat: timeToOverheat,
       currentTemp: currentTemp,
+      copyRoastTempDiff: copyRoastTempDiff,
       temp30s: temp30s,
       temp60s: temp60s,
     );

@@ -50,8 +50,13 @@ final projectionProvider = Provider<Projection>((ref) {
   final config = ref.watch(roastProvider)!.config;
   final logs = ref.watch(roastLogsProvider);
   final elapsed = ref.watch(secondsRoastProvider);
+  final copyOfRoast = ref.watch(copyOfRoastProvider);
   return service.createProjections(
-      roastLogs: logs, roastConfig: config, elapsed: elapsed.value);
+    roastLogs: logs,
+    roastConfig: config,
+    elapsed: elapsed.value,
+    copyOfRoast: copyOfRoast?.toTimeline(),
+  );
 });
 
 final alertsProvider = Provider<List<Alert>>((ref) {

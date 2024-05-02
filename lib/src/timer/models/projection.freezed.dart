@@ -20,6 +20,7 @@ mixin _$Projection {
   Duration? get timeRemaining => throw _privateConstructorUsedError;
   Duration? get timeToOverheat => throw _privateConstructorUsedError;
   double? get currentTemp => throw _privateConstructorUsedError;
+  double? get copyRoastTempDiff => throw _privateConstructorUsedError;
   double? get temp30s => throw _privateConstructorUsedError;
   double? get temp60s => throw _privateConstructorUsedError;
 
@@ -39,6 +40,7 @@ abstract class $ProjectionCopyWith<$Res> {
       Duration? timeRemaining,
       Duration? timeToOverheat,
       double? currentTemp,
+      double? copyRoastTempDiff,
       double? temp30s,
       double? temp60s});
 }
@@ -60,6 +62,7 @@ class _$ProjectionCopyWithImpl<$Res, $Val extends Projection>
     Object? timeRemaining = freezed,
     Object? timeToOverheat = freezed,
     Object? currentTemp = freezed,
+    Object? copyRoastTempDiff = freezed,
     Object? temp30s = freezed,
     Object? temp60s = freezed,
   }) {
@@ -79,6 +82,10 @@ class _$ProjectionCopyWithImpl<$Res, $Val extends Projection>
       currentTemp: freezed == currentTemp
           ? _value.currentTemp
           : currentTemp // ignore: cast_nullable_to_non_nullable
+              as double?,
+      copyRoastTempDiff: freezed == copyRoastTempDiff
+          ? _value.copyRoastTempDiff
+          : copyRoastTempDiff // ignore: cast_nullable_to_non_nullable
               as double?,
       temp30s: freezed == temp30s
           ? _value.temp30s
@@ -105,6 +112,7 @@ abstract class _$$_ProjectionCopyWith<$Res>
       Duration? timeRemaining,
       Duration? timeToOverheat,
       double? currentTemp,
+      double? copyRoastTempDiff,
       double? temp30s,
       double? temp60s});
 }
@@ -124,6 +132,7 @@ class __$$_ProjectionCopyWithImpl<$Res>
     Object? timeRemaining = freezed,
     Object? timeToOverheat = freezed,
     Object? currentTemp = freezed,
+    Object? copyRoastTempDiff = freezed,
     Object? temp30s = freezed,
     Object? temp60s = freezed,
   }) {
@@ -143,6 +152,10 @@ class __$$_ProjectionCopyWithImpl<$Res>
       currentTemp: freezed == currentTemp
           ? _value.currentTemp
           : currentTemp // ignore: cast_nullable_to_non_nullable
+              as double?,
+      copyRoastTempDiff: freezed == copyRoastTempDiff
+          ? _value.copyRoastTempDiff
+          : copyRoastTempDiff // ignore: cast_nullable_to_non_nullable
               as double?,
       temp30s: freezed == temp30s
           ? _value.temp30s
@@ -164,6 +177,7 @@ class _$_Projection implements _Projection {
       required this.timeRemaining,
       required this.timeToOverheat,
       required this.currentTemp,
+      required this.copyRoastTempDiff,
       required this.temp30s,
       required this.temp60s});
 
@@ -176,13 +190,15 @@ class _$_Projection implements _Projection {
   @override
   final double? currentTemp;
   @override
+  final double? copyRoastTempDiff;
+  @override
   final double? temp30s;
   @override
   final double? temp60s;
 
   @override
   String toString() {
-    return 'Projection(roastTime: $roastTime, timeRemaining: $timeRemaining, timeToOverheat: $timeToOverheat, currentTemp: $currentTemp, temp30s: $temp30s, temp60s: $temp60s)';
+    return 'Projection(roastTime: $roastTime, timeRemaining: $timeRemaining, timeToOverheat: $timeToOverheat, currentTemp: $currentTemp, copyRoastTempDiff: $copyRoastTempDiff, temp30s: $temp30s, temp60s: $temp60s)';
   }
 
   @override
@@ -198,13 +214,15 @@ class _$_Projection implements _Projection {
                 other.timeToOverheat == timeToOverheat) &&
             (identical(other.currentTemp, currentTemp) ||
                 other.currentTemp == currentTemp) &&
+            (identical(other.copyRoastTempDiff, copyRoastTempDiff) ||
+                other.copyRoastTempDiff == copyRoastTempDiff) &&
             (identical(other.temp30s, temp30s) || other.temp30s == temp30s) &&
             (identical(other.temp60s, temp60s) || other.temp60s == temp60s));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, roastTime, timeRemaining,
-      timeToOverheat, currentTemp, temp30s, temp60s);
+      timeToOverheat, currentTemp, copyRoastTempDiff, temp30s, temp60s);
 
   @JsonKey(ignore: true)
   @override
@@ -219,6 +237,7 @@ abstract class _Projection implements Projection {
       required final Duration? timeRemaining,
       required final Duration? timeToOverheat,
       required final double? currentTemp,
+      required final double? copyRoastTempDiff,
       required final double? temp30s,
       required final double? temp60s}) = _$_Projection;
 
@@ -230,6 +249,8 @@ abstract class _Projection implements Projection {
   Duration? get timeToOverheat;
   @override
   double? get currentTemp;
+  @override
+  double? get copyRoastTempDiff;
   @override
   double? get temp30s;
   @override
