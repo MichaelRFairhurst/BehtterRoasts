@@ -1,4 +1,6 @@
+import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
+import 'package:behmor_roast/src/shapes/widgets/oversized_circle.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -35,33 +37,59 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: developmentTimeParts(),
+    return OversizedCircle(
+      borderWidth: 1,
+      borderColor: RoastAppTheme.metal,
+      oversize: const EdgeInsets.only(left: 150, right: 100, top: 10),
+      color: RoastAppTheme.capuccino,
+      alignment: Alignment.bottomLeft,
+      bottomBorder: false,
+      child: Container(
+        width: 90,
+        height: 90,
+        margin: const EdgeInsets.only(left: 5, bottom: 8),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: RoastAppTheme.crema,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: developmentTimeParts(),
+        ),
+      ),
     );
   }
 
   List<Widget> developmentTimeParts() {
     final timeline = ref.watch(roastTimelineProvider);
-    final roast = ref.watch(roastProvider);
+
     if (timeline.dryEnd == null) {
-      return [const Text('Waiting for dry end.')];
+      return [const Text('Waiting for dry end.', textAlign: TextAlign.center)];
     }
 
     final firstCrackEnd = timeline.firstCrackEnd;
     if (firstCrackEnd == null) {
-      return [const Text('Waiting for first crack.')];
+      return [
+        const Text('Waiting for first crack.', textAlign: TextAlign.center)
+      ];
     }
 
     final development =
         (time! - firstCrackEnd).inMilliseconds / time!.inMilliseconds;
 
     final develFmt = (development * 100).toStringAsFixed(1);
-    final targetFmt =
-        (roast!.config.targetDevelopment * 100).toStringAsFixed(1);
+    //final targetFmt =
+    //    (roast!.config.targetDevelopment * 100).toStringAsFixed(1);
 
     return [
-      Text('$develFmt/$targetFmt% development'),
+      Text(
+        'development',
+        style: RoastAppTheme.materialTheme.textTheme.labelSmall,
+      ),
+      Text('$develFmt%',
+          style: RoastAppTheme.materialTheme.textTheme.headlineSmall
+              ?.copyWith(fontFamily: 'Roboto')),
     ];
   }
 }

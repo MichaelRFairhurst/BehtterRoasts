@@ -62,20 +62,6 @@ class TimerPage extends ConsumerWidget {
           context.replace(Routes.completeRoast);
         },
       );
-    } else if (state == RoastState.preheating) {
-      fab = ElevatedButton.icon(
-        style: RoastAppTheme.largeButtonTheme.style,
-        icon: const Icon(Icons.stop_circle, size: 28.0),
-        label: const Text('Stop Preheat'),
-        onPressed: () {
-          final preheatService = ref.read(preheatTimerProvider);
-          ref
-              .read(roastTimelineProvider.notifier)
-              .update((state) => state.copyWith(
-                    preheatEnd: preheatService.elapsed()!,
-                  ));
-        },
-      );
     }
 
     final Widget body;
@@ -144,6 +130,8 @@ class TimerPage extends ConsumerWidget {
               child: const ControlsWidget(),
             ),
             Expanded(child: body),
+            const TimeWidget(),
+            RoastTipWidget(tips: tips),
             AnimatedPopUp(
               child: state != RoastState.roasting || showTempInputTime == null
                   ? null
@@ -176,18 +164,11 @@ class TimerPage extends ConsumerWidget {
         ),
         floatingActionButton: fab,
         bottomNavigationBar: BottomAppBar(
+          elevation: 0.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
-            children: [
-              RoastTipWidget(tips: tips),
-              const SizedBox(
-                height: 50,
-                child: Center(
-                  child: TimeWidget(),
-                ),
-              ),
-            ],
+            children: [],
           ),
         ),
       ),

@@ -1,7 +1,10 @@
+import 'package:behmor_roast/src/config/theme.dart';
+import 'package:behmor_roast/src/shapes/widgets/oversized_circle.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/timer/widgets/development_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
+import 'package:behmor_roast/src/util/widgets/animated_pop_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,22 +24,126 @@ class TimeWidget extends ConsumerWidget {
     if (state == RoastState.waiting ||
         state == RoastState.preheatDone ||
         time == null) {
-      return const Text('Not roasting.');
+      return const AnimatedPopUp(
+        child: SizedBox(key: ValueKey('hide')),
+      );
     }
 
     final showRoastInfo =
         state == RoastState.roasting || state == RoastState.done;
 
-    return Row(
+    return AnimatedPopUp(
+      child: SizedBox(
+        height: 115,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(color: RoastAppTheme.cremaLight),
+            if (showRoastInfo) const DevelopmentWidget(),
+            if (showRoastInfo)
+              OversizedCircle(
+                borderWidth: 1,
+                borderColor: RoastAppTheme.metalLight,
+                oversize: const EdgeInsets.only(left: 25, right: 7),
+                color: RoastAppTheme.cremaLight,
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  width: 110,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Est. Temp',
+                        style: RoastAppTheme.materialTheme.textTheme.labelSmall,
+                      ),
+                      Text('270F',
+                          style: RoastAppTheme
+                              .materialTheme.textTheme.headlineMedium
+                              ?.copyWith(fontFamily: 'Roboto')),
+                    ],
+                  ),
+                ),
+              ),
+            OversizedCircle(
+              borderWidth: 5,
+              borderColor: RoastAppTheme.lime,
+              oversize: const EdgeInsets.symmetric(horizontal: 8),
+              color: RoastAppTheme.cremaLight,
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: 150,
+                height: 110,
+                padding: const EdgeInsets.only(top: 10, bottom: 15),
+                child: timeCircleContent(time, state, showRoastInfo, ref),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget timeCircleContent(
+      Duration? time, RoastState state, bool showRoastInfo, WidgetRef ref) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        const SizedBox(width: 20),
-        if (showRoastInfo) const DevelopmentWidget(),
-        const Spacer(),
-        if (showRoastInfo) const Text('Roast time: '),
-        if (state == RoastState.preheating) const Text('Preheat time: '),
-        TimestampWidget.twitter(time),
-        const SizedBox(width: 20),
+        if (state == RoastState.waiting ||
+            state == RoastState.preheatDone ||
+            time == null)
+          Text(
+            'Not roasting.',
+            style: RoastAppTheme.materialTheme.textTheme.labelMedium,
+          ),
+        if (showRoastInfo)
+          Text(
+            'Roast Time',
+            style: RoastAppTheme.materialTheme.textTheme.labelMedium,
+          ),
+        if (state == RoastState.preheating)
+          Text(
+            'Preheat Time',
+            style: RoastAppTheme.materialTheme.textTheme.labelMedium,
+          ),
+        TimestampWidget(time ?? Duration.zero,
+            style: RoastAppTheme.materialTheme.textTheme.displaySmall
+                ?.copyWith(fontFamily: 'Roboto')),
+        const SizedBox(height: 2),
+        SizedBox(
+          height: 28,
+          child: ElevatedButton.icon(
+            icon: const Icon(Icons.check),
+            label: const Text('Done'),
+            style: RoastAppTheme.limeButtonTheme.style,
+            onPressed: donePressed(state, ref),
+          ),
+        ),
       ],
     );
+  }
+
+  void Function()? donePressed(RoastState state, WidgetRef ref) {
+    if (state == RoastState.roasting) {
+      return () {
+        final tService = ref.read(roastTimerProvider);
+        final now = tService.elapsed()!;
+
+        ref
+            .read(roastTimelineProvider.notifier)
+            .update((timeline) => timeline.copyWith(done: now));
+        tService.stop();
+      };
+    } else if (state == RoastState.preheating) {
+      return () {
+        final preheatService = ref.read(preheatTimerProvider);
+        ref
+            .read(roastTimelineProvider.notifier)
+            .update((state) => state.copyWith(
+                  preheatEnd: preheatService.elapsed()!,
+                ));
+      };
+    }
+    return null;
   }
 }
