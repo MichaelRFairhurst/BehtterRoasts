@@ -3,6 +3,7 @@ import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/instructions/widgets/instructions_widget.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
+import 'package:behmor_roast/src/roast/widgets/phase_control_widget.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/widgets/alert_widget.dart';
@@ -131,6 +132,7 @@ class TimerPage extends ConsumerWidget {
             ),
             Expanded(child: body),
             const TimeWidget(),
+            const PhaseControlWidget(),
             RoastTipWidget(tips: tips),
             AnimatedPopUp(
               child: state != RoastState.roasting || showTempInputTime == null

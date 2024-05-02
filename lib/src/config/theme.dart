@@ -75,6 +75,16 @@ class RoastAppTheme {
     ),
   );
 
+  static final phaseButtonTheme = ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      shadowColor: Colors.black,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: const BorderSide(color: Colors.black, width: 1.0),
+      ),
+    ),
+  );
+
   static final limeButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       foregroundColor: capuccino,
