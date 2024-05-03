@@ -97,6 +97,7 @@ class TimerPage extends ConsumerWidget {
           TempLogWidget(
               logs: logs, editable: true, isDiff: copyingRoast != null),
           const ProjectionsWidget(),
+          const SizedBox(height: 105),
         ],
       );
     }
@@ -129,8 +130,22 @@ class TimerPage extends ConsumerWidget {
               margin: const EdgeInsets.only(bottom: 4.0),
               child: const ControlsWidget(),
             ),
-            Expanded(child: body),
-            const TimeWidget(),
+            Expanded(
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: body,
+                  ),
+                  const Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: 150,
+                    child: TimeWidget(),
+                  ),
+                ],
+              ),
+            ),
             if (showTempInputTime == null) ...[
               if (copyingRoast != null) const InstructionsWidget(),
               const PhaseControlWidget(),

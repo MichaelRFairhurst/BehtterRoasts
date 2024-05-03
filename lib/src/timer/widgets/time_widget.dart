@@ -41,7 +41,6 @@ class TimeWidget extends ConsumerWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Container(color: RoastAppTheme.cremaLight),
             if (showRoastInfo) const DevelopmentWidget(),
             if (showRoastInfo)
               OversizedCircle(
