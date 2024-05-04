@@ -16,7 +16,6 @@ import 'package:behmor_roast/src/timer/widgets/roast_tip_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/time_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/timed_check_temp_widget.dart';
 import 'package:behmor_roast/src/util/logo_title.dart';
-import 'package:behmor_roast/src/util/widgets/animated_pop_up.dart';
 import 'package:behmor_roast/src/util/widgets/bottom_sticky_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -94,6 +93,7 @@ class TimerPage extends ConsumerWidget {
     } else {
       body = BottomStickyScrollView(
         children: [
+          const SizedBox(height: 60),
           TempLogWidget(
               logs: logs, editable: true, isDiff: copyingRoast != null),
           const ProjectionsWidget(),
@@ -106,7 +106,7 @@ class TimerPage extends ConsumerWidget {
       state: state,
       child: Scaffold(
         appBar: AppBar(
-          title: const LogoTitle("Roast Controls"),
+          title: const LogoTitle('Now Roasting'),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -114,28 +114,63 @@ class TimerPage extends ConsumerWidget {
             AlertWidget(
               alerts: alerts,
             ),
-            Container(
-              decoration: const BoxDecoration(
-                color: RoastAppTheme.metalLight,
-                //border: Border(bottom: BorderSide(color: RoastAppTheme.capuccino, width: 1.0)),
-                boxShadow: [
-                  BoxShadow(
-                    color: RoastAppTheme.capuccino,
-                    offset: Offset(0, 0),
-                    blurRadius: 2.0,
-                  )
-                ],
-              ),
-              padding: const EdgeInsets.only(bottom: 4.0),
-              margin: const EdgeInsets.only(bottom: 4.0),
-              child: const ControlsWidget(),
-            ),
             Expanded(
               child: Stack(
                 children: [
                   Positioned.fill(
                     child: body,
                   ),
+                  Positioned.fill(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 150),
+                      child: state != RoastState.roasting ||
+                              showTempInputTime == null
+                          ? const SizedBox()
+                          : Container(
+                              color: RoastAppTheme.capuccino.withOpacity(0.75),
+                              padding: const EdgeInsets.all(8.0)
+                                  .copyWith(bottom: 105),
+                              alignment: Alignment.center,
+                              child: Container(
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color: RoastAppTheme.metalLight,
+                                  borderRadius: BorderRadius.circular(4),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: RoastAppTheme.capuccino,
+                                      offset: Offset(0, 0),
+                                      blurRadius: 2.0,
+                                    )
+                                  ],
+                                ),
+                                child: TimedCheckTempWidget(
+                                  shownTime: showTempInputTime,
+                                  onSubmit: (time, temp) {
+                                    ref
+                                        .read(roastTimelineProvider.notifier)
+                                        .update((state) => state.addLog(
+                                            TempLog(temp: temp, time: time)));
+                                    ref
+                                        .read(
+                                            showTempInputTimeProvider.notifier)
+                                        .state = null;
+                                  },
+                                ),
+                              ),
+                            ),
+                    ),
+                  ),
+                  if (state == RoastState.roasting ||
+                      state == RoastState.ready ||
+                      state == RoastState.done)
+                    const Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: 60,
+                      child: ControlsWidget(),
+                    ),
                   const Positioned(
                     bottom: 0,
                     left: 0,
@@ -146,39 +181,9 @@ class TimerPage extends ConsumerWidget {
                 ],
               ),
             ),
-            if (showTempInputTime == null) ...[
-              if (copyingRoast != null) const InstructionsWidget(),
-              const PhaseControlWidget(),
-              RoastTipWidget(tips: tips),
-            ],
-            AnimatedPopUp(
-              child: state != RoastState.roasting || showTempInputTime == null
-                  ? null
-                  : Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: const BoxDecoration(
-                        color: RoastAppTheme.metalLight,
-                        boxShadow: [
-                          BoxShadow(
-                            color: RoastAppTheme.capuccino,
-                            offset: Offset(0, 0),
-                            blurRadius: 2.0,
-                          )
-                        ],
-                      ),
-                      child: TimedCheckTempWidget(
-                        shownTime: showTempInputTime,
-                        onSubmit: (time, temp) {
-                          ref.read(roastTimelineProvider.notifier).update(
-                              (state) => state
-                                  .addLog(TempLog(temp: temp, time: time)));
-                          ref.read(showTempInputTimeProvider.notifier).state =
-                              null;
-                        },
-                      ),
-                    ),
-            ),
+            if (copyingRoast != null) const InstructionsWidget(),
+            const PhaseControlWidget(),
+            if (showTempInputTime == null) RoastTipWidget(tips: tips),
           ],
         ),
         floatingActionButton: fab,

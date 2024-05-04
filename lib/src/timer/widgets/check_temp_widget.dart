@@ -31,6 +31,7 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0),

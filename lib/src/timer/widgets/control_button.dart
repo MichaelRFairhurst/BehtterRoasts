@@ -1,3 +1,4 @@
+import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/control_log.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
@@ -41,6 +42,8 @@ class ControlButton extends ConsumerWidget {
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
         minimumSize: const Size(30, 30),
+        padding: const EdgeInsets.all(0),
+        disabledBackgroundColor: RoastAppTheme.lime.withOpacity(0.75),
       ),
       onPressed: isDisabled(ref)
           ? null
