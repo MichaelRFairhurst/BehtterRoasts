@@ -51,7 +51,7 @@ class RoastCardState extends ConsumerState<RoastCard> {
             vertical: 4.0,
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
                 'Roast #${roast.roastNumber}',
@@ -77,9 +77,13 @@ class RoastCardState extends ConsumerState<RoastCard> {
                     flex: 1,
                     child: _weightOut(),
                   ),
+                  Icon(
+                    opened ? Icons.expand_less : Icons.expand_more,
+                    size: 16,
+                  ),
                 ],
               ),
-              const SizedBox(height: 4.0),
+              SizedBox(height: 4.0),
               AnimatedPopUp(
                 child: _expandedContent(summary),
               ),
@@ -107,8 +111,10 @@ class RoastCardState extends ConsumerState<RoastCard> {
         children: [
           TimestampWidget(
             widget.roast.toTimeline().done!,
-            style: RoastAppTheme.materialTheme.textTheme.displaySmall?.copyWith(
+            style:
+                RoastAppTheme.materialTheme.textTheme.headlineLarge?.copyWith(
               color: RoastAppTheme.capuccino,
+              fontFamily: 'Roboto',
             ),
           ),
           Text('Roast time',
