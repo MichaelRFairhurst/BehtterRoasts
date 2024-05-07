@@ -70,8 +70,11 @@ class RoastTimelinePage extends ConsumerWidget {
                       children: [
                         const SizedBox(height: 80),
                         Center(
-                          child:
-                              SvgPicture.asset('images/beans.svg', height: 80),
+                          child: SvgPicture.asset(
+                            'images/beans.svg',
+                            height: 80,
+                            color: RoastAppTheme.limeDark,
+                          ),
                         ),
                         Text(
                           'Nothing here yet!',

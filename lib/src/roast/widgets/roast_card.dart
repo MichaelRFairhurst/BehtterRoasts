@@ -61,8 +61,12 @@ class RoastCardState extends ConsumerState<RoastCard> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Center(
-                    child: SvgPicture.asset('images/beans.svg',
-                        width: 38, height: 38),
+                    child: SvgPicture.asset(
+                      'images/beans.svg',
+                      width: 38,
+                      height: 38,
+                      color: _getRoastColor(summary.weightLoss),
+                    ),
                   ),
                   const SizedBox(width: 6),
                   Expanded(
@@ -134,6 +138,18 @@ class RoastCardState extends ConsumerState<RoastCard> {
               style: RoastAppTheme.materialTheme.textTheme.caption),
         ],
       );
+
+  Color _getRoastColor(double weightLoss) {
+    const minLoss = 0.08;
+    const maxLoss = 0.25;
+    final baseValue =
+        ((weightLoss - minLoss) / (maxLoss - minLoss)).clamp(0.0, 1.0);
+    const curve = Curves.easeInOutCubic;
+    final value = curve.transform(baseValue);
+    return ColorTween(
+            begin: const Color(0xFFB36D57), end: RoastAppTheme.capuccino)
+        .lerp(value)!;
+  }
 
   Widget _expandedContent(RoastSummary summary) {
     if (!opened) {
