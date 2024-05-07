@@ -16,6 +16,7 @@ import 'package:behmor_roast/src/timer/widgets/roast_tip_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/time_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/timed_check_temp_widget.dart';
 import 'package:behmor_roast/src/util/logo_title.dart';
+import 'package:behmor_roast/src/util/widgets/animated_blur_out.dart';
 import 'package:behmor_roast/src/util/widgets/bottom_sticky_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -64,6 +65,50 @@ class TimerPage extends ConsumerWidget {
       );
     }
 
+    const roasterControlsHeight = 60.0;
+    const timeWidgetHeight = 150.0;
+    const timeWidgetOverlap = 45.0;
+
+    final showRoasterControls = state == RoastState.roasting ||
+        state == RoastState.ready ||
+        state == RoastState.done;
+
+    final bool showTempPopup;
+    final Widget tempPopupWidget;
+    if (state == RoastState.roasting && showTempInputTime != null) {
+      showTempPopup = true;
+      tempPopupWidget = Container(
+        color: RoastAppTheme.capuccino.withOpacity(0.75),
+        padding: const EdgeInsets.all(8.0).copyWith(bottom: 105),
+        alignment: Alignment.center,
+        child: Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: RoastAppTheme.metalLight,
+            borderRadius: BorderRadius.circular(4),
+            boxShadow: const [
+              BoxShadow(
+                color: RoastAppTheme.capuccino,
+                offset: Offset(0, 0),
+                blurRadius: 2.0,
+              )
+            ],
+          ),
+          child: TimedCheckTempWidget(
+            shownTime: showTempInputTime,
+            onSubmit: (time, temp) {
+              ref.read(roastTimelineProvider.notifier).update(
+                  (state) => state.addLog(TempLog(temp: temp, time: time)));
+              ref.read(showTempInputTimeProvider.notifier).state = null;
+            },
+          ),
+        ),
+      );
+    } else {
+      tempPopupWidget = const SizedBox();
+      showTempPopup = false;
+    }
+
     final Widget body;
     if (state == RoastState.waiting || state == RoastState.preheating) {
       body = const Padding(
@@ -93,11 +138,12 @@ class TimerPage extends ConsumerWidget {
     } else {
       body = BottomStickyScrollView(
         children: [
-          const SizedBox(height: 60),
+          if (showRoasterControls)
+            const SizedBox(height: roasterControlsHeight),
           TempLogWidget(
               logs: logs, editable: true, isDiff: copyingRoast != null),
           const ProjectionsWidget(),
-          const SizedBox(height: 105),
+          const SizedBox(height: timeWidgetHeight - timeWidgetOverlap),
         ],
       );
     }
@@ -118,64 +164,31 @@ class TimerPage extends ConsumerWidget {
               child: Stack(
                 children: [
                   Positioned.fill(
-                    child: body,
+                    child: AnimatedBlurOut(
+                      duration: const Duration(milliseconds: 250),
+                      blur: showTempPopup ? 1.0 : 0.0,
+                      child: body,
+                    ),
                   ),
                   Positioned.fill(
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 150),
-                      child: state != RoastState.roasting ||
-                              showTempInputTime == null
-                          ? const SizedBox()
-                          : Container(
-                              color: RoastAppTheme.capuccino.withOpacity(0.75),
-                              padding: const EdgeInsets.all(8.0)
-                                  .copyWith(bottom: 105),
-                              alignment: Alignment.center,
-                              child: Container(
-                                padding: const EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                  color: RoastAppTheme.metalLight,
-                                  borderRadius: BorderRadius.circular(4),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: RoastAppTheme.capuccino,
-                                      offset: Offset(0, 0),
-                                      blurRadius: 2.0,
-                                    )
-                                  ],
-                                ),
-                                child: TimedCheckTempWidget(
-                                  shownTime: showTempInputTime,
-                                  onSubmit: (time, temp) {
-                                    ref
-                                        .read(roastTimelineProvider.notifier)
-                                        .update((state) => state.addLog(
-                                            TempLog(temp: temp, time: time)));
-                                    ref
-                                        .read(
-                                            showTempInputTimeProvider.notifier)
-                                        .state = null;
-                                  },
-                                ),
-                              ),
-                            ),
+                      child: tempPopupWidget,
                     ),
                   ),
-                  if (state == RoastState.roasting ||
-                      state == RoastState.ready ||
-                      state == RoastState.done)
+                  if (showRoasterControls)
                     const Positioned(
                       top: 0,
                       left: 0,
                       right: 0,
-                      height: 60,
+                      height: roasterControlsHeight,
                       child: ControlsWidget(),
                     ),
                   const Positioned(
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    height: 150,
+                    height: timeWidgetHeight,
                     child: TimeWidget(),
                   ),
                 ],
@@ -183,7 +196,6 @@ class TimerPage extends ConsumerWidget {
             ),
             if (copyingRoast != null) const InstructionsWidget(),
             const PhaseControlWidget(),
-            if (showTempInputTime == null) RoastTipWidget(tips: tips),
           ],
         ),
         floatingActionButton: fab,
@@ -192,7 +204,9 @@ class TimerPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
-            children: [],
+            children: [
+              if (!showTempPopup) RoastTipWidget(tips: tips),
+            ],
           ),
         ),
       ),
