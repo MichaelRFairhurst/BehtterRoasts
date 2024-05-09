@@ -1,3 +1,6 @@
+import 'package:behmor_roast/src/config/theme.dart';
+import 'package:behmor_roast/src/util/models/toggle_switch_style.dart';
+import 'package:behmor_roast/src/util/widgets/toggle_switch.dart';
 import 'package:flutter/material.dart';
 
 class TempIntervalSelect extends StatelessWidget {
@@ -12,22 +15,42 @@ class TempIntervalSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<int>(
-        value: value,
-        onChanged: (value) => onChanged(value!),
-        items: const [
-          DropdownMenuItem(
-            value: 15,
-            child: Text('Every 15s'),
+    return ToggleSwitch<int>(
+      onToggle: onChanged,
+      style: const ToggleSwitchStyle(
+        backgroundColor: Colors.transparent,
+        pillColor: RoastAppTheme.lime,
+        pillPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+        pillElevation: 0,
+      ),
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        ToggleSwitchOption<int>(
+          value: 15,
+          child: Text(
+            'Every 15s',
+            style: RoastAppTheme.materialTheme.textTheme.bodyMedium?.copyWith(
+                fontWeight: value == 15 ? FontWeight.w500 : FontWeight.normal),
           ),
-          DropdownMenuItem(
-            value: 30,
-            child: Text('Every 30s'),
+        ),
+        ToggleSwitchOption<int>(
+          value: 30,
+          child: Text(
+            'Every 30s',
+            style: RoastAppTheme.materialTheme.textTheme.bodyMedium?.copyWith(
+                fontWeight: value == 30 ? FontWeight.w500 : FontWeight.normal),
           ),
-          DropdownMenuItem(
-            value: 60,
-            child: Text('Every 60s'),
+        ),
+        ToggleSwitchOption<int>(
+          value: 60,
+          child: Text(
+            'Every 60s',
+            style: RoastAppTheme.materialTheme.textTheme.bodyMedium?.copyWith(
+                fontWeight: value == 60 ? FontWeight.w500 : FontWeight.normal),
           ),
-        ]);
+        ),
+      ],
+    );
   }
 }

@@ -49,34 +49,6 @@ class TimedCheckTempWidgetState extends ConsumerState<TimedCheckTempWidget> {
           const Spacer(),
           Text('Time: ', style: RoastAppTheme.checkTempTextStyle),
           ToggleSwitch<Duration>(
-            widgetLeft: TimestampWidget(widget.shownTime),
-            valueLeft: widget.shownTime,
-            widgetRight: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TimestampWidget(seconds),
-                if (overrideTime != null)
-                  SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: ElevatedButton(
-                      style: RoastAppTheme.tinyButtonTheme.style,
-                      onPressed: () {
-                        setState(() {
-                          if (useShownTime) {
-                            overrideTime = null;
-                          } else {
-                            overrideTime =
-                                ref.read(roastTimerProvider).elapsed()!;
-                          }
-                        });
-                      },
-                      child: const Icon(Icons.refresh, size: 12),
-                    ),
-                  ),
-              ],
-            ),
-            valueRight: seconds,
             onToggle: (value) {
               setState(() {
                 useShownTime = value == widget.shownTime;
@@ -85,6 +57,40 @@ class TimedCheckTempWidgetState extends ConsumerState<TimedCheckTempWidget> {
                 }
               });
             },
+            children: [
+              ToggleSwitchOption<Duration>(
+                child: TimestampWidget(widget.shownTime),
+                value: widget.shownTime,
+              ),
+              ToggleSwitchOption<Duration>(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TimestampWidget(seconds),
+                    if (overrideTime != null)
+                      SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: ElevatedButton(
+                          style: RoastAppTheme.tinyButtonTheme.style,
+                          onPressed: () {
+                            setState(() {
+                              if (useShownTime) {
+                                overrideTime = null;
+                              } else {
+                                overrideTime =
+                                    ref.read(roastTimerProvider).elapsed()!;
+                              }
+                            });
+                          },
+                          child: const Icon(Icons.refresh, size: 12),
+                        ),
+                      ),
+                  ],
+                ),
+                value: seconds,
+              ),
+            ],
           ),
           const SizedBox(width: 4.0),
         ],

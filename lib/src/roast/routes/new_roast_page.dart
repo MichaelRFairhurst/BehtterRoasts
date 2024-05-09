@@ -66,7 +66,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const LogoTitle("Start a New Roast"),
+        title: const LogoTitle("New Roast"),
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -74,99 +74,25 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
           key: roastFormKey,
           child: CustomScrollView(
             slivers: [
-              const SliverPadding(padding: EdgeInsets.only(top: 16.0)),
-              if (copy != null && bean != null)
-                SliverToBoxAdapter(
-                  child: InputChip(
-                    label: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        const Text('Copying '),
-                        Flexible(
-                          child:
-                              Text(bean.name, overflow: TextOverflow.ellipsis),
-                        ),
-                        Text(' roast #${copy.roastNumber}'),
-                      ],
-                    ),
-                    onDeleted: () {
-                      ref.read(copyOfRoastProvider.notifier).state = null;
-                    },
-                  ),
-                ),
-              if (beanErr)
-                SliverToBoxAdapter(
-                  child: Text(
-                    'Select a bean:',
-                    style:
-                        RoastAppTheme.materialTheme.textTheme.caption!.copyWith(
-                      color: RoastAppTheme.materialTheme.errorColor,
-                      fontSize: 12.0,
-                    ),
-                  ),
-                ),
               SliverToBoxAdapter(
-                child: BeanSelect(
-                  selectedBean: selectedBean,
-                  onChanged: (bean) {
-                    setState(() {
-                      selectedBean = bean;
-                    });
-                  },
-                ),
-              ),
-              const SliverPadding(padding: EdgeInsets.only(top: 40)),
-              const SliverToBoxAdapter(
-                child: Text('Weight (g)'),
-              ),
-              SliverToBoxAdapter(
-                child: TextFormField(
-                    controller: weight,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      suffixText: 'g',
-                    ),
-                    validator: (value) {
-                      if (double.tryParse(value ?? '') == null) {
-                        return 'Enter a valid weight';
-                      }
-
-                      return null;
-                    }),
-              ),
-              const SliverPadding(padding: EdgeInsets.only(top: 10)),
-              const SliverToBoxAdapter(
-                child: Text('Target Development (%)'),
-              ),
-              SliverToBoxAdapter(
-                child: TextFormField(
-                    controller: devel,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      suffixText: '%',
-                    ),
-                    validator: (value) {
-                      if (double.tryParse(value ?? '') == null) {
-                        return 'Enter a valid development percentage';
-                      }
-
-                      return null;
-                    }),
-              ),
-              const SliverPadding(padding: EdgeInsets.only(top: 10)),
-              SliverToBoxAdapter(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Text('Check roaster temperature:'),
-                    TempIntervalSelect(
-                      value: tempInterval,
-                      onChanged: (val) {
-                        setState(() {
-                          tempInterval = val;
-                        });
-                      },
+                    const SizedBox(height: 16.0),
+                    Text(
+                      'Beans:',
+                      style: RoastAppTheme.materialTheme.textTheme.titleMedium,
                     ),
+                    _beansFormCard(),
+                    if (selectedBean != null)
+                      Text('Roast ID: ${selectedBean!.name} #$roastNumber',
+                          textAlign: TextAlign.center),
+                    const SizedBox(height: 40),
+                    Text(
+                      'Profile:',
+                      style: RoastAppTheme.materialTheme.textTheme.titleMedium,
+                    ),
+                    _profileFormCard(bean, copy),
                   ],
                 ),
               ),
@@ -175,8 +101,6 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if (selectedBean != null)
-                      Text('Roast ID: ${selectedBean!.name} #$roastNumber'),
                     Container(
                       alignment: Alignment.bottomCenter,
                       padding: const EdgeInsets.only(bottom: 16),
@@ -228,6 +152,133 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _beansFormCard() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
+            if (beanErr)
+              Text(
+                'Select a bean:',
+                style: RoastAppTheme.materialTheme.textTheme.caption!.copyWith(
+                  color: RoastAppTheme.materialTheme.errorColor,
+                  fontSize: 12.0,
+                ),
+              ),
+            BeanSelect(
+              selectedBean: selectedBean,
+              onChanged: (bean) {
+                setState(() {
+                  selectedBean = bean;
+                });
+              },
+            ),
+            _label('Weight (g)'),
+            TextFormField(
+              controller: weight,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                suffixText: 'g',
+                border: InputBorder.none,
+                prefixIcon: Icon(Icons.scale),
+              ),
+              validator: (value) {
+                if (double.tryParse(value ?? '') == null) {
+                  return 'Enter a valid weight';
+                }
+
+                return null;
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _label(String text) {
+    return Row(
+      children: [
+        Text(text),
+        const SizedBox(width: 12),
+        const Expanded(
+          child: Divider(),
+        ),
+      ],
+    );
+  }
+
+  Widget _profileFormCard(Bean? bean, Roast? copy) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
+            _label('Target Development (%)'),
+            TextFormField(
+              controller: devel,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                suffixText: '%',
+                border: InputBorder.none,
+                icon: Icon(Icons.speed),
+              ),
+              validator: (value) {
+                if (double.tryParse(value ?? '') == null) {
+                  return 'Enter a valid development percentage';
+                }
+
+                return null;
+              },
+            ),
+            _label('Check temperature:'),
+            Row(
+              children: [
+                const Icon(Icons.timer),
+                Expanded(
+                  child: TempIntervalSelect(
+                    value: tempInterval,
+                    onChanged: (val) {
+                      setState(() {
+                        tempInterval = val;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+            _label('Copy of roast:'),
+            if (copy != null && bean != null)
+              InputChip(
+                label: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const Text('Copying '),
+                    Flexible(
+                      child: Text(bean.name, overflow: TextOverflow.ellipsis),
+                    ),
+                    Text(' roast #${copy.roastNumber}'),
+                  ],
+                ),
+                onDeleted: () {
+                  ref.read(copyOfRoastProvider.notifier).state = null;
+                },
+              )
+            else
+              const Text('None'),
+          ],
         ),
       ),
     );

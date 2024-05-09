@@ -1,92 +1,131 @@
-import 'dart:math';
-
 import 'package:behmor_roast/src/util/models/toggle_switch_style.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class ToggleSwitch<T> extends StatefulWidget {
   const ToggleSwitch({
-    required this.widgetLeft,
-    required this.valueLeft,
-    required this.widgetRight,
-    required this.valueRight,
+    required this.children,
     required this.onToggle,
     this.style = ToggleSwitchStyle.defaults,
+    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.mainAxisSize = MainAxisSize.min,
     super.key,
   });
 
-  final Widget widgetLeft;
-  final Widget widgetRight;
-  final T valueLeft;
-  final T valueRight;
+  final List<ToggleSwitchOption<T>> children;
   final ToggleSwitchStyle style;
   final void Function(T) onToggle;
+  final MainAxisAlignment mainAxisAlignment;
+  final MainAxisSize mainAxisSize;
 
   @override
   ToggleSwitchState<T> createState() => ToggleSwitchState<T>();
+}
+
+class ToggleSwitchOption<T> {
+  const ToggleSwitchOption({
+    required this.value,
+    required this.child,
+  });
+  final Widget child;
+  final T value;
 }
 
 class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
     with SingleTickerProviderStateMixin {
   late AnimationController animationCtrl;
 
+  final sizeTween = Tween<double>(begin: 0, end: 0);
+  late Animation<double> sizeAnimation;
+
+  final positionTween = Tween<double>(begin: 0, end: 0);
+  late Animation<double> positionAnimation;
+
+  int selectedIdx = 0;
+  ToggleSwitchDragState? dragState;
+
   @override
   void initState() {
     super.initState();
 
     animationCtrl = AnimationController(
-      vsync: this,
+      value: 1.0,
       duration: const Duration(milliseconds: 150),
+      vsync: this,
     );
+
+    sizeAnimation = animationCtrl.drive(sizeTween);
+    positionAnimation = animationCtrl.drive(positionTween);
   }
 
   @override
   Widget build(BuildContext context) {
     final pillPadding = widget.style.pillPadding;
     return CustomPaint(
-      painter: ToggleSwitchPainter(
-        context: context,
-        animation: animationCtrl,
-        style: widget.style,
-      ),
+      painter: buildPainter(context),
       child: Padding(
         padding: widget.style.padding,
         child: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: widget.mainAxisSize,
+          mainAxisAlignment: widget.mainAxisAlignment,
           children: [
-            GestureDetector(
-              onTap: chooseLeft,
-              onHorizontalDragUpdate: onHorizontalDragUpdate,
-              onHorizontalDragEnd: onHorizontalDragEnd,
-              child: Padding(
-                padding: pillPadding,
-                child: widget.widgetLeft,
+            for (var i = 0; i < widget.children.length; ++i)
+              GestureDetector(
+                onTap: () => chooseValue(i),
+                onHorizontalDragStart: (details) =>
+                    onHorizontalDragStart(i, details),
+                onHorizontalDragUpdate: onHorizontalDragUpdate,
+                onHorizontalDragEnd: onHorizontalDragEnd,
+                child: Padding(
+                  padding: pillPadding,
+                  child: widget.children[i].child,
+                ),
               ),
-            ),
-            SizedBox(width: widget.style.gap),
-            GestureDetector(
-              onTap: chooseRight,
-              onHorizontalDragUpdate: onHorizontalDragUpdate,
-              onHorizontalDragEnd: onHorizontalDragEnd,
-              child: Padding(
-                padding: pillPadding.flipped,
-                child: widget.widgetRight,
-              ),
-            ),
+            //SizedBox(width: widget.style.gap),
           ],
         ),
       ),
     );
   }
 
-  void chooseLeft() {
-    animationCtrl.reverse();
-    widget.onToggle(widget.valueLeft);
+  CustomPainter buildPainter(BuildContext context) {
+    if (dragState != null) {
+      return ToggleSwitchPainterDragging(
+          dragState: dragState!, style: widget.style, context: context);
+    }
+    return ToggleSwitchPainterNormal(
+      context: context,
+      selectedIdx: selectedIdx,
+      animation: animationCtrl,
+      sizeAnimation: sizeAnimation,
+      sizeTween: sizeTween,
+      positionAnimation: positionAnimation,
+      positionTween: positionTween,
+      style: widget.style,
+    );
   }
 
-  void chooseRight() {
+  void chooseValue(int i, {double? beginSize, double? beginPosition}) {
+    final option = widget.children[i];
+    final renderRow = _getRenderRow();
+    var renderChild = renderRow.getChildrenAsList()[i];
+
+    sizeTween.begin = beginSize ?? sizeAnimation.value;
+    positionTween.begin = beginPosition ?? positionAnimation.value;
+
+    animationCtrl.reset();
+
+    final offset = (renderChild.parentData as FlexParentData).offset.dx;
+    sizeTween.end = renderChild.size.width;
+    positionTween.end = offset;
     animationCtrl.forward();
-    widget.onToggle(widget.valueRight);
+
+    widget.onToggle(option.value);
+
+    setState(() {
+      selectedIdx = i;
+    });
   }
 
   Widget background() => Container(
@@ -101,40 +140,159 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
         ),
       );
 
+  RenderFlex _getRenderRow() =>
+      (((context.findRenderObject() as RenderCustomPaint).child
+              as RenderPadding)
+          .child as RenderFlex);
+
+  void onHorizontalDragStart(int i, DragStartDetails details) {
+    if (i != selectedIdx) {
+      return;
+    }
+
+    final dragState = ToggleSwitchDragState(
+      context: context,
+      draggedIdx: i,
+    );
+
+    dragState.addListener(() {
+      if (dragState.selectedIdx != selectedIdx) {
+        setState(() {
+          selectedIdx = dragState.selectedIdx;
+        });
+        widget.onToggle(widget.children[selectedIdx].value);
+      }
+    });
+
+    setState(() {
+      this.dragState = dragState;
+    });
+  }
+
   void onHorizontalDragUpdate(DragUpdateDetails details) {
-    final leftObject = (((context.findRenderObject() as RenderCustomPaint).child
-                as RenderPadding)
-            .child as RenderFlex)
-        .firstChild!;
-    animationCtrl.value += details.primaryDelta! / leftObject.size.width;
+    dragState?.dragAmount += details.primaryDelta ?? 0;
+    dragState?.update();
   }
 
   void onHorizontalDragEnd(DragEndDetails details) {
-    final leftObject = (((context.findRenderObject() as RenderCustomPaint).child
-                as RenderPadding)
-            .child as RenderFlex)
-        .firstChild!;
+    if (dragState == null) {
+      return;
+    }
 
-    final flicked =
-        animationCtrl.value + details.primaryVelocity! / leftObject.size.width;
-    if (flicked < 0.5) {
-      chooseLeft();
-    } else {
-      chooseRight();
+    try {
+      //dragState!.dragAmount += details.primaryVelocity!;
+      dragState!.update();
+    } finally {
+      chooseValue(
+        selectedIdx,
+        beginSize: dragState!.pillWidth,
+        beginPosition: dragState!.pillLeft,
+      );
+      dragState = null;
     }
   }
 }
 
-class ToggleSwitchPainter extends CustomPainter {
-  ToggleSwitchPainter({
+class ToggleSwitchDragState extends ChangeNotifier {
+  ToggleSwitchDragState({
+    required this.draggedIdx,
     required this.context,
-    required this.animation,
-    required this.style,
-  }) : super(repaint: animation);
+  }) : selectedIdx = draggedIdx;
 
-  final Animation<double> animation;
+  final BuildContext context;
+  int draggedIdx;
+  double dragAmount = 0.0;
+  int selectedIdx;
+
+  double pillLeft = 0;
+  double pillWidth = 0;
+
+  int? targetLeftIdx;
+  int? targetRightIdx;
+  double targetDragProgress = 0.0;
+
+  void findTargets() {
+    final renderRow = _getRenderRow();
+    final renderChildren = renderRow.getChildrenAsList();
+
+    final Iterable<int> targetIndexes;
+    if (dragAmount.isNegative) {
+      targetIndexes = Iterable.generate(draggedIdx + 1, (i) => draggedIdx - i);
+    } else {
+      targetIndexes = Iterable.generate(
+          renderChildren.length - draggedIdx, (i) => i + draggedIdx);
+    }
+
+    var remainingDrag = dragAmount.abs();
+    int prevIdx = targetIndexes.first;
+    int lastIdx = targetIndexes.first;
+    for (final targetIdx in targetIndexes) {
+      prevIdx = lastIdx;
+      lastIdx = targetIdx;
+      final target = renderChildren[targetIdx];
+
+      if (remainingDrag > 0 && targetIdx != targetIndexes.last) {
+        remainingDrag -= target.size.width;
+      } else {
+        break;
+      }
+    }
+
+    if (dragAmount.isNegative) {
+      targetLeftIdx = lastIdx;
+      targetRightIdx = prevIdx;
+      targetDragProgress = remainingDrag > 0 ? 0 : remainingDrag;
+    } else {
+      targetLeftIdx = prevIdx;
+      targetRightIdx = lastIdx;
+      targetDragProgress = renderChildren[lastIdx].size.width + remainingDrag;
+    }
+  }
+
+  void update() {
+    findTargets();
+
+    final renderRow = _getRenderRow();
+    final renderChildren = renderRow.getChildrenAsList();
+
+    final targetLeft = renderChildren[targetLeftIdx!];
+    final targetRight = renderChildren[targetRightIdx!];
+
+    final position = Tween<double>(
+        begin: (targetLeft.parentData as FlexParentData).offset.dx,
+        end: (targetRight.parentData as FlexParentData).offset.dx);
+    final size = Tween<double>(
+        begin: targetLeft.size.width, end: targetRight.size.width);
+
+    final dragWidth = (targetLeft.size.width + targetRight.size.width) / 2;
+    final rawProgress = (targetDragProgress / dragWidth);
+    final progress = rawProgress.abs().clamp(0.0, 1.0);
+
+    pillLeft = position.transform(progress);
+    pillWidth = size.transform(progress);
+    selectedIdx = progress < 0.5 ? targetLeftIdx! : targetRightIdx!;
+
+    notifyListeners();
+  }
+
+  RenderFlex _getRenderRow() =>
+      (((context.findRenderObject() as RenderCustomPaint).child
+              as RenderPadding)
+          .child as RenderFlex);
+}
+
+abstract class ToggleSwitchPainterBase extends CustomPainter {
+  ToggleSwitchPainterBase({
+    required this.context,
+    required this.style,
+    super.repaint,
+  });
+
   final BuildContext context;
   final ToggleSwitchStyle style;
+
+  double get pillLeft;
+  double get pillWidth;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -143,29 +301,16 @@ class ToggleSwitchPainter extends CustomPainter {
   }
 
   void paintPill(Canvas canvas, Size size) {
-    final leftBox = findWidgetLeftObj();
-    final rightBox = findWidgetRightObj();
-
-    final left = animation.value *
-            (size.width -
-                rightBox.paintBounds.right -
-                style.padding.right -
-                style.padding.left) +
-        style.padding.left;
-    final right = leftBox.paintBounds.right +
-        (size.width -
-                leftBox.paintBounds.right -
-                style.padding.left -
-                style.padding.right) *
-            animation.value +
-        style.padding.left;
+    final renderRow = findFlexObj();
 
     final top = style.padding.top;
-    final bottom =
-        max(leftBox.paintBounds.height, rightBox.paintBounds.height) +
-            style.padding.top;
+    final bottom = renderRow.size.height + style.padding.top;
 
-    final rect = RRect.fromLTRBR(left, top, right, bottom, style.pillRadius);
+    final left = pillLeft;
+    final right = left + pillWidth;
+
+    final rect =
+        RRect.fromLTRBR(pillLeft, top, right, bottom, style.pillRadius);
 
     final shadowPath = Path()..addRRect(rect);
     canvas.drawShadow(
@@ -189,18 +334,78 @@ class ToggleSwitchPainter extends CustomPainter {
         paint);
   }
 
-  @override
-  bool shouldRepaint(ToggleSwitchPainter oldDelegate) {
-    return oldDelegate.animation != animation ||
-        oldDelegate.context != context ||
-        oldDelegate.style != style;
-  }
-
   RenderCustomPaint findRenderObject() =>
       context.findRenderObject() as RenderCustomPaint;
   RenderPadding findPaddingObj() => findRenderObject().child as RenderPadding;
   RenderFlex findFlexObj() => findPaddingObj().child as RenderFlex;
+}
 
-  RenderBox findWidgetLeftObj() => findFlexObj().firstChild as RenderBox;
-  RenderBox findWidgetRightObj() => findFlexObj().lastChild as RenderBox;
+class ToggleSwitchPainterNormal extends ToggleSwitchPainterBase {
+  ToggleSwitchPainterNormal({
+    required super.context,
+    required this.selectedIdx,
+    required this.animation,
+    required this.sizeAnimation,
+    required this.sizeTween,
+    required this.positionAnimation,
+    required this.positionTween,
+    required super.style,
+  }) : super(repaint: animation);
+
+  final int selectedIdx;
+  final Animation<double> animation;
+  final Animation<double> sizeAnimation;
+  final Tween<double> sizeTween;
+  final Animation<double> positionAnimation;
+  final Tween<double> positionTween;
+
+  @override
+  double get pillLeft {
+    final renderRow = findFlexObj();
+    var renderChildren = renderRow.getChildrenAsList();
+    var renderChild = renderChildren[selectedIdx];
+
+    final offset = (renderChild.parentData as FlexParentData).offset.dx;
+    sizeTween.end = renderChild.size.width;
+    positionTween.end = offset + style.padding.left;
+
+    return positionAnimation.value;
+  }
+
+  @override
+  double get pillWidth => sizeAnimation.value;
+
+  @override
+  bool shouldRepaint(ToggleSwitchPainterBase oldDelegate) {
+    return oldDelegate is! ToggleSwitchPainterNormal ||
+        oldDelegate.animation != animation ||
+        oldDelegate.sizeAnimation != sizeAnimation ||
+        oldDelegate.positionAnimation != positionAnimation ||
+        oldDelegate.context != context ||
+        oldDelegate.style != style;
+  }
+}
+
+class ToggleSwitchPainterDragging extends ToggleSwitchPainterBase {
+  ToggleSwitchPainterDragging({
+    required super.context,
+    required this.dragState,
+    required super.style,
+  }) : super(repaint: dragState);
+
+  final ToggleSwitchDragState dragState;
+
+  @override
+  double get pillLeft => dragState.pillLeft;
+
+  @override
+  double get pillWidth => dragState.pillWidth;
+
+  @override
+  bool shouldRepaint(ToggleSwitchPainterBase oldDelegate) {
+    return oldDelegate is! ToggleSwitchPainterDragging ||
+        oldDelegate.dragState != dragState ||
+        oldDelegate.context != context ||
+        oldDelegate.style != style;
+  }
 }

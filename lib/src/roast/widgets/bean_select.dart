@@ -2,8 +2,10 @@ import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/sign_in/providers.dart';
+import 'package:behmor_roast/src/util/widgets/animated_pop_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 
 class BeanSelect extends ConsumerStatefulWidget {
   const BeanSelect({
@@ -21,6 +23,7 @@ class BeanSelect extends ConsumerStatefulWidget {
 
 class BeanSelectState extends ConsumerState<BeanSelect> {
   bool addNew = false;
+  bool expand = false;
   final newBeanName = TextEditingController();
   final newBeanForm = GlobalKey<FormState>();
 
@@ -84,52 +87,65 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
       );
     }
 
-    return Wrap(
-      crossAxisAlignment: WrapCrossAlignment.center,
-      spacing: 8.0,
+    return Column(
       children: [
-        const Text('Bean:'),
-        DropdownButton<Bean>(
-          value: widget.selectedBean,
-          items: getItems(beans),
-          onChanged: widget.onChanged,
-        ),
-        const Text('OR'),
-        ElevatedButton.icon(
-          label: const Text('Add new bean'),
-          icon: const Icon(Icons.add),
-          style: RoastAppTheme.limeButtonTheme.style,
-          onPressed: () {
-            widget.onChanged(null);
+        ListTile(
+          title: Text(widget.selectedBean?.name ?? 'Select a bean'),
+          leading: SvgPicture.asset(
+            'images/bean.svg',
+            color: RoastAppTheme.capuccinoLight,
+            height: 24,
+          ),
+          contentPadding: const EdgeInsets.only(left: 12),
+          horizontalTitleGap: 0.0,
+          trailing: const Icon(Icons.expand_more),
+          onTap: () {
             setState(() {
-              addNew = true;
+              expand = true;
             });
           },
+        ),
+        AnimatedPopUp(
+          child: !expand
+              ? const SizedBox()
+              : Column(
+                  children: getItems(beans),
+                ),
         ),
       ],
     );
   }
 
-  List<DropdownMenuItem<Bean>> getItems(List<Bean> beans) {
+  Widget beanTile(Bean bean) {
+    return ListTile(
+      title: Text(bean.name),
+      leading: SvgPicture.asset(
+        'images/bean.svg',
+        color: RoastAppTheme.capuccinoLight,
+        height: 24,
+      ),
+      contentPadding: const EdgeInsets.only(left: 12),
+      horizontalTitleGap: 0.0,
+      trailing: expand ? null : const Icon(Icons.expand_more),
+      dense: true,
+      onTap: () {
+        if (expand) {
+          widget.onChanged(bean);
+        }
+        setState(() {
+          expand = !expand;
+        });
+      },
+    );
+  }
+
+  List<Widget> getItems(List<Bean> beans) {
     if (beans.isEmpty) {
       return [
-        const DropdownMenuItem<Bean>(
-          value: null,
-          child: Text('None'),
-        )
+        const Text('None'),
       ];
     }
 
-    return [
-      ...beans.map((bean) => DropdownMenuItem<Bean>(
-            value: bean,
-            child: Text(bean.name),
-          )),
-      if (widget.selectedBean == null)
-        const DropdownMenuItem<Bean>(
-          value: null,
-          child: Text('Select a bean'),
-        ),
-    ];
+    return beans.map((bean) => beanTile(bean)).toList();
   }
 }
