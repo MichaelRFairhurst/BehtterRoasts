@@ -10,6 +10,7 @@ class ToggleSwitch<T> extends StatefulWidget {
     this.style = ToggleSwitchStyle.defaults,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.mainAxisSize = MainAxisSize.min,
+    this.initialValue,
     super.key,
   });
 
@@ -18,6 +19,7 @@ class ToggleSwitch<T> extends StatefulWidget {
   final void Function(T) onToggle;
   final MainAxisAlignment mainAxisAlignment;
   final MainAxisSize mainAxisSize;
+  final T? initialValue;
 
   @override
   ToggleSwitchState<T> createState() => ToggleSwitchState<T>();
@@ -57,6 +59,11 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
 
     sizeAnimation = animationCtrl.drive(sizeTween);
     positionAnimation = animationCtrl.drive(positionTween);
+
+    if (widget.initialValue != null) {
+      selectedIdx = widget.children
+          .indexWhere((option) => option.value == widget.initialValue);
+    }
   }
 
   @override

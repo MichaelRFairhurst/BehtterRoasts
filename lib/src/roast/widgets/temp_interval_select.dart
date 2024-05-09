@@ -25,6 +25,7 @@ class TempIntervalSelect extends StatelessWidget {
       ),
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       mainAxisSize: MainAxisSize.max,
+      initialValue: 30,
       children: [
         ToggleSwitchOption<int>(
           value: 15,
