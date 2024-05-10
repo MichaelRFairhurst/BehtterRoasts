@@ -246,7 +246,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
             _label('Check temperature:'),
             Row(
               children: [
-                const Icon(Icons.timer),
+                const Icon(Icons.timer_outlined),
                 Expanded(
                   child: TempIntervalSelect(
                     value: tempInterval,

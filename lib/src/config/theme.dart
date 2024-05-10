@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
 class RoastAppTheme {
@@ -151,6 +152,20 @@ class RoastAppTheme {
         ),
       ),
       dividerColor: RoastAppTheme.metalLight,
+      iconTheme: const IconThemeData(
+        color: capuccinoLightest,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        iconColor: MaterialStateColor.resolveWith((states) {
+          if (states.contains(MaterialState.error)) {
+            return errorColor;
+          } else if (states.contains(MaterialState.focused)) {
+            return limeDark;
+          }
+
+          return capuccinoLightest;
+        }),
+      ),
       textTheme: TextTheme(
         displayLarge: GoogleFonts.vollkorn(
             textStyle: ThemeData.light().textTheme.displayLarge),
