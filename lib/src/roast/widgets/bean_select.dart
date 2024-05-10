@@ -1,11 +1,12 @@
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
+import 'package:behmor_roast/src/roast/services/bean_service.dart';
+import 'package:behmor_roast/src/roast/widgets/continent_icon.dart';
 import 'package:behmor_roast/src/sign_in/providers.dart';
 import 'package:behmor_roast/src/util/widgets/animated_pop_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 
 class BeanSelect extends ConsumerStatefulWidget {
   const BeanSelect({
@@ -35,6 +36,7 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
             ?.where((bean) => !bean.archived)
             .toList() ??
         [];
+    final beanService = ref.watch(beanServiceProvider);
 
     if (widget.selectedBean != null && !beans.contains(widget.selectedBean)) {
       beans.add(widget.selectedBean!);
@@ -62,10 +64,10 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
               style: RoastAppTheme.limeButtonTheme.style,
               onPressed: () async {
                 if (newBeanForm.currentState!.validate()) {
-                  final bean = await ref.read(beanServiceProvider).add(Bean(
-                        name: newBeanName.text,
-                        ownerId: ref.read(authProvider).value!.uid,
-                      ));
+                  final bean = await beanService.add(Bean(
+                    name: newBeanName.text,
+                    ownerId: ref.read(authProvider).value!.uid,
+                  ));
                   addNew = false;
                   widget.onChanged(bean);
                 }
@@ -87,13 +89,16 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
       );
     }
 
+    final selectedContinent = widget.selectedBean == null
+        ? Continent.other
+        : beanService.continentOf(widget.selectedBean!);
+
     return Column(
       children: [
         ListTile(
           title: Text(widget.selectedBean?.name ?? 'Select a bean'),
-          leading: SvgPicture.asset(
-            'images/bean.svg',
-            color: RoastAppTheme.capuccinoLight,
+          leading: ContinentIcon(
+            selectedContinent,
             height: 24,
           ),
           contentPadding: const EdgeInsets.only(left: 12),
@@ -101,7 +106,7 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
           trailing: const Icon(Icons.expand_more),
           onTap: () {
             setState(() {
-              expand = true;
+              expand = !expand;
             });
           },
         ),
@@ -109,19 +114,18 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
           child: !expand
               ? const SizedBox()
               : Column(
-                  children: getItems(beans),
+                  children: getItems(beans, beanService),
                 ),
         ),
       ],
     );
   }
 
-  Widget beanTile(Bean bean) {
+  Widget beanTile(Bean bean, beanService) {
     return ListTile(
       title: Text(bean.name),
-      leading: SvgPicture.asset(
-        'images/bean.svg',
-        color: RoastAppTheme.capuccinoLight,
+      leading: ContinentIcon(
+        beanService.continentOf(bean),
         height: 24,
       ),
       contentPadding: const EdgeInsets.only(left: 12),
@@ -139,13 +143,13 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
     );
   }
 
-  List<Widget> getItems(List<Bean> beans) {
+  List<Widget> getItems(List<Bean> beans, BeanService beanService) {
     if (beans.isEmpty) {
       return [
         const Text('None'),
       ];
     }
 
-    return beans.map((bean) => beanTile(bean)).toList();
+    return beans.map((bean) => beanTile(bean, beanService)).toList();
   }
 }
