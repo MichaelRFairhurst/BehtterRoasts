@@ -7,16 +7,18 @@ class ContinentIcon extends StatelessWidget {
   const ContinentIcon(
     this.continent, {
     this.height = 36,
+    this.color,
     super.key,
   });
 
   final double height;
   final Continent continent;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) => SvgPicture.asset(
         beanIconPath(),
-        color: RoastAppTheme.capuccinoLightest,
+        color: color ?? IconTheme.of(context).color,
         height: height,
       );
 

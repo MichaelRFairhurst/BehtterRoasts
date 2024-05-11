@@ -57,7 +57,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
     final bean = beans.valueOrNull
         ?.cast<Bean?>()
         .singleWhere((bean) => bean?.id == copy?.beanId, orElse: () => null);
-    final otherRoasts = selectedBean == null
+    final otherRoasts = selectedBean == null || selectedBean!.id == null
         ? <Roast>[]
         : ref.watch(roastsForBeanProvider(selectedBean!.id!)).value ?? [];
 
@@ -84,7 +84,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                       style: RoastAppTheme.materialTheme.textTheme.titleMedium,
                     ),
                     _beansFormCard(),
-                    if (selectedBean != null)
+                    if (selectedBean != null && selectedBean!.name != '')
                       Text('Roast ID: ${selectedBean!.name} #$roastNumber',
                           textAlign: TextAlign.center),
                     const SizedBox(height: 40),
@@ -109,7 +109,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                         child: ElevatedButton.icon(
                           label: const Icon(Icons.navigate_next),
                           icon: const Text('Begin roast'),
-                          onPressed: () {
+                          onPressed: () async {
                             final formValid =
                                 roastFormKey.currentState!.validate();
                             if (selectedBean == null) {
@@ -123,6 +123,16 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                             }
 
                             if (!beanErr && formValid) {
+                              if (selectedBean!.id == null) {
+                                selectedBean = await ref
+                                    .read(beanServiceProvider)
+                                    .add(selectedBean!);
+                              }
+
+                              if (!mounted) {
+                                return;
+                              }
+
                               final roast = Roast(
                                 beanId: selectedBean!.id!,
                                 copyOfRoastId: copy?.id,
