@@ -10,7 +10,7 @@ class ToggleSwitch<T> extends StatefulWidget {
     this.style = ToggleSwitchStyle.defaults,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.mainAxisSize = MainAxisSize.min,
-    this.initialValue,
+    this.value,
     super.key,
   });
 
@@ -19,7 +19,7 @@ class ToggleSwitch<T> extends StatefulWidget {
   final void Function(T) onToggle;
   final MainAxisAlignment mainAxisAlignment;
   final MainAxisSize mainAxisSize;
-  final T? initialValue;
+  final T? value;
 
   @override
   ToggleSwitchState<T> createState() => ToggleSwitchState<T>();
@@ -60,9 +60,22 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
     sizeAnimation = animationCtrl.drive(sizeTween);
     positionAnimation = animationCtrl.drive(positionTween);
 
-    if (widget.initialValue != null) {
-      selectedIdx = widget.children
-          .indexWhere((option) => option.value == widget.initialValue);
+    if (widget.value != null) {
+      selectedIdx =
+          widget.children.indexWhere((option) => option.value == widget.value);
+    }
+  }
+
+  @override
+  void didUpdateWidget(ToggleSwitch<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.value != oldWidget.value) {
+      final newSelectedIdx =
+          widget.children.indexWhere((option) => option.value == widget.value);
+      if (newSelectedIdx != selectedIdx) {
+        chooseValue(newSelectedIdx);
+      }
     }
   }
 
@@ -79,7 +92,7 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
           children: [
             for (var i = 0; i < widget.children.length; ++i)
               GestureDetector(
-                onTap: () => chooseValue(i),
+                onTap: () => widget.onToggle(widget.children[i].value),
                 onHorizontalDragStart: (details) =>
                     onHorizontalDragStart(i, details),
                 onHorizontalDragUpdate: onHorizontalDragUpdate,
@@ -113,13 +126,12 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
     );
   }
 
-  void chooseValue(int i, {double? beginSize, double? beginPosition}) {
-    final option = widget.children[i];
+  void chooseValue(int i, {double? beginSize, double? beginLeft}) {
     final renderRow = _getRenderRow();
     var renderChild = renderRow.getChildrenAsList()[i];
 
     sizeTween.begin = beginSize ?? sizeAnimation.value;
-    positionTween.begin = beginPosition ?? positionAnimation.value;
+    positionTween.begin = beginLeft ?? positionAnimation.value;
 
     animationCtrl.reset();
 
@@ -128,11 +140,7 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
     positionTween.end = offset;
     animationCtrl.forward();
 
-    widget.onToggle(option.value);
-
-    setState(() {
-      selectedIdx = i;
-    });
+    selectedIdx = i;
   }
 
   Widget background() => Container(
@@ -191,10 +199,13 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
       dragState!.update();
     } finally {
       chooseValue(
-        selectedIdx,
+        dragState!.selectedIdx,
         beginSize: dragState!.pillWidth,
-        beginPosition: dragState!.pillLeft,
+        beginLeft: dragState!.pillLeft,
       );
+      animationCtrl.forward();
+      widget.onToggle(widget.children[selectedIdx].value);
+
       dragState = null;
     }
   }
