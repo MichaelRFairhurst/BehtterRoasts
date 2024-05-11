@@ -6,6 +6,7 @@ import 'package:behmor_roast/src/roast/models/roast_config.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/services/roast_number_service.dart';
 import 'package:behmor_roast/src/roast/widgets/bean_select.dart';
+import 'package:behmor_roast/src/roast/widgets/roast_select.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_interval_select.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
@@ -37,10 +38,21 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
     super.initState();
     selectedBean = widget.selectedBean;
     final copy = ref.read(copyOfRoastProvider);
-    if (copy != null) {
+    copyUpdated(copy);
+  }
+
+  void copyUpdated(Roast? copy) {
+    if (copy == null) {
+      return;
+    }
+
+    setState(() {
       devel.text = (copy.config.targetDevelopment * 100).toString();
       weight.text = copy.weightIn.toString();
       tempInterval = copy.config.tempInterval;
+    });
+
+    if (selectedBean == null) {
       final beans = ref.read(beansProvider);
       beans.whenData((beans) {
         setState(() {
@@ -53,10 +65,8 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
   @override
   Widget build(BuildContext context) {
     final copy = ref.watch(copyOfRoastProvider);
-    final beans = ref.watch(beansProvider);
-    final bean = beans.valueOrNull
-        ?.cast<Bean?>()
-        .singleWhere((bean) => bean?.id == copy?.beanId, orElse: () => null);
+    ref.listen<Roast?>(
+        copyOfRoastProvider, (previous, next) => copyUpdated(next));
     final otherRoasts = selectedBean == null || selectedBean!.id == null
         ? <Roast>[]
         : ref.watch(roastsForBeanProvider(selectedBean!.id!)).value ?? [];
@@ -83,16 +93,16 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                       'Beans:',
                       style: RoastAppTheme.materialTheme.textTheme.titleMedium,
                     ),
-                    _beansFormCard(),
+                    _beansFormCard(copy),
                     if (selectedBean != null && selectedBean!.name != '')
                       Text('Roast ID: ${selectedBean!.name} #$roastNumber',
                           textAlign: TextAlign.center),
                     const SizedBox(height: 40),
                     Text(
-                      'Profile:',
+                      'Settings:',
                       style: RoastAppTheme.materialTheme.textTheme.titleMedium,
                     ),
-                    _profileFormCard(bean, copy),
+                    _profileFormCard(selectedBean, copy),
                   ],
                 ),
               ),
@@ -167,7 +177,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
     );
   }
 
-  Widget _beansFormCard() {
+  Widget _beansFormCard(Roast? copy) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -190,6 +200,15 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                 setState(() {
                   selectedBean = bean;
                 });
+                ref.read(copyOfRoastProvider.notifier).state = null;
+              },
+            ),
+            RoastSelect(
+              title: _label('Copy of roast:'),
+              bean: selectedBean,
+              selectedRoast: copy,
+              onChanged: (roast) {
+                ref.read(copyOfRoastProvider.notifier).state = roast;
               },
             ),
             _label('Weight (g)'),
@@ -269,7 +288,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                 ),
               ],
             ),
-            _label('Copy of roast:'),
+            /*
             if (copy != null && bean != null)
               InputChip(
                 label: Row(
@@ -288,6 +307,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
               )
             else
               const Text('None'),
+			  */
           ],
         ),
       ),

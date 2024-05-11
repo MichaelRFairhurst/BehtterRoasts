@@ -1,4 +1,3 @@
-import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
