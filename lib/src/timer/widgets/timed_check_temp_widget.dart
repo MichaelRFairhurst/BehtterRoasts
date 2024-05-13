@@ -49,6 +49,7 @@ class TimedCheckTempWidgetState extends ConsumerState<TimedCheckTempWidget> {
           const Spacer(),
           Text('Time: ', style: RoastAppTheme.checkTempTextStyle),
           ToggleSwitch<Duration>(
+            value: useShownTime ? widget.shownTime : overrideTime!,
             onToggle: (value) {
               setState(() {
                 useShownTime = value == widget.shownTime;
