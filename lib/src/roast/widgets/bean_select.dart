@@ -45,7 +45,7 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
         ? Continent.other
         : beanService.continentOf(widget.selectedBean!);
 
-    if (addNew) {
+    if (addNew || beans.isEmpty) {
       return Row(
         children: [
           Expanded(
@@ -67,19 +67,20 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
               },
             ),
           ),
-          SizedBox(
-            width: 32,
-            height: 32,
-            child: IconButton(
-              icon: const Icon(Icons.expand_more),
-              onPressed: () {
-                setState(() {
-                  addNew = false;
-                });
-                widget.onChanged(null);
-              },
+          if (beans.isNotEmpty)
+            SizedBox(
+              width: 32,
+              height: 32,
+              child: IconButton(
+                icon: const Icon(Icons.expand_more),
+                onPressed: () {
+                  setState(() {
+                    addNew = false;
+                  });
+                  widget.onChanged(null);
+                },
+              ),
             ),
-          ),
         ],
       );
     }
@@ -163,12 +164,6 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
   }
 
   List<Widget> getItems(List<Bean> beans, BeanService beanService) {
-    if (beans.isEmpty) {
-      return [
-        const Text('None'),
-      ];
-    }
-
     return [
       ...beans.map((bean) => beanTile(bean, beanService, false)),
       Text(
