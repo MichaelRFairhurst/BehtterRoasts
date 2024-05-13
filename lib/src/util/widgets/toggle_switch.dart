@@ -324,11 +324,10 @@ abstract class ToggleSwitchPainterBase extends CustomPainter {
     final top = style.padding.top;
     final bottom = renderRow.size.height + style.padding.top;
 
-    final left = pillLeft;
+    final left = pillLeft + style.padding.left;
     final right = left + pillWidth;
 
-    final rect =
-        RRect.fromLTRBR(pillLeft, top, right, bottom, style.pillRadius);
+    final rect = RRect.fromLTRBR(left, top, right, bottom, style.pillRadius);
 
     final shadowPath = Path()..addRRect(rect);
     canvas.drawShadow(
@@ -385,7 +384,7 @@ class ToggleSwitchPainterNormal extends ToggleSwitchPainterBase {
 
     final offset = (renderChild.parentData as FlexParentData).offset.dx;
     sizeTween.end = renderChild.size.width;
-    positionTween.end = offset + style.padding.left;
+    positionTween.end = offset;
 
     return positionAnimation.value;
   }
