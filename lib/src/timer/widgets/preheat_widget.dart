@@ -3,6 +3,7 @@ import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
+import 'package:behmor_roast/src/timer/widgets/preheat_timer.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_beep/flutter_beep.dart';
@@ -59,36 +60,42 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
         }
       });
 
-      final remaining = duration - timeFloored;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             'Preheating...',
             textAlign: TextAlign.center,
-            style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
+            style: RoastAppTheme.materialTheme.textTheme.headlineLarge,
           ),
-          const SizedBox(height: 12),
-          Text('Target temp: ${tempCtrl.text}F'),
+          const SizedBox(height: 30),
+          Align(
+            alignment: Alignment.center,
+            child: PreheatTimer(
+              duration: duration,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Target temp: ${tempCtrl.text}°F',
+            textAlign: TextAlign.center,
+            style: RoastAppTheme.materialTheme.textTheme.titleLarge,
+          ),
           const SizedBox(height: 12),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Estimated time remaining: '),
-              TimestampWidget.twitter(
-                remaining,
-                style:
-                    RoastAppTheme.materialTheme.textTheme.bodyMedium!.copyWith(
-                  color: remaining <= Duration.zero
-                      ? RoastAppTheme.errorColor
-                      : null,
-                  fontWeight: remaining <= const Duration(seconds: 10)
-                      ? FontWeight.bold
-                      : null,
-                ),
+              Text(
+                'Elapsed: ',
+                textAlign: TextAlign.center,
+                style: RoastAppTheme.materialTheme.textTheme.titleMedium,
               ),
+              TimestampWidget.twitter(timeFloored,
+                  style: RoastAppTheme.materialTheme.textTheme.titleMedium),
             ],
           ),
-          const Spacer(),
+          const SizedBox(height: 30),
           RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
@@ -104,15 +111,13 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
                 TextSpan(
                   text: ' to monitor the temp of your roaster. When your'
                       ' roaster reaches your target temperature of '
-                      '${tempCtrl.text}F, press "Stop Preheat."',
+                      '${tempCtrl.text}°F, press "Stop Preheat."',
                   style: RoastAppTheme.materialTheme.textTheme.bodyMedium!
                       .copyWith(fontStyle: FontStyle.italic),
                 ),
               ],
             ),
           ),
-          const Spacer(),
-          const SizedBox(height: 20),
         ],
       );
     }
@@ -167,7 +172,7 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
                 child: TextFormField(
                     controller: tempCtrl,
                     decoration: const InputDecoration(
-                      suffixText: 'F',
+                      suffixText: '°F',
                     ),
                     validator: (str) {
                       if (str == null || int.tryParse(str) == null) {

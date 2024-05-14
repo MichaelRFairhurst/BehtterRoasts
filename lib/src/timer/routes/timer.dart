@@ -118,22 +118,27 @@ class TimerPage extends ConsumerWidget {
     } else if (state == RoastState.preheatDone) {
       body = Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(children: [
-          Text('Caution: roaster is hot!',
-              style: RoastAppTheme.materialTheme.textTheme.titleMedium),
-          const SizedBox(height: 16),
-          const Text('Enter the final preheat temperature you recorded, and'
-              ' then carefully load your beans into the hot roasting drum.'),
-          const SizedBox(height: 16),
-          CheckTempWidget(
-            title: const Text('Enter final preheat temperature'),
-            onSubmit: (temp) {
-              ref
-                  .read(roastTimelineProvider.notifier)
-                  .update((state) => state.copyWith(preheatTemp: temp));
-            },
-          ),
-        ]),
+        child: Column(
+          children: [
+            const Spacer(),
+            Text('Caution: roaster is hot!',
+                style: RoastAppTheme.materialTheme.textTheme.headlineLarge),
+            const Spacer(),
+            const Text('Enter the final preheat temperature you recorded, and'
+                ' then carefully load your beans into the hot roasting drum.'),
+            const Spacer(),
+            CheckTempWidget(
+              title: Text('Enter final preheat temperature:',
+                  style: RoastAppTheme.materialTheme.textTheme.titleSmall),
+              onSubmit: (temp) {
+                ref
+                    .read(roastTimelineProvider.notifier)
+                    .update((state) => state.copyWith(preheatTemp: temp));
+              },
+            ),
+            const Spacer(flex: 3),
+          ],
+        ),
       );
     } else {
       body = BottomStickyScrollView(

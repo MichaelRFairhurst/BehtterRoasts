@@ -17,12 +17,7 @@ class TimeWidget extends ConsumerWidget {
     final state = ref.watch(roastStateProvider);
     final projections = ref.watch(projectionProvider);
 
-    Duration? time;
-    if (state == RoastState.preheating) {
-      time = ref.watch(secondsPreheatProvider).value;
-    } else {
-      time = ref.watch(secondsRoastProvider).value;
-    }
+    Duration? time = ref.watch(secondsRoastProvider).value;
 
     if (state == RoastState.waiting ||
         state == RoastState.preheatDone ||
@@ -94,11 +89,6 @@ class TimeWidget extends ConsumerWidget {
             'Roast Time',
             style: RoastAppTheme.materialTheme.textTheme.labelMedium,
           ),
-        if (state == RoastState.preheating)
-          Text(
-            'Preheat Time',
-            style: RoastAppTheme.materialTheme.textTheme.labelMedium,
-          ),
         TimestampWidget(time ?? Duration.zero,
             style: RoastAppTheme.materialTheme.textTheme.displaySmall
                 ?.copyWith(fontFamily: 'Roboto')),
@@ -166,16 +156,8 @@ class TimeWidget extends ConsumerWidget {
             .update((timeline) => timeline.copyWith(done: now));
         tService.stop();
       };
-    } else if (state == RoastState.preheating) {
-      return () {
-        final preheatService = ref.read(preheatTimerProvider);
-        ref
-            .read(roastTimelineProvider.notifier)
-            .update((state) => state.copyWith(
-                  preheatEnd: preheatService.elapsed()!,
-                ));
-      };
     }
+
     return null;
   }
 
