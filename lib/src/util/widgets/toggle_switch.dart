@@ -241,7 +241,6 @@ class ToggleSwitchDragState extends ChangeNotifier {
           renderChildren.length - draggedIdx, (i) => i + draggedIdx);
     }
 
-    print('here $dragAmount');
     var remainingDrag = dragAmount.abs();
     int prevIdx = targetIndexes.first;
     int lastIdx = targetIndexes.first;
@@ -266,8 +265,6 @@ class ToggleSwitchDragState extends ChangeNotifier {
       targetRightIdx = lastIdx;
       targetDragProgress = renderChildren[prevIdx].size.width + remainingDrag;
     }
-
-    print('here $targetLeftIdx $targetRightIdx $targetDragProgress');
   }
 
   void update() {

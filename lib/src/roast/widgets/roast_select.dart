@@ -46,10 +46,11 @@ class RoastSelectState extends ConsumerState<RoastSelect> {
         if (expand || widget.selectedRoast == null)
           tile(
             title: const Text('(optional)'),
-            subtitle: 'Choose a roast to copy.',
-            leading: Icon(
-              Icons.restart_alt,
+            subtitle: 'Choose a roast to repeat.',
+            leading: SvgPicture.asset(
+              'images/copy_roast3.svg',
               color: RoastAppTheme.materialTheme.inputDecorationTheme.iconColor,
+              width: 24,
             ),
             isHeading: true,
             onTap: () {
@@ -76,12 +77,12 @@ class RoastSelectState extends ConsumerState<RoastSelect> {
     return tile(
       leading: SvgPicture.asset(
         'images/beans.svg',
-        height: isHeading ? 24 : 20,
+        height: isHeading ? 28 : 24,
         color: Theme.of(context).inputDecorationTheme.iconColor,
       ),
       title: Row(
         children: [
-          Text('Roast #${roast.roastNumber} ('),
+          Text('Roast #${roast.roastNumber} (${roast.weightIn}g, '),
           TimestampWidget(timeline.done!),
           const Text(')'),
         ],
@@ -114,7 +115,8 @@ class RoastSelectState extends ConsumerState<RoastSelect> {
       title: title,
       leading: leading,
       subtitle: Text(subtitle),
-      contentPadding: const EdgeInsets.only(left: 12),
+      contentPadding:
+          isHeading ? const EdgeInsets.all(0) : const EdgeInsets.only(left: 12),
       horizontalTitleGap: 0.0,
       trailing: isHeading ? const Icon(Icons.expand_more) : null,
       dense: !isHeading,
@@ -127,7 +129,7 @@ class RoastSelectState extends ConsumerState<RoastSelect> {
       ...roasts.map((roast) => roastTile(roast, false)),
       tile(
         title: const Text('None'),
-        subtitle: 'Do not copy a previous roast.',
+        subtitle: 'Do not repeat a previous roast.',
         onTap: () {
           setState(() {
             expand = false;

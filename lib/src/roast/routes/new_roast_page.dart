@@ -38,18 +38,20 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
     super.initState();
     selectedBean = widget.selectedBean;
     final copy = ref.read(copyOfRoastProvider);
-    copyUpdated(copy);
+    copyUpdated(copy, true);
   }
 
-  void copyUpdated(Roast? copy) {
+  void copyUpdated(Roast? copy, bool firstLoad) {
     if (copy == null) {
       return;
     }
 
     setState(() {
       devel.text = (copy.config.targetDevelopment * 100).toString();
-      weight.text = copy.weightIn.toString();
       tempInterval = copy.config.tempInterval;
+      if (firstLoad) {
+        weight.text = copy.weightIn.toString();
+      }
     });
 
     if (selectedBean == null) {
@@ -66,7 +68,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
   Widget build(BuildContext context) {
     final copy = ref.watch(copyOfRoastProvider);
     ref.listen<Roast?>(
-        copyOfRoastProvider, (previous, next) => copyUpdated(next));
+        copyOfRoastProvider, (previous, next) => copyUpdated(next, false));
     final otherRoasts = selectedBean == null || selectedBean!.id == null
         ? <Roast>[]
         : ref.watch(roastsForBeanProvider(selectedBean!.id!)).value ?? [];
@@ -85,25 +87,29 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: 16.0),
-                    Text(
-                      'Beans:',
-                      style: RoastAppTheme.materialTheme.textTheme.titleMedium,
-                    ),
-                    _beansFormCard(copy),
-                    if (selectedBean != null && selectedBean!.name != '')
-                      Text('Roast ID: ${selectedBean!.name} #$roastNumber',
-                          textAlign: TextAlign.center),
-                    const SizedBox(height: 40),
-                    Text(
-                      'Settings:',
-                      style: RoastAppTheme.materialTheme.textTheme.titleMedium,
-                    ),
-                    _profileFormCard(selectedBean, copy),
-                  ],
+                child: Theme(
+                  data: Theme.of(context)
+                      .copyWith(cardTheme: RoastAppTheme.formCardTheme),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 16.0),
+                      Text(
+                        'Beans:',
+                        style: RoastAppTheme.materialTheme.textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 4),
+                      _beansFormCard(copy),
+                      const SizedBox(height: 40),
+                      Text(
+                        'Profile:',
+                        style: RoastAppTheme.materialTheme.textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 4),
+                      _profileFormCard(selectedBean, copy),
+                      const SizedBox(height: 40),
+                    ],
+                  ),
                 ),
               ),
               SliverFillRemaining(
@@ -179,9 +185,6 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
 
   Widget _beansFormCard(Roast? copy) {
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -203,14 +206,6 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                 ref.read(copyOfRoastProvider.notifier).state = null;
               },
             ),
-            RoastSelect(
-              title: _label('Copy of roast:'),
-              bean: selectedBean,
-              selectedRoast: copy,
-              onChanged: (roast) {
-                ref.read(copyOfRoastProvider.notifier).state = roast;
-              },
-            ),
             _label('Weight (g)'),
             TextFormField(
               controller: weight,
@@ -218,7 +213,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
               decoration: const InputDecoration(
                 suffixText: 'g',
                 border: InputBorder.none,
-                prefixIcon: Icon(Icons.scale),
+                icon: Icon(Icons.scale),
               ),
               validator: (value) {
                 if (double.tryParse(value ?? '') == null) {
@@ -248,13 +243,18 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
 
   Widget _profileFormCard(Bean? bean, Roast? copy) {
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
+            RoastSelect(
+              title: _label('Repeat previous roast:'),
+              bean: selectedBean,
+              selectedRoast: copy,
+              onChanged: (roast) {
+                ref.read(copyOfRoastProvider.notifier).state = roast;
+              },
+            ),
             _label('Target Development (%)'),
             TextFormField(
               controller: devel,
@@ -288,26 +288,6 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                 ),
               ],
             ),
-            /*
-            if (copy != null && bean != null)
-              InputChip(
-                label: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    const Text('Copying '),
-                    Flexible(
-                      child: Text(bean.name, overflow: TextOverflow.ellipsis),
-                    ),
-                    Text(' roast #${copy.roastNumber}'),
-                  ],
-                ),
-                onDeleted: () {
-                  ref.read(copyOfRoastProvider.notifier).state = null;
-                },
-              )
-            else
-              const Text('None'),
-			  */
           ],
         ),
       ),

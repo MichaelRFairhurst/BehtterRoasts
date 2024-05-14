@@ -104,6 +104,17 @@ class RoastAppTheme {
     ),
   );
 
+  static final formCardTheme = CardTheme(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+      side: const BorderSide(
+        color: RoastAppTheme.metalLight,
+      ),
+    ),
+    color: cremaLightest,
+    elevation: 0,
+  );
+
   static final materialTheme = ThemeData.localize(
     ThemeData(
       brightness: Brightness.light,
