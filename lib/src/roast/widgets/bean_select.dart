@@ -89,7 +89,7 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
       children: [
         if (expand || widget.selectedBean == null)
           tile(
-            title: 'Select a bean',
+            title: const Text('Select a bean'),
             leading: ContinentIcon(
               Continent.other,
               height: 24,
@@ -124,12 +124,24 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
 
   Widget beanTile(Bean bean, BeanService beanService, bool isHeading) {
     return tile(
-      leading: ContinentIcon(
-        beanService.continentOf(bean),
-        height: isHeading ? 24 : 20,
-        color: Theme.of(context).inputDecorationTheme.iconColor,
+      leading: Hero(
+        tag: '${bean.name}Icon',
+        child: ContinentIcon(
+          beanService.continentOf(bean),
+          height: isHeading ? 24 : 20,
+          color: Theme.of(context).inputDecorationTheme.iconColor,
+        ),
       ),
-      title: bean.name,
+      title: Hero(
+        tag: bean.name,
+        child: Text(bean.name,
+            style: isHeading
+                ? Theme.of(context).textTheme.titleMedium
+                : Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(fontSize: 13)),
+      ),
       isHeading: isHeading,
       onTap: isHeading
           ? () {
@@ -147,13 +159,13 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
   }
 
   Widget tile({
-    required String title,
+    required Widget title,
     required Widget leading,
     required bool isHeading,
     required void Function() onTap,
   }) {
     return ListTile(
-      title: Text(title),
+      title: title,
       leading: leading,
       contentPadding:
           isHeading ? const EdgeInsets.all(0) : const EdgeInsets.only(left: 12),
@@ -182,7 +194,7 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
           tileColor: RoastAppTheme.lime,
         ),
         child: tile(
-          title: 'Add new bean',
+          title: const Text('Add new bean'),
           leading: continentAddIcon(Continent.other),
           isHeading: false,
           onTap: () {
