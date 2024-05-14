@@ -183,14 +183,15 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
               const Expanded(
                 child: Text('Estimated time:'),
               ),
-              IconButton(
-                icon: const Icon(Icons.remove),
-                onPressed: () {
-                  setState(() {
-                    duration -= const Duration(seconds: 5);
-                  });
-                },
-              ),
+              if (duration > const Duration(seconds: 5))
+                IconButton(
+                  icon: const Icon(Icons.remove),
+                  onPressed: () {
+                    setState(() {
+                      duration -= const Duration(seconds: 5);
+                    });
+                  },
+                ),
               TimestampWidget.twitter(duration),
               IconButton(
                 icon: const Icon(Icons.add),
