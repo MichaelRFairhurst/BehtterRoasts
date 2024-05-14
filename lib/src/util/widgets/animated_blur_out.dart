@@ -17,7 +17,7 @@ class AnimatedBlurOut extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TweenAnimationBuilder<double>(
-      tween: Tween<double>(begin: 1.0, end: blur),
+      tween: Tween<double>(begin: 0.0, end: blur),
       duration: duration,
       builder: (context, value, child) {
         return ImageFiltered(
