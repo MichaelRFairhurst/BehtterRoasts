@@ -63,6 +63,9 @@ class TimedCheckTempWidgetState extends ConsumerState<TimedCheckTempWidget> {
                 child: TimestampWidget(widget.shownTime),
                 value: widget.shownTime,
               ),
+              const ToggleSwitchChild<Duration>(
+                child: SizedBox(width: 4),
+              ),
               ToggleSwitchOption<Duration>(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

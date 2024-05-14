@@ -12,7 +12,6 @@ class ToggleSwitchStyle with _$ToggleSwitchStyle {
     @Default(EdgeInsets.all(3.0)) EdgeInsets padding,
     @Default(EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0))
         EdgeInsets pillPadding,
-    @Default(4.0) double gap,
     @Default(Radius.circular(64.0)) Radius backgroundRadius,
     @Default(Radius.circular(32.0)) Radius pillRadius,
     @Default(Color(0xFF202020)) Color pillShadowColor,

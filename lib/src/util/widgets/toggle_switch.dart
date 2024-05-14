@@ -14,7 +14,7 @@ class ToggleSwitch<T> extends StatefulWidget {
     super.key,
   });
 
-  final List<ToggleSwitchOption<T>> children;
+  final List<ToggleSwitchChild<T>> children;
   final ToggleSwitchStyle style;
   final void Function(T) onToggle;
   final MainAxisAlignment mainAxisAlignment;
@@ -25,12 +25,19 @@ class ToggleSwitch<T> extends StatefulWidget {
   ToggleSwitchState<T> createState() => ToggleSwitchState<T>();
 }
 
-class ToggleSwitchOption<T> {
-  const ToggleSwitchOption({
-    required this.value,
+class ToggleSwitchChild<T> {
+  const ToggleSwitchChild({
     required this.child,
   });
+
   final Widget child;
+}
+
+class ToggleSwitchOption<T> extends ToggleSwitchChild<T> {
+  const ToggleSwitchOption({
+    required this.value,
+    required super.child,
+  });
   final T value;
 }
 
@@ -47,6 +54,11 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
   int selectedIdx = 0;
   ToggleSwitchDragState? dragState;
 
+  List<ToggleSwitchOption<T>> get options =>
+      widget.children.whereType<ToggleSwitchOption<T>>().toList();
+
+  int get selectedChildIdx => widget.children.indexOf(options[selectedIdx]);
+
   @override
   void initState() {
     super.initState();
@@ -62,7 +74,7 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
 
     if (widget.value != null) {
       selectedIdx =
-          widget.children.indexWhere((option) => option.value == widget.value);
+          options.indexWhere((option) => option.value == widget.value);
     }
   }
 
@@ -72,7 +84,7 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
 
     if (widget.value != oldWidget.value) {
       final newSelectedIdx =
-          widget.children.indexWhere((option) => option.value == widget.value);
+          options.indexWhere((option) => option.value == widget.value);
       if (newSelectedIdx != selectedIdx) {
         chooseValue(newSelectedIdx);
       }
@@ -91,18 +103,21 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
           mainAxisAlignment: widget.mainAxisAlignment,
           children: [
             for (var i = 0; i < widget.children.length; ++i)
-              GestureDetector(
-                onTap: () => widget.onToggle(widget.children[i].value),
-                onHorizontalDragStart: (details) =>
-                    onHorizontalDragStart(i, details),
-                onHorizontalDragUpdate: onHorizontalDragUpdate,
-                onHorizontalDragEnd: onHorizontalDragEnd,
-                child: Padding(
-                  padding: pillPadding,
-                  child: widget.children[i].child,
-                ),
-              ),
-            //SizedBox(width: widget.style.gap),
+              if (widget.children[i] is ToggleSwitchOption<T>)
+                GestureDetector(
+                  onTap: () => widget.onToggle(
+                      (widget.children[i] as ToggleSwitchOption<T>).value),
+                  onHorizontalDragStart: (details) =>
+                      onHorizontalDragStart(i, details),
+                  onHorizontalDragUpdate: onHorizontalDragUpdate,
+                  onHorizontalDragEnd: onHorizontalDragEnd,
+                  child: Padding(
+                    padding: pillPadding,
+                    child: widget.children[i].child,
+                  ),
+                )
+              else
+                widget.children[i].child
           ],
         ),
       ),
@@ -116,7 +131,7 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
     }
     return ToggleSwitchPainterNormal(
       context: context,
-      selectedIdx: selectedIdx,
+      selectedChildIdx: selectedChildIdx,
       animation: animationCtrl,
       sizeAnimation: sizeAnimation,
       sizeTween: sizeTween,
@@ -128,7 +143,8 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
 
   void chooseValue(int i, {double? beginSize, double? beginLeft}) {
     final renderRow = _getRenderRow();
-    var renderChild = renderRow.getChildrenAsList()[i];
+    var renderChild =
+        renderRow.getChildrenAsList()[widget.children.indexOf(options[i])];
 
     sizeTween.begin = beginSize ?? sizeAnimation.value;
     positionTween.begin = beginLeft ?? positionAnimation.value;
@@ -168,6 +184,7 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
     final dragState = ToggleSwitchDragState(
       context: context,
       draggedIdx: i,
+      children: widget.children,
     );
 
     dragState.addListener(() {
@@ -175,7 +192,7 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
         setState(() {
           selectedIdx = dragState.selectedIdx;
         });
-        widget.onToggle(widget.children[selectedIdx].value);
+        widget.onToggle(options[selectedIdx].value);
       }
     });
 
@@ -204,7 +221,7 @@ class ToggleSwitchState<T> extends State<ToggleSwitch<T>>
         beginLeft: dragState!.pillLeft,
       );
       animationCtrl.forward();
-      widget.onToggle(widget.children[selectedIdx].value);
+      widget.onToggle(options[selectedIdx].value);
 
       dragState = null;
     }
@@ -215,9 +232,12 @@ class ToggleSwitchDragState extends ChangeNotifier {
   ToggleSwitchDragState({
     required this.draggedIdx,
     required this.context,
+    required this.children,
   }) : selectedIdx = draggedIdx;
 
   final BuildContext context;
+  List<ToggleSwitchChild> children;
+
   int draggedIdx;
   double dragAmount = 0.0;
   int selectedIdx;
@@ -245,6 +265,10 @@ class ToggleSwitchDragState extends ChangeNotifier {
     int prevIdx = targetIndexes.first;
     int lastIdx = targetIndexes.first;
     for (final targetIdx in targetIndexes) {
+      if (children[targetIdx] is! ToggleSwitchOption) {
+        continue;
+      }
+
       prevIdx = lastIdx;
       lastIdx = targetIdx;
       final target = renderChildren[targetIdx];
@@ -288,9 +312,19 @@ class ToggleSwitchDragState extends ChangeNotifier {
 
     pillLeft = position.transform(progress);
     pillWidth = size.transform(progress);
-    selectedIdx = progress < 0.5 ? targetLeftIdx! : targetRightIdx!;
+    setSelectedIdx(progress < 0.5 ? targetLeftIdx! : targetRightIdx!);
 
     notifyListeners();
+  }
+
+  void setSelectedIdx(int childIdx) {
+    var selectedIdx = 0;
+    for (int i = 0; i < childIdx; ++i) {
+      if (children[i] is ToggleSwitchOption) {
+        selectedIdx++;
+      }
+    }
+    this.selectedIdx = selectedIdx;
   }
 
   RenderFlex _getRenderRow() =>
@@ -360,7 +394,7 @@ abstract class ToggleSwitchPainterBase extends CustomPainter {
 class ToggleSwitchPainterNormal extends ToggleSwitchPainterBase {
   ToggleSwitchPainterNormal({
     required super.context,
-    required this.selectedIdx,
+    required this.selectedChildIdx,
     required this.animation,
     required this.sizeAnimation,
     required this.sizeTween,
@@ -369,7 +403,7 @@ class ToggleSwitchPainterNormal extends ToggleSwitchPainterBase {
     required super.style,
   }) : super(repaint: animation);
 
-  final int selectedIdx;
+  final int selectedChildIdx;
   final Animation<double> animation;
   final Animation<double> sizeAnimation;
   final Tween<double> sizeTween;
@@ -380,7 +414,7 @@ class ToggleSwitchPainterNormal extends ToggleSwitchPainterBase {
   double get pillLeft {
     final renderRow = findFlexObj();
     var renderChildren = renderRow.getChildrenAsList();
-    var renderChild = renderChildren[selectedIdx];
+    var renderChild = renderChildren[selectedChildIdx];
 
     final offset = (renderChild.parentData as FlexParentData).offset.dx;
     sizeTween.end = renderChild.size.width;
