@@ -31,7 +31,7 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
 
     if (copyPreheat != null) {
       tempCtrl.text = copyPreheat.temp.toString();
-      duration = copyPreheat.end;
+      duration = roundToFiveSeconds(copyPreheat.end);
     }
   }
 
@@ -250,5 +250,9 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
         ],
       ),
     );
+  }
+
+  Duration roundToFiveSeconds(Duration duration) {
+    return Duration(seconds: (duration.inSeconds / 5).round() * 5);
   }
 }
