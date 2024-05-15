@@ -120,7 +120,7 @@ class RoastSummaryWidget extends StatelessWidget {
               style: RoastAppTheme.roastNotesStyle,
             ),
           ),
-        const SizedBox(height: 30),
+        const Divider(height: 30),
         Padding(
           padding: cellPadding,
           child: Text(

@@ -159,6 +159,7 @@ class RoastCardState extends ConsumerState<RoastCard> {
       children: [
         const Divider(),
         RoastSummaryWidget(summary: summary, showBeanName: false),
+        const SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
           child: Row(

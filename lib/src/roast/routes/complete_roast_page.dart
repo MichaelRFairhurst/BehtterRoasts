@@ -113,7 +113,7 @@ class CompleteRoastPageState extends ConsumerState<CompleteRoastPage> {
               ],
               if (!needsWeightOut)
                 RoastSummaryWidget(summary: ref.watch(roastSummaryProvider)!),
-              const Spacer(),
+              const Spacer(flex: 2),
             ],
           ),
         ),
