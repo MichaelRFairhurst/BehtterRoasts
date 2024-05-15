@@ -1,11 +1,14 @@
 import 'package:behmor_roast/src/config/theme.dart';
+
 import 'package:behmor_roast/src/roast/models/roast_summary.dart';
+import 'package:behmor_roast/src/roast/widgets/phase_chart.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 import 'package:flutter/material.dart';
 
 class RoastSummaryWidget extends StatelessWidget {
   const RoastSummaryWidget({
-    this.cellPadding = const EdgeInsets.all(6.0),
+    this.cellPadding =
+        const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
     this.showBeanName = true,
     required this.summary,
     super.key,
@@ -27,6 +30,7 @@ class RoastSummaryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Table(
           columnWidths: const {
@@ -61,47 +65,10 @@ class RoastSummaryWidget extends StatelessWidget {
             paddedRow(
               children: [
                 const Text('Development:'),
-                phaseDetails(
-                  summary.developmentPhaseTime,
-                  summary.developmentPercent,
-                  extra: '/${formatPercent(summary.developmentPercentTarget)}',
-                ),
-              ],
-            ),
-            paddedRow(
-              children: [
-                const Text('First Crack Phase:'),
-                phaseDetails(
-                  summary.firstCrackPhaseTime,
-                  summary.firstCrackPhasePercent,
-                ),
-              ],
-            ),
-            if (summary.secondCrackPhaseTime != null)
-              paddedRow(
-                children: [
-                  const Text('Second Crack Phase:'),
-                  phaseDetails(
-                    summary.secondCrackPhaseTime!,
-                    summary.secondCrackPhasePercent!,
-                  ),
-                ],
-              ),
-            paddedRow(
-              children: [
-                const Text('Maillard Phase:'),
-                phaseDetails(
-                  summary.maillardPhaseTime,
-                  summary.maillardPhasePercent,
-                ),
-              ],
-            ),
-            paddedRow(
-              children: [
-                const Text('Dry Phase:'),
-                phaseDetails(
-                  summary.dryPhaseTime,
-                  summary.dryPhasePercent,
+                Text(
+                  [summary.developmentPercent, summary.developmentPercentTarget]
+                      .map(formatPercent)
+                      .join(' / '),
                 ),
               ],
             ),
@@ -147,24 +114,18 @@ class RoastSummaryWidget extends StatelessWidget {
               style: RoastAppTheme.roastNotesStyle,
             ),
           ),
+        const SizedBox(height: 30),
+        Padding(
+          padding: cellPadding,
+          child: Text(
+            'Phase breakdown:',
+            style: RoastAppTheme.materialTheme.textTheme.labelMedium,
+          ),
+        ),
+        PhaseChart(summary: summary),
       ],
     );
   }
-
-  Widget phaseDetails(Duration time, double percent, {String extra = ''}) =>
-      RichText(
-        text: TextSpan(
-          children: [
-            WidgetSpan(
-              child: TimestampWidget.twitter(time),
-            ),
-            TextSpan(
-              text: ' (${formatPercent(percent)}$extra)',
-              style: RoastAppTheme.materialTheme.textTheme.bodySmall,
-            ),
-          ],
-        ),
-      );
 
   String formatPercent(double val) => '${(val * 100).toStringAsFixed(1)}%';
 }

@@ -49,6 +49,7 @@ dependencies:
   firebase_auth: ^4.16.0
   flutter_signin_button: ^2.0.0
   flutter_svg: ^1.1.6
+  graphic: ^2.2.1
 
 dev_dependencies:
   flutter_test:
