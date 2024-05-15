@@ -32,6 +32,8 @@ mixin _$RoastSummary {
   Duration get developmentPhaseTime => throw _privateConstructorUsedError;
   double get developmentPercent => throw _privateConstructorUsedError;
   double get developmentPercentTarget => throw _privateConstructorUsedError;
+  double get weightIn => throw _privateConstructorUsedError;
+  double get weightOut => throw _privateConstructorUsedError;
   double get weightLoss => throw _privateConstructorUsedError;
   String? get notes => throw _privateConstructorUsedError;
 
@@ -63,6 +65,8 @@ abstract class $RoastSummaryCopyWith<$Res> {
       Duration developmentPhaseTime,
       double developmentPercent,
       double developmentPercentTarget,
+      double weightIn,
+      double weightOut,
       double weightLoss,
       String? notes});
 }
@@ -96,6 +100,8 @@ class _$RoastSummaryCopyWithImpl<$Res, $Val extends RoastSummary>
     Object? developmentPhaseTime = null,
     Object? developmentPercent = null,
     Object? developmentPercentTarget = null,
+    Object? weightIn = null,
+    Object? weightOut = null,
     Object? weightLoss = null,
     Object? notes = freezed,
   }) {
@@ -164,6 +170,14 @@ class _$RoastSummaryCopyWithImpl<$Res, $Val extends RoastSummary>
           ? _value.developmentPercentTarget
           : developmentPercentTarget // ignore: cast_nullable_to_non_nullable
               as double,
+      weightIn: null == weightIn
+          ? _value.weightIn
+          : weightIn // ignore: cast_nullable_to_non_nullable
+              as double,
+      weightOut: null == weightOut
+          ? _value.weightOut
+          : weightOut // ignore: cast_nullable_to_non_nullable
+              as double,
       weightLoss: null == weightLoss
           ? _value.weightLoss
           : weightLoss // ignore: cast_nullable_to_non_nullable
@@ -201,6 +215,8 @@ abstract class _$$_RoastSummaryCopyWith<$Res>
       Duration developmentPhaseTime,
       double developmentPercent,
       double developmentPercentTarget,
+      double weightIn,
+      double weightOut,
       double weightLoss,
       String? notes});
 }
@@ -232,6 +248,8 @@ class __$$_RoastSummaryCopyWithImpl<$Res>
     Object? developmentPhaseTime = null,
     Object? developmentPercent = null,
     Object? developmentPercentTarget = null,
+    Object? weightIn = null,
+    Object? weightOut = null,
     Object? weightLoss = null,
     Object? notes = freezed,
   }) {
@@ -300,6 +318,14 @@ class __$$_RoastSummaryCopyWithImpl<$Res>
           ? _value.developmentPercentTarget
           : developmentPercentTarget // ignore: cast_nullable_to_non_nullable
               as double,
+      weightIn: null == weightIn
+          ? _value.weightIn
+          : weightIn // ignore: cast_nullable_to_non_nullable
+              as double,
+      weightOut: null == weightOut
+          ? _value.weightOut
+          : weightOut // ignore: cast_nullable_to_non_nullable
+              as double,
       weightLoss: null == weightLoss
           ? _value.weightLoss
           : weightLoss // ignore: cast_nullable_to_non_nullable
@@ -332,6 +358,8 @@ class _$_RoastSummary implements _RoastSummary {
       required this.developmentPhaseTime,
       required this.developmentPercent,
       required this.developmentPercentTarget,
+      required this.weightIn,
+      required this.weightOut,
       required this.weightLoss,
       this.notes});
 
@@ -368,13 +396,17 @@ class _$_RoastSummary implements _RoastSummary {
   @override
   final double developmentPercentTarget;
   @override
+  final double weightIn;
+  @override
+  final double weightOut;
+  @override
   final double weightLoss;
   @override
   final String? notes;
 
   @override
   String toString() {
-    return 'RoastSummary(beanName: $beanName, roastNumber: $roastNumber, totalTime: $totalTime, preheatTime: $preheatTime, preheatGap: $preheatGap, dryPhaseTime: $dryPhaseTime, dryPhasePercent: $dryPhasePercent, maillardPhaseTime: $maillardPhaseTime, maillardPhasePercent: $maillardPhasePercent, firstCrackPhaseTime: $firstCrackPhaseTime, firstCrackPhasePercent: $firstCrackPhasePercent, secondCrackPhaseTime: $secondCrackPhaseTime, secondCrackPhasePercent: $secondCrackPhasePercent, developmentPhaseTime: $developmentPhaseTime, developmentPercent: $developmentPercent, developmentPercentTarget: $developmentPercentTarget, weightLoss: $weightLoss, notes: $notes)';
+    return 'RoastSummary(beanName: $beanName, roastNumber: $roastNumber, totalTime: $totalTime, preheatTime: $preheatTime, preheatGap: $preheatGap, dryPhaseTime: $dryPhaseTime, dryPhasePercent: $dryPhasePercent, maillardPhaseTime: $maillardPhaseTime, maillardPhasePercent: $maillardPhasePercent, firstCrackPhaseTime: $firstCrackPhaseTime, firstCrackPhasePercent: $firstCrackPhasePercent, secondCrackPhaseTime: $secondCrackPhaseTime, secondCrackPhasePercent: $secondCrackPhasePercent, developmentPhaseTime: $developmentPhaseTime, developmentPercent: $developmentPercent, developmentPercentTarget: $developmentPercentTarget, weightIn: $weightIn, weightOut: $weightOut, weightLoss: $weightLoss, notes: $notes)';
   }
 
   @override
@@ -416,32 +448,39 @@ class _$_RoastSummary implements _RoastSummary {
             (identical(
                     other.developmentPercentTarget, developmentPercentTarget) ||
                 other.developmentPercentTarget == developmentPercentTarget) &&
+            (identical(other.weightIn, weightIn) ||
+                other.weightIn == weightIn) &&
+            (identical(other.weightOut, weightOut) ||
+                other.weightOut == weightOut) &&
             (identical(other.weightLoss, weightLoss) ||
                 other.weightLoss == weightLoss) &&
             (identical(other.notes, notes) || other.notes == notes));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      beanName,
-      roastNumber,
-      totalTime,
-      preheatTime,
-      preheatGap,
-      dryPhaseTime,
-      dryPhasePercent,
-      maillardPhaseTime,
-      maillardPhasePercent,
-      firstCrackPhaseTime,
-      firstCrackPhasePercent,
-      secondCrackPhaseTime,
-      secondCrackPhasePercent,
-      developmentPhaseTime,
-      developmentPercent,
-      developmentPercentTarget,
-      weightLoss,
-      notes);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        beanName,
+        roastNumber,
+        totalTime,
+        preheatTime,
+        preheatGap,
+        dryPhaseTime,
+        dryPhasePercent,
+        maillardPhaseTime,
+        maillardPhasePercent,
+        firstCrackPhaseTime,
+        firstCrackPhasePercent,
+        secondCrackPhaseTime,
+        secondCrackPhasePercent,
+        developmentPhaseTime,
+        developmentPercent,
+        developmentPercentTarget,
+        weightIn,
+        weightOut,
+        weightLoss,
+        notes
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -468,6 +507,8 @@ abstract class _RoastSummary implements RoastSummary {
       required final Duration developmentPhaseTime,
       required final double developmentPercent,
       required final double developmentPercentTarget,
+      required final double weightIn,
+      required final double weightOut,
       required final double weightLoss,
       final String? notes}) = _$_RoastSummary;
 
@@ -503,6 +544,10 @@ abstract class _RoastSummary implements RoastSummary {
   double get developmentPercent;
   @override
   double get developmentPercentTarget;
+  @override
+  double get weightIn;
+  @override
+  double get weightOut;
   @override
   double get weightLoss;
   @override
