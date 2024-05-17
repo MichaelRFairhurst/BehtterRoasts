@@ -1,5 +1,7 @@
+import 'package:behmor_roast/src/chart/temp_chart.dart';
 import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/config/theme.dart';
+import 'package:behmor_roast/src/instructions/providers.dart';
 import 'package:behmor_roast/src/instructions/widgets/instructions_widget.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
@@ -33,6 +35,7 @@ class TimerPage extends ConsumerWidget {
     final showTempInputTime = ref.watch(showTempInputTimeProvider);
     final alerts = ref.watch(alertsProvider);
     final logs = ref.watch(roastLogsProvider);
+    final copyLogs = ref.watch(roastLogsCopyProvider);
     final tips = ref.watch(tipsProvider);
     final copyingRoast = ref.watch(copyOfRoastProvider);
 
@@ -145,6 +148,11 @@ class TimerPage extends ConsumerWidget {
         children: [
           if (showRoasterControls)
             const SizedBox(height: roasterControlsHeight),
+          TempChart(
+            logs: logs,
+            copyLogs: copyLogs,
+            isLive: true,
+          ),
           TempLogWidget(
               logs: logs, editable: true, isDiff: copyingRoast != null),
           const ProjectionsWidget(),

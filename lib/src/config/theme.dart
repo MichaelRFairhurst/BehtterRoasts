@@ -8,6 +8,7 @@ class RoastAppTheme {
   static const lilacDark = Color(0xFF6E4A94);
   static const indigo = Color(0xFFACBEE3);
   static const indigoDark = Color(0xFF517A8F);
+  static const cremaDark = Color(0xFFB8A89C);
   static const crema = Color(0xFFDED8D3);
   static const cremaLight = Color(0xFFFAF5F0);
   static const cremaLightest = Color(0xFFFFFBF8);

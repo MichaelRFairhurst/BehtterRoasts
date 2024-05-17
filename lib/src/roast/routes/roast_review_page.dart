@@ -1,8 +1,10 @@
+import 'package:behmor_roast/src/chart/temp_chart.dart';
 import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/services/roast_summary_service.dart';
 import 'package:behmor_roast/src/roast/widgets/roast_summary_widget.dart';
+import 'package:behmor_roast/src/roast/widgets/temp_graph_widget.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/util/logo_title.dart';
@@ -74,9 +76,27 @@ class RoastReviewPage extends ConsumerWidget {
                       showBeanName: false,
                     ),
                   ),
+                  TempChart(
+                    logs: roastLogService.aggregate(
+                      roast.toTimeline(),
+                      copy: copy?.toTimeline(),
+                    ),
+                    copyLogs: copy == null
+                        ? null
+                        : roastLogService.aggregate(copy.toTimeline()),
+                    isLive: false,
+                  ),
+                  const SizedBox(height: 20),
+                  //TempGraphWidget(
+                  //  logs: roastLogService.aggregate(
+                  //    roast.toTimeline(),
+                  //    copy: copy?.toTimeline(),
+                  //  ),
+                  //),
                   TempLogWidget(
                     logs: roastLogService.aggregate(
                       roast.toTimeline(),
+                      copy: copy?.toTimeline(),
                     ),
                   ),
                 ],
