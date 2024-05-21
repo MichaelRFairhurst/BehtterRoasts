@@ -15,34 +15,6 @@ class RoastLogService {
         ? null
         : RoastProfileService().iterateProfile(copy.rawLogs);
 
-    for (final log in logs) {
-      if (log is TempLog) {
-        if (previousTemp == null) {
-          result.add(RoastLog(
-              time: log.time,
-              temp: log.temp,
-              tempDiff: copyTempIterator?.getTempDiff(log)));
-        } else {
-          final duration = log.time - previousTemp.time;
-          final rise = log.temp - previousTemp.temp;
-          result.add(RoastLog(
-            time: log.time,
-            temp: log.temp,
-            rateOfRise: rise / (duration.inMilliseconds / 1000.0 / 60.0),
-            tempDiff: copyTempIterator?.getTempDiff(log),
-          ));
-        }
-        previousTemp = log;
-      }
-
-      if (log is ControlLog) {
-        result.add(RoastLog(
-            time: log.time,
-            control: log.control,
-            timeDiff: log.instructionTimeDiff));
-      }
-    }
-
     if (timeline.preheatStart != null && timeline.preheatEnd != null) {
       final preheatGap = timeline.preheatGap;
       if (preheatGap == null) {
@@ -51,10 +23,45 @@ class RoastLogService {
             temp: timeline.preheatTemp,
             phase: RoastPhase.preheat));
       } else {
+        final time = preheatGap * -1;
         result.add(RoastLog(
-            time: preheatGap * -1,
-            temp: timeline.preheatTemp,
-            phase: RoastPhase.preheat));
+          time: time,
+          temp: timeline.preheatTemp,
+          phase: RoastPhase.preheat,
+        ));
+
+        previousTemp = TempLog(
+          time: time,
+          temp: timeline.preheatTemp!,
+        );
+      }
+    }
+
+    for (final log in logs) {
+      if (log is TempLog) {
+        final double ror;
+        if (previousTemp == null) {
+          ror = 0.0;
+        } else {
+          final duration = log.time - previousTemp.time;
+          final rise = log.temp - previousTemp.temp;
+          ror = rise / (duration.inMilliseconds / 1000.0 / 60.0);
+        }
+
+        result.add(RoastLog(
+          time: log.time,
+          temp: log.temp,
+          rateOfRise: ror,
+          tempDiff: copyTempIterator?.getTempDiff(log),
+        ));
+        previousTemp = log;
+      }
+
+      if (log is ControlLog) {
+        result.add(RoastLog(
+            time: log.time,
+            control: log.control,
+            timeDiff: log.instructionTimeDiff));
       }
     }
 
