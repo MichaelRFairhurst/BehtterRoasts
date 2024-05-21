@@ -376,7 +376,7 @@ class TempChartPainter extends CustomPainter {
     double? yPrev;
     for (final log in logs) {
       final attr = attribute(log);
-      if (attr == null) {
+      if (attr == null || log.time.isNegative) {
         continue;
       }
 
@@ -387,7 +387,8 @@ class TempChartPainter extends CustomPainter {
         final slope = (y - yPrev) / (x - xPrev);
         slopes.add(slope);
         if (timeRange.inMilliseconds < log.time.inMilliseconds) {
-          offsets.add(Offset(region.width, yPrev + slope * (x - xPrev)));
+          offsets.add(
+              Offset(region.width, yPrev + slope * (region.width - xPrev)));
           break;
         }
       }
