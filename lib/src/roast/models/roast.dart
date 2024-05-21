@@ -60,6 +60,7 @@ class Roast with _$Roast {
       rawLogs: [...tempLogs, ...controlLogs],
       preheatStart: preheat?.start,
       preheatEnd: preheat?.end,
+      preheatTemp: preheat?.temp,
       startTime: roasted,
       dryEnd: dryEnd,
       firstCrackStart: firstCrackStart,
