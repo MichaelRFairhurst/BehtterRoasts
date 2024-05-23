@@ -25,6 +25,10 @@ class ContinentIcon extends StatelessWidget {
     switch (continent) {
       case Continent.africa:
         return 'images/africa.svg';
+      case Continent.asia:
+        return 'images/asia.svg';
+      case Continent.indonesia:
+        return 'images/indonesia2.svg';
       case Continent.southAmerica:
         return 'images/south_america.svg';
       case Continent.centralAmerica:
