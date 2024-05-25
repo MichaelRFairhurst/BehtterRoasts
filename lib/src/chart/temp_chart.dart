@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 import 'package:behmor_roast/src/chart/widgets/legend.dart';
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
@@ -8,6 +9,7 @@ import 'package:behmor_roast/src/timer/services/timer_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class TempChart extends ConsumerStatefulWidget {
   const TempChart({
@@ -25,7 +27,7 @@ class TempChart extends ConsumerStatefulWidget {
   TempChartState createState() => TempChartState();
 }
 
-class ElapsedListenable extends ChangeNotifier {
+class ChartListenable extends ChangeNotifier {
   Duration _timeRangeEnd = Duration.zero;
 
   Duration _elapsed = Duration.zero;
@@ -39,6 +41,9 @@ class ElapsedListenable extends ChangeNotifier {
     temp30s: null,
     temp60s: null,
   );
+
+  DrawableRoot? _dryEndSvg;
+  DrawableRoot? _firstCrackSvg;
 
   Duration get timeRangeEnd => _timeRangeEnd;
 
@@ -60,12 +65,26 @@ class ElapsedListenable extends ChangeNotifier {
     _projection = val;
     notifyListeners();
   }
+
+  DrawableRoot? get dryEndSvg => _dryEndSvg;
+
+  set dryEndSvg(DrawableRoot? svg) {
+    _dryEndSvg = svg;
+    notifyListeners();
+  }
+
+  DrawableRoot? get firstCrackSvg => _firstCrackSvg;
+
+  set firstCrackSvg(DrawableRoot? svg) {
+    _firstCrackSvg = svg;
+    notifyListeners();
+  }
 }
 
 class TempChartState extends ConsumerState<TempChart>
     with TickerProviderStateMixin {
   //late final AnimationController controller;
-  final elapsed = ElapsedListenable();
+  final elapsed = ChartListenable();
   late final Ticker ticker;
   late final TimerService timerService;
 
@@ -81,6 +100,9 @@ class TempChartState extends ConsumerState<TempChart>
     } else {
       elapsed.timeRangeEnd = widget.logs.last.time;
     }
+
+    loadSvg((d) => elapsed.dryEndSvg = d, 'images/dry.svg');
+    loadSvg((d) => elapsed.firstCrackSvg = d, 'images/crack.svg');
   }
 
   @override
@@ -99,6 +121,11 @@ class TempChartState extends ConsumerState<TempChart>
       elapsed.timeRangeEnd = newElapsed + const Duration(minutes: 1);
       elapsed.elapsed = newElapsed;
     }
+  }
+
+  void loadSvg(void Function(DrawableRoot?) setter, String path) async {
+    setter(await svg.fromSvgString(
+        await DefaultAssetBundle.of(context).loadString(path), path));
   }
 
   @override
@@ -183,7 +210,7 @@ class TempChartPainter extends CustomPainter {
     required this.copyLogs,
   }) : super(repaint: elapsed);
 
-  final ElapsedListenable elapsed;
+  final ChartListenable elapsed;
   final List<RoastLog> logs;
   final List<RoastLog>? copyLogs;
   final tempRange = 335.0;
@@ -203,8 +230,9 @@ class TempChartPainter extends CustomPainter {
 
     drawYLabels(canvas, graphicRegion);
     drawXLabels(canvas, graphicRegion);
+    drawPhaseTicks(canvas, graphicRegion);
 
-    paintRor(canvas, graphicRegion);
+    drawRor(canvas, graphicRegion);
 
     if (copyLogs != null) {
       final copyLinePath =
@@ -289,7 +317,7 @@ class TempChartPainter extends CustomPainter {
     }
   }
 
-  void paintRor(Canvas canvas, Rect graphicRegion) {
+  void drawRor(Canvas canvas, Rect graphicRegion) {
     final rorPositiveLinePath =
         buildLinePath(logs, graphicRegion, (log) => log.rateOfRise, tempRange);
 
@@ -320,6 +348,43 @@ class TempChartPainter extends CustomPainter {
             end: Alignment.bottomCenter,
           ).createShader(rorPositiveLinePath.getBounds())
           ..style = PaintingStyle.fill);
+  }
+
+  void drawPhaseTicks(Canvas canvas, Rect graphicRegion) {
+    final timeScale = graphicRegion.width / timeRange.inMilliseconds;
+
+    for (final log in logs) {
+      final phase = log.phase;
+      if (phase == null) {
+        continue;
+      }
+      final x = log.time.inMilliseconds * timeScale;
+      canvas.drawLine(
+          Offset(graphicRegion.left + x, graphicRegion.top),
+          Offset(graphicRegion.left + x, graphicRegion.bottom),
+          Paint()..color = RoastAppTheme.metal);
+      DrawableRoot? svg;
+      switch (phase) {
+        case RoastPhase.firstCrackStart:
+          svg = elapsed.firstCrackSvg;
+          break;
+        case RoastPhase.dryEnd:
+          svg = elapsed.dryEndSvg;
+          break;
+        default:
+      }
+
+      if (svg != null) {
+        canvas.save();
+        canvas.translate(graphicRegion.left + x - 8,
+            graphicRegion.top + graphicRegion.height / 2 - 8);
+        canvas.drawPicture(svg.toPicture(
+            size: const Size(16, 16),
+            colorFilter: const ColorFilter.mode(
+                RoastAppTheme.capuccinoLightest, BlendMode.srcIn)));
+        canvas.restore();
+      }
+    }
   }
 
   void drawLineAreaGradient(Canvas canvas, Path path, Rect region, Color color,
