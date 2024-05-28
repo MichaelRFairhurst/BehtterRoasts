@@ -6,6 +6,7 @@ import 'package:behmor_roast/src/roast/models/roast_log.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/timer/services/timer_service.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,6 +45,7 @@ class ChartListenable extends ChangeNotifier {
 
   DrawableRoot? _dryEndSvg;
   DrawableRoot? _firstCrackSvg;
+  DrawableRoot? _secondCrackSvg;
 
   Duration get timeRangeEnd => _timeRangeEnd;
 
@@ -79,6 +81,13 @@ class ChartListenable extends ChangeNotifier {
     _firstCrackSvg = svg;
     notifyListeners();
   }
+
+  DrawableRoot? get secondCrackSvg => _secondCrackSvg;
+
+  set secondCrackSvg(DrawableRoot? svg) {
+    _secondCrackSvg = svg;
+    notifyListeners();
+  }
 }
 
 class TempChartState extends ConsumerState<TempChart>
@@ -103,12 +112,15 @@ class TempChartState extends ConsumerState<TempChart>
 
     loadSvg((d) => elapsed.dryEndSvg = d, 'images/dry.svg');
     loadSvg((d) => elapsed.firstCrackSvg = d, 'images/crack.svg');
+    loadSvg((d) => elapsed.secondCrackSvg = d, 'images/2nd_crack.svg');
   }
 
   @override
   void dispose() {
-    ticker.dispose();
     elapsed.dispose();
+    if (widget.isLive) {
+      ticker.dispose();
+    }
     super.dispose();
   }
 
@@ -232,6 +244,9 @@ class TempChartPainter extends CustomPainter {
     drawXLabels(canvas, graphicRegion);
     drawPhaseTicks(canvas, graphicRegion);
 
+    final tempLinePath = buildTempLinePath(graphicRegion);
+
+    drawFirstCrackRange(canvas, graphicRegion, tempLinePath);
     drawRor(canvas, graphicRegion);
 
     if (copyLogs != null) {
@@ -242,7 +257,6 @@ class TempChartPainter extends CustomPainter {
           clip: true);
     }
 
-    final tempLinePath = buildTempLinePath(graphicRegion);
     drawLineAreaGradient(
         canvas, tempLinePath, graphicRegion, RoastAppTheme.errorColor);
 
@@ -358,15 +372,16 @@ class TempChartPainter extends CustomPainter {
       if (phase == null) {
         continue;
       }
-      final x = log.time.inMilliseconds * timeScale;
-      canvas.drawLine(
-          Offset(graphicRegion.left + x, graphicRegion.top),
-          Offset(graphicRegion.left + x, graphicRegion.bottom),
-          Paint()..color = RoastAppTheme.metal);
+      final x = graphicRegion.left + log.time.inMilliseconds * timeScale;
+      final paint = Paint()..color = RoastAppTheme.metal;
       DrawableRoot? svg;
       switch (phase) {
         case RoastPhase.firstCrackStart:
-          svg = elapsed.firstCrackSvg;
+        case RoastPhase.firstCrackEnd:
+          return;
+
+        case RoastPhase.secondCrackStart:
+          svg = elapsed.secondCrackSvg;
           break;
         case RoastPhase.dryEnd:
           svg = elapsed.dryEndSvg;
@@ -376,15 +391,82 @@ class TempChartPainter extends CustomPainter {
 
       if (svg != null) {
         canvas.save();
-        canvas.translate(graphicRegion.left + x - 8,
-            graphicRegion.top + graphicRegion.height / 2 - 8);
+        canvas.translate(
+            x - 8, graphicRegion.top + graphicRegion.height / 2 - 8);
         canvas.drawPicture(svg.toPicture(
             size: const Size(16, 16),
             colorFilter: const ColorFilter.mode(
                 RoastAppTheme.capuccinoLightest, BlendMode.srcIn)));
         canvas.restore();
+
+        canvas.drawLine(
+            Offset(x, graphicRegion.bottom - graphicRegion.height / 2 + 16),
+            Offset(x, graphicRegion.bottom),
+            paint);
+        canvas.drawLine(
+            Offset(x, graphicRegion.top + graphicRegion.height / 2 - 16),
+            Offset(x, graphicRegion.top),
+            paint);
+      } else {
+        canvas.drawLine(Offset(x, graphicRegion.top),
+            Offset(x, graphicRegion.bottom), paint);
       }
     }
+  }
+
+  void drawFirstCrackRange(
+      Canvas canvas, Rect graphicRegion, Path tempLinePath) {
+    final timeScale = graphicRegion.width / timeRange.inMilliseconds;
+
+    final start =
+        logs.firstWhereOrNull((log) => log.phase == RoastPhase.firstCrackStart);
+    final end =
+        logs.firstWhereOrNull((log) => log.phase == RoastPhase.firstCrackEnd);
+    if (start == null) {
+      return;
+    }
+
+    final Duration endTime;
+	if (end != null && end.time != start.time) {
+	  endTime = end.time;
+	} else {
+	  endTime = elapsed.elapsed;
+	}
+
+    final xMin = graphicRegion.left + start.time.inMilliseconds * timeScale;
+    final xMax = graphicRegion.left + endTime.inMilliseconds * timeScale;
+    final svg = elapsed.firstCrackSvg;
+
+    final tempPathPlus = Path()..addPath(tempLinePath, const Offset(0, 0));
+    final projection = projectionPoint(graphicRegion);
+    if (projection != null) {
+      tempPathPlus.lineTo(projection.dx, projection.dy);
+    }
+
+    final tempArea = completeArea(tempPathPlus, graphicRegion, clip: false);
+    final firstCrackArea = Path.combine(
+      PathOperation.intersect,
+      tempArea,
+      Path()
+        ..addRect(
+            Rect.fromLTRB(xMin, graphicRegion.top, xMax, graphicRegion.bottom)),
+    );
+
+    canvas.drawPath(
+        firstCrackArea, Paint()..color = RoastAppTheme.metal.withOpacity(0.15));
+
+    if (svg == null) {
+      return;
+    }
+
+    canvas.save();
+    canvas.translate((xMin + xMax) / 2 - 8,
+        graphicRegion.top + graphicRegion.height / 2 - 8);
+    canvas.drawPicture(svg.toPicture(
+        size: const Size(16, 16),
+        colorFilter: const ColorFilter.mode(
+            RoastAppTheme.capuccinoLightest, BlendMode.srcIn)));
+    canvas.restore();
   }
 
   void drawLineAreaGradient(Canvas canvas, Path path, Rect region, Color color,
@@ -414,8 +496,21 @@ class TempChartPainter extends CustomPainter {
     return buildLinePath(logs, region, (log) => log.temp, tempRange);
   }
 
-  Path buildProjectionPath(Rect region) {
+  Offset? projectionPoint(Rect region) {
     if (elapsed.projection.currentTemp == null) {
+      return null;
+    }
+
+    final timeScale = region.width / timeRange.inMilliseconds;
+    final tempScale = region.height / tempRange;
+    final endX = elapsed.elapsed.inMilliseconds * timeScale;
+    final endY = elapsed.projection.currentTemp! * tempScale;
+    return Offset(region.left + endX, region.bottom - endY);
+  }
+
+  Path buildProjectionPath(Rect region) {
+    final endPoint = projectionPoint(region);
+    if (endPoint == null) {
       return Path();
     }
 
@@ -424,10 +519,8 @@ class TempChartPainter extends CustomPainter {
     final lastLog = logs.where((l) => l.temp != null).last;
     final startX = lastLog.time.inMilliseconds * timeScale;
     final startY = lastLog.temp! * tempScale;
-    final endX = elapsed.elapsed.inMilliseconds * timeScale;
-    final endY = elapsed.projection.currentTemp! * tempScale;
-    return dottedLine(region.left + startX, region.bottom - startY,
-        region.left + endX, region.bottom - endY, 2);
+    return dottedLine(region.left + startX, region.bottom - startY, endPoint.dx,
+        endPoint.dy, 2);
   }
 
   Path buildLinePath(List<RoastLog> logs, Rect region,
