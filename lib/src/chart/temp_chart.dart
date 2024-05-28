@@ -377,6 +377,7 @@ class TempChartPainter extends CustomPainter {
       final paint = Paint()..color = RoastAppTheme.metal;
       DrawableRoot? svg;
       switch (phase) {
+		case RoastPhase.preheat:
         case RoastPhase.firstCrackStart:
         case RoastPhase.firstCrackEnd:
           return;
