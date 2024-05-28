@@ -40,8 +40,9 @@ class AlertService {
       ));
     }
 
-    if (timeToOverheat != null) {
-      final severity = timeToOverheat < const Duration(seconds: 60)
+    if (timeToOverheat != null &&
+        timeToOverheat < const Duration(seconds: 90)) {
+      final severity = timeToOverheat < const Duration(seconds: 45)
           ? Severity.warning
           : Severity.alert;
       results.add(Alert(
