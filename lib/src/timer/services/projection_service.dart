@@ -25,7 +25,7 @@ class ProjectionService {
         .toList();
     final phaseLogs = roastLogs.where((log) => log.phase != null).toList();
 
-    if (elapsed != null && tempLogs.length > 1) {
+    if (elapsed != null && tempLogs.isNotEmpty) {
       final temp = tempLogs.last.temp!;
       final ror = tempLogs.last.rateOfRise!;
       final lastTime = tempLogs.last.time;

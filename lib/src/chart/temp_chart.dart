@@ -258,7 +258,8 @@ class TempChartPainter extends CustomPainter {
     }
 
     drawLineAreaGradient(
-        canvas, tempLinePath, graphicRegion, RoastAppTheme.errorColor);
+        canvas, tempLinePath, graphicRegion, RoastAppTheme.errorColor,
+        extraOffset: projectionPoint(graphicRegion));
 
     final projectionPath = buildProjectionPath(graphicRegion);
 
@@ -427,11 +428,11 @@ class TempChartPainter extends CustomPainter {
     }
 
     final Duration endTime;
-	if (end != null && end.time != start.time) {
-	  endTime = end.time;
-	} else {
-	  endTime = elapsed.elapsed;
-	}
+    if (end != null && end.time != start.time) {
+      endTime = end.time;
+    } else {
+      endTime = elapsed.elapsed;
+    }
 
     final xMin = graphicRegion.left + start.time.inMilliseconds * timeScale;
     final xMax = graphicRegion.left + endTime.inMilliseconds * timeScale;
@@ -470,7 +471,7 @@ class TempChartPainter extends CustomPainter {
   }
 
   void drawLineAreaGradient(Canvas canvas, Path path, Rect region, Color color,
-      {bool clip = false}) {
+      {bool clip = false, Offset? extraOffset}) {
     canvas.drawPath(
         path,
         Paint()
@@ -478,8 +479,20 @@ class TempChartPainter extends CustomPainter {
           ..strokeWidth = 2
           ..style = PaintingStyle.stroke);
 
+    final areaBasePath;
+    if (extraOffset != null) {
+      areaBasePath = Path()
+        ..addPath(
+          path,
+          const Offset(0, 0),
+        )
+        ..lineTo(extraOffset.dx, extraOffset.dy);
+    } else {
+      areaBasePath = path;
+    }
+
     canvas.drawPath(
-        completeArea(path, region, clip: clip),
+        completeArea(areaBasePath, region, clip: clip),
         Paint()
           ..shader = LinearGradient(
             colors: [
