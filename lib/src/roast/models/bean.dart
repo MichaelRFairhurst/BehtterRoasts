@@ -7,6 +7,8 @@ enum Continent {
   africa,
   southAmerica,
   centralAmerica,
+  asia,
+  indonesia,
   other,
 }
 

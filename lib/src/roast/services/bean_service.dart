@@ -30,6 +30,44 @@ class BeanService {
     caseSensitive: false,
   );
 
+  final asiaRegex = RegExp(
+    <String>{
+      'asia',
+      'cambodia',
+      'china',
+      'india',
+      'laos',
+      'myanmar',
+      'nepal',
+      'sri lanka',
+      'srilanka',
+      'thailand',
+      'vietnam',
+    }.map((s) => '($s)').join('|'),
+    caseSensitive: false,
+  );
+
+  final indonesiaRegex = RegExp(
+    <String>{
+      'indonesia',
+      'aceh',
+      'bali',
+      'bengkulu',
+      'celebes',
+      'flores',
+      'guinea',
+      'jambi',
+      'java',
+      'lampung',
+      'mandheling',
+      'sulawesi',
+      'sumatra',
+      'timor',
+      'toraja',
+    }.map((s) => '($s)').join('|'),
+    caseSensitive: false,
+  );
+
   final southAmericaRegex = RegExp(
     <String>{
       'south america',
@@ -88,6 +126,10 @@ class BeanService {
   Continent continentOf(Bean bean) {
     if (africaRegex.hasMatch(bean.name)) {
       return Continent.africa;
+    } else if (asiaRegex.hasMatch(bean.name)) {
+      return Continent.asia;
+    } else if (indonesiaRegex.hasMatch(bean.name)) {
+      return Continent.indonesia;
     } else if (southAmericaRegex.hasMatch(bean.name)) {
       return Continent.southAmerica;
     } else if (centralAmericaRegex.hasMatch(bean.name)) {
