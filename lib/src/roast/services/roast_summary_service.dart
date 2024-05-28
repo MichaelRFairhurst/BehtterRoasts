@@ -6,12 +6,28 @@ class RoastSummaryService {
   RoastSummary summarize(Roast roast, Bean bean) {
     final timeline = roast.toTimeline();
     final totalTime = timeline.done!;
-    final dryPhaseTime = timeline.dryEnd!;
-    final maillardPhaseTime = timeline.firstCrackStart! - dryPhaseTime;
-    // TODO: Should this do something different when first crack is last crack?
-    final firstCrackPhaseTime =
-        timeline.firstCrackEnd! - timeline.firstCrackStart!;
-    final developmentPhaseTime = totalTime - timeline.firstCrackEnd!;
+    final dryPhaseTime = timeline.dryEnd ?? totalTime;
+	Duration? maillardPhaseTime;
+	double? maillardPhasePercent;
+	if (timeline.dryEnd != null) {
+	  maillardPhaseTime = (timeline.firstCrackStart ?? totalTime) - dryPhaseTime;
+      maillardPhasePercent = maillardPhaseTime.inMilliseconds / totalTime.inMilliseconds;
+	}
+
+    Duration? firstCrackPhaseTime;
+	double? firstCrackPhasePercent;
+	Duration? developmentPhaseTime;
+	double? developmentPercent;
+    if (timeline.firstCrackStart != null && timeline.firstCrackEnd != null) {
+	  firstCrackPhaseTime =
+		  timeline.firstCrackEnd! - timeline.firstCrackStart!;
+          firstCrackPhasePercent = firstCrackPhaseTime.inMilliseconds / totalTime.inMilliseconds;
+	  developmentPhaseTime = totalTime - timeline.firstCrackEnd!;
+	  // Caution: Due to weird coffee terminology, development percent is NOT
+	  // the percentage of the time in the development phase. It is time since
+	  // first crack start.
+	  developmentPercent = (totalTime - timeline.firstCrackStart!).inMilliseconds / totalTime.inMilliseconds;
+	}
 
     Duration? secondCrackPhaseTime;
     double? secondCrackPhasePercent;
@@ -30,16 +46,13 @@ class RoastSummaryService {
       dryPhaseTime: dryPhaseTime,
       dryPhasePercent: dryPhaseTime.inMilliseconds / totalTime.inMilliseconds,
       maillardPhaseTime: maillardPhaseTime,
-      maillardPhasePercent:
-          maillardPhaseTime.inMilliseconds / totalTime.inMilliseconds,
+      maillardPhasePercent: maillardPhasePercent,
       firstCrackPhaseTime: firstCrackPhaseTime,
-      firstCrackPhasePercent:
-          firstCrackPhaseTime.inMilliseconds / totalTime.inMilliseconds,
+      firstCrackPhasePercent: firstCrackPhasePercent,
       secondCrackPhaseTime: secondCrackPhaseTime,
       secondCrackPhasePercent: secondCrackPhasePercent,
       developmentPhaseTime: developmentPhaseTime,
-      developmentPercent:
-          developmentPhaseTime.inMilliseconds / totalTime.inMilliseconds,
+      developmentPercent: developmentPercent ?? 0.0,
       developmentPercentTarget: roast.config.targetDevelopment,
       weightIn: roast.weightIn,
       weightOut: roast.weightOut,

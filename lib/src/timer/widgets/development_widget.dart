@@ -50,15 +50,15 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget>
       ];
       progress = 0;
     } else {
-      final firstCrackEnd = timeline.firstCrackEnd;
-      if (firstCrackEnd == null) {
+      final firstCrackStart = timeline.firstCrackStart;
+      if (firstCrackStart == null) {
         innerParts = [
           const Text('Waiting for first crack.', textAlign: TextAlign.center)
         ];
         progress = 0;
       } else {
         final development =
-            (time! - firstCrackEnd).inMilliseconds / time!.inMilliseconds;
+            (time! - firstCrackStart).inMilliseconds / time!.inMilliseconds;
 
         final develFmt = (development * 100).toStringAsFixed(1);
 

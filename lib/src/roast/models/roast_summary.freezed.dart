@@ -23,13 +23,13 @@ mixin _$RoastSummary {
   Duration? get preheatGap => throw _privateConstructorUsedError;
   Duration get dryPhaseTime => throw _privateConstructorUsedError;
   double get dryPhasePercent => throw _privateConstructorUsedError;
-  Duration get maillardPhaseTime => throw _privateConstructorUsedError;
-  double get maillardPhasePercent => throw _privateConstructorUsedError;
-  Duration get firstCrackPhaseTime => throw _privateConstructorUsedError;
-  double get firstCrackPhasePercent => throw _privateConstructorUsedError;
+  Duration? get maillardPhaseTime => throw _privateConstructorUsedError;
+  double? get maillardPhasePercent => throw _privateConstructorUsedError;
+  Duration? get firstCrackPhaseTime => throw _privateConstructorUsedError;
+  double? get firstCrackPhasePercent => throw _privateConstructorUsedError;
   Duration? get secondCrackPhaseTime => throw _privateConstructorUsedError;
   double? get secondCrackPhasePercent => throw _privateConstructorUsedError;
-  Duration get developmentPhaseTime => throw _privateConstructorUsedError;
+  Duration? get developmentPhaseTime => throw _privateConstructorUsedError;
   double get developmentPercent => throw _privateConstructorUsedError;
   double get developmentPercentTarget => throw _privateConstructorUsedError;
   double get weightIn => throw _privateConstructorUsedError;
@@ -56,13 +56,13 @@ abstract class $RoastSummaryCopyWith<$Res> {
       Duration? preheatGap,
       Duration dryPhaseTime,
       double dryPhasePercent,
-      Duration maillardPhaseTime,
-      double maillardPhasePercent,
-      Duration firstCrackPhaseTime,
-      double firstCrackPhasePercent,
+      Duration? maillardPhaseTime,
+      double? maillardPhasePercent,
+      Duration? firstCrackPhaseTime,
+      double? firstCrackPhasePercent,
       Duration? secondCrackPhaseTime,
       double? secondCrackPhasePercent,
-      Duration developmentPhaseTime,
+      Duration? developmentPhaseTime,
       double developmentPercent,
       double developmentPercentTarget,
       double weightIn,
@@ -91,13 +91,13 @@ class _$RoastSummaryCopyWithImpl<$Res, $Val extends RoastSummary>
     Object? preheatGap = freezed,
     Object? dryPhaseTime = null,
     Object? dryPhasePercent = null,
-    Object? maillardPhaseTime = null,
-    Object? maillardPhasePercent = null,
-    Object? firstCrackPhaseTime = null,
-    Object? firstCrackPhasePercent = null,
+    Object? maillardPhaseTime = freezed,
+    Object? maillardPhasePercent = freezed,
+    Object? firstCrackPhaseTime = freezed,
+    Object? firstCrackPhasePercent = freezed,
     Object? secondCrackPhaseTime = freezed,
     Object? secondCrackPhasePercent = freezed,
-    Object? developmentPhaseTime = null,
+    Object? developmentPhaseTime = freezed,
     Object? developmentPercent = null,
     Object? developmentPercentTarget = null,
     Object? weightIn = null,
@@ -134,22 +134,22 @@ class _$RoastSummaryCopyWithImpl<$Res, $Val extends RoastSummary>
           ? _value.dryPhasePercent
           : dryPhasePercent // ignore: cast_nullable_to_non_nullable
               as double,
-      maillardPhaseTime: null == maillardPhaseTime
+      maillardPhaseTime: freezed == maillardPhaseTime
           ? _value.maillardPhaseTime
           : maillardPhaseTime // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      maillardPhasePercent: null == maillardPhasePercent
+              as Duration?,
+      maillardPhasePercent: freezed == maillardPhasePercent
           ? _value.maillardPhasePercent
           : maillardPhasePercent // ignore: cast_nullable_to_non_nullable
-              as double,
-      firstCrackPhaseTime: null == firstCrackPhaseTime
+              as double?,
+      firstCrackPhaseTime: freezed == firstCrackPhaseTime
           ? _value.firstCrackPhaseTime
           : firstCrackPhaseTime // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      firstCrackPhasePercent: null == firstCrackPhasePercent
+              as Duration?,
+      firstCrackPhasePercent: freezed == firstCrackPhasePercent
           ? _value.firstCrackPhasePercent
           : firstCrackPhasePercent // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
       secondCrackPhaseTime: freezed == secondCrackPhaseTime
           ? _value.secondCrackPhaseTime
           : secondCrackPhaseTime // ignore: cast_nullable_to_non_nullable
@@ -158,10 +158,10 @@ class _$RoastSummaryCopyWithImpl<$Res, $Val extends RoastSummary>
           ? _value.secondCrackPhasePercent
           : secondCrackPhasePercent // ignore: cast_nullable_to_non_nullable
               as double?,
-      developmentPhaseTime: null == developmentPhaseTime
+      developmentPhaseTime: freezed == developmentPhaseTime
           ? _value.developmentPhaseTime
           : developmentPhaseTime // ignore: cast_nullable_to_non_nullable
-              as Duration,
+              as Duration?,
       developmentPercent: null == developmentPercent
           ? _value.developmentPercent
           : developmentPercent // ignore: cast_nullable_to_non_nullable
@@ -206,13 +206,13 @@ abstract class _$$_RoastSummaryCopyWith<$Res>
       Duration? preheatGap,
       Duration dryPhaseTime,
       double dryPhasePercent,
-      Duration maillardPhaseTime,
-      double maillardPhasePercent,
-      Duration firstCrackPhaseTime,
-      double firstCrackPhasePercent,
+      Duration? maillardPhaseTime,
+      double? maillardPhasePercent,
+      Duration? firstCrackPhaseTime,
+      double? firstCrackPhasePercent,
       Duration? secondCrackPhaseTime,
       double? secondCrackPhasePercent,
-      Duration developmentPhaseTime,
+      Duration? developmentPhaseTime,
       double developmentPercent,
       double developmentPercentTarget,
       double weightIn,
@@ -239,13 +239,13 @@ class __$$_RoastSummaryCopyWithImpl<$Res>
     Object? preheatGap = freezed,
     Object? dryPhaseTime = null,
     Object? dryPhasePercent = null,
-    Object? maillardPhaseTime = null,
-    Object? maillardPhasePercent = null,
-    Object? firstCrackPhaseTime = null,
-    Object? firstCrackPhasePercent = null,
+    Object? maillardPhaseTime = freezed,
+    Object? maillardPhasePercent = freezed,
+    Object? firstCrackPhaseTime = freezed,
+    Object? firstCrackPhasePercent = freezed,
     Object? secondCrackPhaseTime = freezed,
     Object? secondCrackPhasePercent = freezed,
-    Object? developmentPhaseTime = null,
+    Object? developmentPhaseTime = freezed,
     Object? developmentPercent = null,
     Object? developmentPercentTarget = null,
     Object? weightIn = null,
@@ -282,22 +282,22 @@ class __$$_RoastSummaryCopyWithImpl<$Res>
           ? _value.dryPhasePercent
           : dryPhasePercent // ignore: cast_nullable_to_non_nullable
               as double,
-      maillardPhaseTime: null == maillardPhaseTime
+      maillardPhaseTime: freezed == maillardPhaseTime
           ? _value.maillardPhaseTime
           : maillardPhaseTime // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      maillardPhasePercent: null == maillardPhasePercent
+              as Duration?,
+      maillardPhasePercent: freezed == maillardPhasePercent
           ? _value.maillardPhasePercent
           : maillardPhasePercent // ignore: cast_nullable_to_non_nullable
-              as double,
-      firstCrackPhaseTime: null == firstCrackPhaseTime
+              as double?,
+      firstCrackPhaseTime: freezed == firstCrackPhaseTime
           ? _value.firstCrackPhaseTime
           : firstCrackPhaseTime // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      firstCrackPhasePercent: null == firstCrackPhasePercent
+              as Duration?,
+      firstCrackPhasePercent: freezed == firstCrackPhasePercent
           ? _value.firstCrackPhasePercent
           : firstCrackPhasePercent // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
       secondCrackPhaseTime: freezed == secondCrackPhaseTime
           ? _value.secondCrackPhaseTime
           : secondCrackPhaseTime // ignore: cast_nullable_to_non_nullable
@@ -306,10 +306,10 @@ class __$$_RoastSummaryCopyWithImpl<$Res>
           ? _value.secondCrackPhasePercent
           : secondCrackPhasePercent // ignore: cast_nullable_to_non_nullable
               as double?,
-      developmentPhaseTime: null == developmentPhaseTime
+      developmentPhaseTime: freezed == developmentPhaseTime
           ? _value.developmentPhaseTime
           : developmentPhaseTime // ignore: cast_nullable_to_non_nullable
-              as Duration,
+              as Duration?,
       developmentPercent: null == developmentPercent
           ? _value.developmentPercent
           : developmentPercent // ignore: cast_nullable_to_non_nullable
@@ -378,19 +378,19 @@ class _$_RoastSummary implements _RoastSummary {
   @override
   final double dryPhasePercent;
   @override
-  final Duration maillardPhaseTime;
+  final Duration? maillardPhaseTime;
   @override
-  final double maillardPhasePercent;
+  final double? maillardPhasePercent;
   @override
-  final Duration firstCrackPhaseTime;
+  final Duration? firstCrackPhaseTime;
   @override
-  final double firstCrackPhasePercent;
+  final double? firstCrackPhasePercent;
   @override
   final Duration? secondCrackPhaseTime;
   @override
   final double? secondCrackPhasePercent;
   @override
-  final Duration developmentPhaseTime;
+  final Duration? developmentPhaseTime;
   @override
   final double developmentPercent;
   @override
@@ -498,13 +498,13 @@ abstract class _RoastSummary implements RoastSummary {
       final Duration? preheatGap,
       required final Duration dryPhaseTime,
       required final double dryPhasePercent,
-      required final Duration maillardPhaseTime,
-      required final double maillardPhasePercent,
-      required final Duration firstCrackPhaseTime,
-      required final double firstCrackPhasePercent,
+      required final Duration? maillardPhaseTime,
+      required final double? maillardPhasePercent,
+      required final Duration? firstCrackPhaseTime,
+      required final double? firstCrackPhasePercent,
       final Duration? secondCrackPhaseTime,
       final double? secondCrackPhasePercent,
-      required final Duration developmentPhaseTime,
+      required final Duration? developmentPhaseTime,
       required final double developmentPercent,
       required final double developmentPercentTarget,
       required final double weightIn,
@@ -527,19 +527,19 @@ abstract class _RoastSummary implements RoastSummary {
   @override
   double get dryPhasePercent;
   @override
-  Duration get maillardPhaseTime;
+  Duration? get maillardPhaseTime;
   @override
-  double get maillardPhasePercent;
+  double? get maillardPhasePercent;
   @override
-  Duration get firstCrackPhaseTime;
+  Duration? get firstCrackPhaseTime;
   @override
-  double get firstCrackPhasePercent;
+  double? get firstCrackPhasePercent;
   @override
   Duration? get secondCrackPhaseTime;
   @override
   double? get secondCrackPhasePercent;
   @override
-  Duration get developmentPhaseTime;
+  Duration? get developmentPhaseTime;
   @override
   double get developmentPercent;
   @override
