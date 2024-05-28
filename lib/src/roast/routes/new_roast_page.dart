@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/bean.dart';
@@ -58,7 +59,8 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
       final beans = ref.read(beansProvider);
       beans.whenData((beans) {
         setState(() {
-          selectedBean = beans.singleWhere((bean) => bean.id == copy.beanId);
+          selectedBean =
+              beans.firstWhereOrNull((bean) => bean.id == copy.beanId);
         });
       });
     }
