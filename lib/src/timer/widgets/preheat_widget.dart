@@ -3,6 +3,7 @@ import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
+import 'package:behmor_roast/src/timer/services/buzz_beep_service.dart';
 import 'package:behmor_roast/src/timer/widgets/preheat_timer.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 import 'package:flutter/material.dart';
@@ -54,9 +55,13 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
         }
         final earlyWarning = duration - const Duration(seconds: 10);
         if (now >= earlyWarning && earlier < earlyWarning) {
-          FlutterBeep.beep();
+          ref
+              .read(buzzBeepServiceProvider)
+              .trigger(BuzzBeepKind.preheatEarlyWarning);
         } else if (now >= duration && earlier < duration) {
-          FlutterBeep.beep(false);
+          ref
+              .read(buzzBeepServiceProvider)
+              .trigger(BuzzBeepKind.preheatExpired);
         }
       });
 

@@ -5,6 +5,8 @@ import 'package:behmor_roast/src/instructions/providers.dart';
 import 'package:behmor_roast/src/instructions/widgets/instructions_widget.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/models/temp_log.dart';
+import 'package:behmor_roast/src/timer/services/buzz_beep_service.dart';
+import 'package:behmor_roast/src/timer/widgets/buzz_beep_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/phase_control_widget.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_log_widget.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
@@ -38,6 +40,12 @@ class TimerPage extends ConsumerWidget {
     final copyLogs = ref.watch(roastLogsCopyProvider);
     final tips = ref.watch(tipsProvider);
     final copyingRoast = ref.watch(copyOfRoastProvider);
+
+    ref.listen<Duration?>(showTempInputTimeProvider, (_, next) {
+      if (next != null) {
+        ref.read(buzzBeepServiceProvider).trigger(BuzzBeepKind.tempCheck);
+      }
+    });
 
     Widget? fab;
     if (state == RoastState.ready) {
@@ -166,6 +174,7 @@ class TimerPage extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const LogoTitle('Now Roasting'),
+		  actions: const [BuzzBeepWidget()],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

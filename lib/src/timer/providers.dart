@@ -6,6 +6,7 @@ import 'package:behmor_roast/src/timer/models/alert.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/services/alert_service.dart';
+import 'package:behmor_roast/src/timer/services/buzz_beep_service.dart';
 import 'package:behmor_roast/src/timer/services/projection_service.dart';
 import 'package:behmor_roast/src/timer/services/tips_service.dart';
 import 'package:behmor_roast/src/timer/services/wakelock_service.dart';
@@ -14,6 +15,10 @@ import 'package:behmor_roast/src/timer/services/timer_service.dart';
 
 final wakelockServiceProvider = Provider((_) {
   return WakelockService();
+});
+
+final buzzBeepServiceProvider = Provider((_) {
+  return BuzzBeepService();
 });
 
 final roastTimerProvider = Provider((ref) {

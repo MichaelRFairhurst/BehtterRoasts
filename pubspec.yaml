@@ -52,6 +52,7 @@ dependencies:
   graphic: ^2.2.1
   collection: ^1.16.0
   wakelock: ^0.6.2
+  vibration: ^1.7.7
 
 dev_dependencies:
   flutter_test:

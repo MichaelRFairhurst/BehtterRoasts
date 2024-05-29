@@ -1,10 +1,13 @@
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/timer/models/alert.dart';
+import 'package:behmor_roast/src/timer/providers.dart';
+import 'package:behmor_roast/src/timer/services/buzz_beep_service.dart';
 import 'package:behmor_roast/src/util/widgets/animated_pop_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_beep/flutter_beep.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AlertWidget extends StatefulWidget {
+class AlertWidget extends ConsumerStatefulWidget {
   const AlertWidget({
     required this.alerts,
     super.key,
@@ -16,7 +19,7 @@ class AlertWidget extends StatefulWidget {
   AlertWidgetState createState() => AlertWidgetState();
 }
 
-class AlertWidgetState extends State<AlertWidget> {
+class AlertWidgetState extends ConsumerState<AlertWidget> {
   var alerts = <Alert>[];
   final dismissed = <Severity, Set<AlertKind>>{
     Severity.warning: <AlertKind>{},
@@ -34,6 +37,10 @@ class AlertWidgetState extends State<AlertWidget> {
     super.didUpdateWidget(oldWidget);
 
     _refreshAlerts();
+  }
+
+  void _buzzBeep(BuzzBeepKind kind) {
+    ref.read(buzzBeepServiceProvider).trigger(kind);
   }
 
   void _refreshAlerts() {
@@ -55,7 +62,7 @@ class AlertWidgetState extends State<AlertWidget> {
     for (final warning in newWarnings) {
       final oldWarning = kindsState[warning.kind];
       if (oldWarning == null || oldWarning.severity != warning.severity) {
-        FlutterBeep.beep(false);
+        _buzzBeep(BuzzBeepKind.warning);
       }
     }
 
@@ -63,7 +70,7 @@ class AlertWidgetState extends State<AlertWidget> {
     for (final alert in newAlerts) {
       final oldAlert = kindsState[alert.kind];
       if (oldAlert == null) {
-        FlutterBeep.beep(false);
+        _buzzBeep(BuzzBeepKind.alert);
       }
     }
 

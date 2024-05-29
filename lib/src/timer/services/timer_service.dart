@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:behmor_roast/src/timer/services/wakelock_service.dart';
-import 'package:flutter_beep/flutter_beep.dart';
 
 class TimerService {
   TimerService({
@@ -44,7 +43,6 @@ class TimerService {
 
       if (_tempCheckInterval != null &&
           now.inSeconds % _tempCheckInterval! == 0) {
-        FlutterBeep.beep();
         _checkTemp.add(now);
       }
       _seconds.add(now);
