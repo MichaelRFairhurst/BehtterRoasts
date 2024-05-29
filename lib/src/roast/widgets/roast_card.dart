@@ -165,15 +165,16 @@ class RoastCardState extends ConsumerState<RoastCard> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              ElevatedButton(
+              ElevatedButton.icon(
                 style: RoastAppTheme.limeButtonTheme.style,
                 onPressed: () {
                   context.push(Routes.roastReview(widget.roast.id!));
                 },
-                child: const Text('Full details'),
+                icon: const Icon(Icons.area_chart),
+                label: const Text('Details'),
               ),
               const SizedBox(width: 12.0),
-              ElevatedButton(
+              ElevatedButton.icon(
                 style: RoastAppTheme.limeButtonTheme.style,
                 onPressed: () {
                   // Clear copy state first so that this is a change. Otherwise,
@@ -182,7 +183,9 @@ class RoastCardState extends ConsumerState<RoastCard> {
                   ref.read(copyOfRoastProvider.notifier).state = widget.roast;
                   context.replace(Routes.newRoast);
                 },
-                child: const Text('Roast again'),
+                icon: SvgPicture.asset('images/copy_roast3.svg',
+                    color: RoastAppTheme.capuccino, height: 18),
+                label: const Text('Roast again'),
               ),
             ],
           ),

@@ -1,3 +1,4 @@
+import 'package:behmor_roast/src/config/routes.dart';
 import 'package:behmor_roast/src/config/theme.dart';
 
 import 'package:behmor_roast/src/roast/models/roast.dart';
@@ -9,6 +10,7 @@ import 'package:behmor_roast/src/util/widgets/list_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class RoastTimelinePage extends ConsumerWidget {
@@ -147,6 +149,14 @@ class RoastTimelinePage extends ConsumerWidget {
           ),
         ),
       ),
+	  floatingActionButton: ElevatedButton.icon(
+	    style: RoastAppTheme.largeButtonTheme.style,
+		icon: const Icon(Icons.local_fire_department, size: 32),
+		label: const Text('Roast'),
+		onPressed: () {
+		  context.push(Routes.newRoast, extra: bean);
+		}
+	  ),
     );
   }
 
