@@ -61,7 +61,7 @@ class AlertService {
     if (!timePastPressStart.isNegative &&
         timePastPressStart < const Duration(seconds: 30)) {
       results.add(const Alert(
-        kind: AlertKind.smokeSuppressor,
+        kind: AlertKind.willShutOff,
         severity: Severity.warning,
         message: 'Press START, or the roaster will automatically off!',
       ));
@@ -72,7 +72,7 @@ class AlertService {
       results.add(Alert(
         kind: AlertKind.smokeSuppressor,
         severity: Severity.alert,
-        message: 'Smoke suppressor turns on in ${timeToSmoke.inSeconds}'
+        message: 'Smoke suppressor turns on in ~${timeToSmoke.inSeconds}'
             ' seconds, and roast temps will quickly fall.',
       ));
     }
