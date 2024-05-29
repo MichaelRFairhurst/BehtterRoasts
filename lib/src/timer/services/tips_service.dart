@@ -25,8 +25,8 @@ class TipsService {
         timeline.firstCrackStart == timeline.firstCrackEnd &&
         timeline.firstCrackStart != null &&
         timeline.secondCrackStart == null) {
-      results.add("Keep pressing 'Log Crack' while you hear pops, in order to"
-          ' track the end of the First Crack phase.');
+      results.add("You may press 'End first crack' more than once, only the"
+          ' last pressed time is recorded.');
     }
 
     if (timeline.roastState == RoastState.done) {
