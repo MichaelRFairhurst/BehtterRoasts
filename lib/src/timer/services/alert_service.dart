@@ -1,12 +1,9 @@
+import 'package:behmor_roast/src/behmor/constants.dart';
 import 'package:behmor_roast/src/timer/models/alert.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 
-const _smokeSuppressorTime = Duration(seconds: 7 * 60 + 45);
-// Technically, this is 75% of roast time. This is correct for 1lb P5 roasts.
-const _pressStartTime = Duration(seconds: 13 * 60 + 30);
-
-const _maxRecommendedPreheat = Duration(seconds: 60 + 45);
+const _maxRecommendedTemp = overheatTemp - 6;
 
 class AlertService {
   List<Alert> getAlerts({
@@ -19,7 +16,7 @@ class AlertService {
     final timeToOverheat = projections.timeToOverheat;
 
     if (timeline.roastState == RoastState.preheating &&
-        elapsedPreheat! > _maxRecommendedPreheat) {
+        elapsedPreheat! > maxRecommendedPreheat) {
       results.add(const Alert(
         kind: AlertKind.preheatMax,
         severity: Severity.warning,
@@ -51,9 +48,16 @@ class AlertService {
         message: 'Roaster projected to overheat in'
             ' ${timeToOverheat.inSeconds} seconds',
       ));
+    } else if (projections.currentTemp != null &&
+        projections.currentTemp! >= _maxRecommendedTemp) {
+      results.add(const Alert(
+        kind: AlertKind.willOverheat,
+        severity: Severity.warning,
+        message: 'Roaster will shut down if it reaches $overheatTemp°F',
+      ));
     }
 
-    final timePastPressStart = elapsed - _pressStartTime;
+    final timePastPressStart = elapsed - pressStartTime;
     if (!timePastPressStart.isNegative &&
         timePastPressStart < const Duration(seconds: 30)) {
       results.add(const Alert(
@@ -63,7 +67,7 @@ class AlertService {
       ));
     }
 
-    final timeToSmoke = _smokeSuppressorTime - elapsed;
+    final timeToSmoke = smokeSuppressorTime - elapsed;
     if (timeToSmoke < const Duration(seconds: 45) && !timeToSmoke.isNegative) {
       results.add(Alert(
         kind: AlertKind.smokeSuppressor,

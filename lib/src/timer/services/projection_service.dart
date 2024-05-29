@@ -1,10 +1,9 @@
+import 'package:behmor_roast/src/behmor/constants.dart';
 import 'package:behmor_roast/src/roast/models/roast_config.dart';
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
 import 'package:behmor_roast/src/roast/services/roast_profile_service.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
-
-const _overheatTemp = 331.0;
 
 class ProjectionService {
   Projection createProjections({
@@ -36,7 +35,7 @@ class ProjectionService {
       temp30s = currentTemp + ror / 2;
       temp60s = currentTemp + ror;
 
-      final overheatMinutes = (_overheatTemp - currentTemp) / ror;
+      final overheatMinutes = (overheatTemp - currentTemp) / ror;
       if (ror > 0 && overheatMinutes < 3.0 && overheatMinutes > 0) {
         timeToOverheat = Duration(seconds: (overheatMinutes * 60).round());
       }
