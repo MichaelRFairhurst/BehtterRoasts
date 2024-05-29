@@ -101,7 +101,7 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: 'Press ',
+                  text: 'Hold ',
                   style: RoastAppTheme.materialTheme.textTheme.bodyMedium!
                       .copyWith(fontStyle: FontStyle.italic),
                 ),
