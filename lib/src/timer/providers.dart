@@ -8,17 +8,28 @@ import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/services/alert_service.dart';
 import 'package:behmor_roast/src/timer/services/projection_service.dart';
 import 'package:behmor_roast/src/timer/services/tips_service.dart';
+import 'package:behmor_roast/src/timer/services/wakelock_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:behmor_roast/src/timer/services/timer_service.dart';
 
-final roastTimerProvider = Provider((_) {
-  return TimerService();
+final wakelockServiceProvider = Provider((_) {
+  return WakelockService();
+});
+
+final roastTimerProvider = Provider((ref) {
+  return TimerService(
+    id: 'roastTimer',
+    wakelockService: ref.watch(wakelockServiceProvider),
+  );
 });
 
 final copyOfRoastProvider = StateProvider<Roast?>((ref) => null);
 
-final preheatTimerProvider = Provider((_) {
-  return TimerService();
+final preheatTimerProvider = Provider((ref) {
+  return TimerService(
+    id: 'preheatTimer',
+    wakelockService: ref.watch(wakelockServiceProvider),
+  );
 });
 
 final secondsRoastProvider = StreamProvider<Duration?>((ref) {

@@ -1,8 +1,17 @@
 import 'dart:async';
 
+import 'package:behmor_roast/src/timer/services/wakelock_service.dart';
 import 'package:flutter_beep/flutter_beep.dart';
 
 class TimerService {
+  TimerService({
+	required this.id,
+	required this.wakelockService,
+  });
+
+  final String id;
+  final WakelockService wakelockService;
+
   DateTime? _startTime;
   DateTime? _stopTime;
   int? _tempCheckInterval;
@@ -13,12 +22,14 @@ class TimerService {
     _startTime = DateTime.now();
     _tempCheckInterval = tempCheckInterval;
     _fireSeconds();
+	wakelockService.requestOn(id);
   }
 
   void reset() {
     _startTime = null;
     _stopTime = null;
     _seconds.add(null);
+	wakelockService.requestOff(id);
   }
 
   void _fireSeconds() async {
@@ -47,6 +58,7 @@ class TimerService {
 
   void stop() {
     _stopTime = DateTime.now();
+	wakelockService.requestOff(id);
   }
 
   Duration? elapsed() {

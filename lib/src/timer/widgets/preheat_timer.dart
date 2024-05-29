@@ -85,6 +85,7 @@ class PreheatTimerState extends ConsumerState<PreheatTimer>
                       .update((state) => state.copyWith(
                             preheatEnd: preheatService.elapsed()!,
                           ));
+                  preheatService.stop();
                 },
               ),
             ),
