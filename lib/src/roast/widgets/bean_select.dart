@@ -53,7 +53,7 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
               decoration: InputDecoration(
                 label: const Text('New Bean Name'),
                 border: InputBorder.none,
-                prefixIcon: continentAddIcon(selectedContinent),
+                icon: continentAddIcon(selectedContinent),
               ),
               controller: newBeanName,
               onChanged: (_) => selectNewBean(),
@@ -211,20 +211,20 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
 
   Widget continentAddIcon(Continent selectedContinent) {
     const iconRight = 0.0;
-    const iconBottom = 2.0;
+    const iconBottom = 0.0;
     return Container(
       alignment: Alignment.center,
-      height: 32,
-      width: 32,
+      height: 24,
+      width: 24,
       child: SizedBox(
-        width: 32,
-        height: 32,
+        width: 24,
+        height: 24,
         child: Stack(
-          alignment: Alignment.center,
+          alignment: Alignment.topLeft,
           children: [
             ContinentIcon(
               selectedContinent,
-              height: 24,
+              height: 20,
             ),
             for (double right = iconRight - 1.5;
                 right <= iconRight + 1.5;
