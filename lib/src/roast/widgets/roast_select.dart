@@ -32,9 +32,15 @@ class RoastSelectState extends ConsumerState<RoastSelect> {
 
   @override
   Widget build(BuildContext context) {
-    final roasts = widget.bean?.id == null
+    var roasts = widget.bean?.id == null
         ? <Roast>[]
         : ref.watch(roastsForBeanProvider(widget.bean!.id!)).value ?? [];
+    final allBeans = ref.watch(beansProvider).value ?? [];
+
+    if (widget.selectedRoast != null &&
+        !roasts.contains(widget.selectedRoast)) {
+      roasts = [widget.selectedRoast!, ...roasts];
+    }
 
     if (widget.bean == null || roasts.isEmpty) {
       return const SizedBox();
@@ -60,19 +66,20 @@ class RoastSelectState extends ConsumerState<RoastSelect> {
             },
           )
         else
-          roastTile(widget.selectedRoast!, true),
+          roastTile(widget.selectedRoast!, allBeans, true),
         AnimatedPopUp(
           child: !expand
               ? const SizedBox()
               : Column(
-                  children: getItems(roasts),
+                  children: getItems(roasts, allBeans),
                 ),
         ),
       ],
     );
   }
 
-  Widget roastTile(Roast roast, bool isHeading) {
+  Widget roastTile(Roast roast, List<Bean> beans, bool isHeading) {
+    final bean = beans.firstWhere((bean) => bean.id == roast.beanId);
     final timeline = roast.toTimeline();
     return tile(
       leading: SvgPicture.asset(
@@ -87,7 +94,7 @@ class RoastSelectState extends ConsumerState<RoastSelect> {
           const Text(')'),
         ],
       ),
-      subtitle: widget.bean!.name, //roast.roastNumber,
+      subtitle: bean.name,
       isHeading: isHeading,
       onTap: isHeading
           ? () {
@@ -124,9 +131,9 @@ class RoastSelectState extends ConsumerState<RoastSelect> {
     );
   }
 
-  List<Widget> getItems(List<Roast> roasts) {
+  List<Widget> getItems(List<Roast> roasts, List<Bean> allBeans) {
     return [
-      ...roasts.map((roast) => roastTile(roast, false)),
+      ...roasts.map((roast) => roastTile(roast, allBeans, false)),
       tile(
         title: const Text('None'),
         subtitle: 'Do not repeat a previous roast.',
