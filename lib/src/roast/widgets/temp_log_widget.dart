@@ -40,16 +40,6 @@ class TempLogWidget extends ConsumerWidget {
               child: Text('Temp'),
             ),
           ),
-          const DataColumn(
-            label: Expanded(
-              child: Text('Power'),
-            ),
-          ),
-          const DataColumn(
-            label: Expanded(
-              child: Text('Phase'),
-            ),
-          ),
           if (isDiff)
             const DataColumn(
               label: Expanded(
@@ -62,22 +52,25 @@ class TempLogWidget extends ConsumerWidget {
                 child: Text('Rate of Rise'),
               ),
             ),
+          const DataColumn(
+            label: Expanded(
+              child: Text('Other'),
+            ),
+          ),
         ],
         rows: getRows(context, ref),
       ),
     );
   }
 
-  List<DataRow> getRows(
-      BuildContext context, WidgetRef ref) {
-	final logs = isLive ? this.logs.reversed : this.logs;
+  List<DataRow> getRows(BuildContext context, WidgetRef ref) {
+    final logs = isLive ? this.logs.reversed : this.logs;
 
     if (logs.isEmpty) {
       return const [
         DataRow(
           cells: [
             DataCell(Text('no logs yet')),
-            DataCell(Text('')),
             DataCell(Text('')),
             DataCell(Text('')),
             DataCell(Text('')),
@@ -93,9 +86,8 @@ class TempLogWidget extends ConsumerWidget {
               cells: [
                 DataCell(TimestampWidget(log.time)),
                 tempCell(log, context, ref, isLast: log == lastTemp),
-                powerCell(log),
-                phaseCell(log),
                 if (isDiff) diffCell(log) else rorCell(log),
+                powerAndPhaseCell(log),
               ],
             ))
         .toList();
@@ -156,36 +148,32 @@ class TempLogWidget extends ConsumerWidget {
     );
   }
 
-  DataCell powerCell(RoastLog log) {
+  DataCell powerAndPhaseCell(RoastLog log) {
+    switch (log.phase) {
+      case RoastPhase.preheat:
+        return const DataCell(Text('Preheat'));
+      case RoastPhase.start:
+        return const DataCell(Text('Start'));
+      case RoastPhase.dryEnd:
+        return const DataCell(Text('Dry End'));
+      case RoastPhase.firstCrackStart:
+        return const DataCell(Text('FC Start'));
+      case RoastPhase.firstCrackEnd:
+        return const DataCell(Text('FC End'));
+      case RoastPhase.secondCrackStart:
+        return const DataCell(Text('SC Start'));
+      case RoastPhase.done:
+        return const DataCell(Text('Done'));
+      case null:
+      // nothing
+    }
+
     if (log.control == null) {
       return const DataCell(Text(''));
+    } else {
+      return DataCell(Text(
+          log.control.toString().replaceAll('Control.', '').toUpperCase()));
     }
-
-    return DataCell(
-        Text(log.control.toString().replaceAll('Control.', '').toUpperCase()));
-  }
-
-  DataCell phaseCell(RoastLog log) {
-    if (log.phase == RoastPhase.preheat) {
-      return const DataCell(Text('Preheat'));
-    }
-    if (log.phase == RoastPhase.start) {
-      return const DataCell(Text('Start'));
-    }
-    if (log.phase == RoastPhase.dryEnd) {
-      return const DataCell(Text('Dry End'));
-    }
-    if (log.phase == RoastPhase.firstCrackStart) {
-      return const DataCell(Text('FC Start'));
-    }
-    if (log.phase == RoastPhase.firstCrackEnd) {
-      return const DataCell(Text('FC End'));
-    }
-    if (log.phase == RoastPhase.done) {
-      return const DataCell(Text('Done'));
-    }
-
-    return const DataCell(Text(''));
   }
 
   DataCell rorCell(RoastLog log) {
