@@ -21,7 +21,6 @@ import 'package:behmor_roast/src/timer/widgets/time_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/timed_check_temp_widget.dart';
 import 'package:behmor_roast/src/util/logo_title.dart';
 import 'package:behmor_roast/src/util/widgets/animated_blur_out.dart';
-import 'package:behmor_roast/src/util/widgets/bottom_sticky_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
