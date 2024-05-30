@@ -34,14 +34,17 @@ class InstructionsWidgetState extends ConsumerState<InstructionsWidget> {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
-      color: RoastAppTheme.capuccino,
+      color: RoastAppTheme.capuccinoLight,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'Instructions:',
-            style: RoastAppTheme.materialTheme.textTheme.subtitle2?.copyWith(
-              color: RoastAppTheme.cremaLight,
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(
+              'Instructions:',
+              style: RoastAppTheme.materialTheme.textTheme.subtitle2?.copyWith(
+                color: RoastAppTheme.cremaLight,
+              ),
             ),
           ),
           Card(

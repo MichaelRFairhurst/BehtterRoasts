@@ -75,7 +75,7 @@ class TimerPage extends ConsumerWidget {
       );
     }
 
-    const roasterControlsHeight = 60.0;
+    const roasterControlsHeight = 65.0;
     const timeWidgetHeight = 150.0;
     const timeWidgetOverlap = 45.0;
 
@@ -89,7 +89,7 @@ class TimerPage extends ConsumerWidget {
       showTempPopup = true;
       tempPopupWidget = Container(
         color: RoastAppTheme.capuccino.withOpacity(0.75),
-        padding: const EdgeInsets.all(8.0).copyWith(bottom: 105),
+        padding: const EdgeInsets.all(8.0).copyWith(top: 105),
         alignment: Alignment.center,
         child: Container(
           padding: const EdgeInsets.all(8.0),
@@ -155,8 +155,7 @@ class TimerPage extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (showRoasterControls)
-              const SizedBox(height: roasterControlsHeight),
+            const SizedBox(height: timeWidgetHeight - timeWidgetOverlap),
             TempChart(
               logs: logs,
               copyLogs: copyLogs,
@@ -168,7 +167,8 @@ class TimerPage extends ConsumerWidget {
               isDiff: copyingRoast != null,
             ),
             const ProjectionsWidget(),
-            const SizedBox(height: timeWidgetHeight - timeWidgetOverlap),
+            if (showRoasterControls)
+              const SizedBox(height: roasterControlsHeight),
           ],
         ),
       );
@@ -205,17 +205,16 @@ class TimerPage extends ConsumerWidget {
                   ),
                   if (showRoasterControls)
                     const Positioned(
-                      top: 0,
+                      bottom: 0,
                       left: 0,
                       right: 0,
                       height: roasterControlsHeight,
                       child: ControlsWidget(),
                     ),
                   const Positioned(
-                    bottom: 0,
+                    top: 0,
                     left: 0,
                     right: 0,
-                    height: timeWidgetHeight,
                     child: TimeWidget(),
                   ),
                 ],

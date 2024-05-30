@@ -11,7 +11,7 @@ class OversizedCircle extends SingleChildRenderObjectWidget {
     required this.borderWidth,
     required this.alignment,
     required this.oversize,
-    this.bottomBorder = true,
+    this.topBorder = true,
     super.key,
   });
 
@@ -20,7 +20,7 @@ class OversizedCircle extends SingleChildRenderObjectWidget {
   final double borderWidth;
   final AlignmentGeometry alignment;
   final EdgeInsets oversize;
-  final bool bottomBorder;
+  final bool topBorder;
 
   @override
   RenderOversizedCircle createRenderObject(BuildContext context) =>
@@ -30,7 +30,7 @@ class OversizedCircle extends SingleChildRenderObjectWidget {
         borderWidth: borderWidth,
         alignment: alignment,
         oversize: oversize,
-        bottomBorder: bottomBorder,
+        topBorder: topBorder,
       );
 
   @override
@@ -41,7 +41,7 @@ class OversizedCircle extends SingleChildRenderObjectWidget {
     renderObject.borderWidth = borderWidth;
     renderObject.alignment = alignment;
     renderObject.oversize = oversize;
-    renderObject.bottomBorder = bottomBorder;
+    renderObject.topBorder = topBorder;
     renderObject.markNeedsPaint();
   }
 }
@@ -53,7 +53,7 @@ class RenderOversizedCircle extends RenderBox with RenderObjectWithChildMixin {
     required this.borderWidth,
     required this.alignment,
     required this.oversize,
-    required this.bottomBorder,
+    required this.topBorder,
   });
 
   Color color;
@@ -61,7 +61,7 @@ class RenderOversizedCircle extends RenderBox with RenderObjectWithChildMixin {
   double borderWidth;
   AlignmentGeometry alignment;
   EdgeInsets oversize;
-  bool bottomBorder;
+  bool topBorder;
 
   @override
   bool sizedByParent = true;
@@ -89,8 +89,9 @@ class RenderOversizedCircle extends RenderBox with RenderObjectWithChildMixin {
     final diameter = max(width, height);
     final radius = diameter / 2;
 
-    final center =
-        childOffset + Offset(radius - oversize.left, radius - oversize.top);
+    final center = childOffset +
+        Offset(radius - oversize.left,
+            childSize.height - radius + oversize.bottom);
 
     // Shadow
     canvas.drawCircle(
@@ -103,8 +104,8 @@ class RenderOversizedCircle extends RenderBox with RenderObjectWithChildMixin {
     // Border
     canvas.drawCircle(center, radius, Paint()..color = borderColor);
 
-    // Body, preserving bottom border
-    if (bottomBorder) {
+    // Body, preserving top border
+    if (topBorder) {
       final insidePath = Path.combine(
         PathOperation.intersect,
         Path()
@@ -113,7 +114,7 @@ class RenderOversizedCircle extends RenderBox with RenderObjectWithChildMixin {
         Path()
           ..addRect(
             Rect.fromLTWH(
-                offset.dx, offset.dy, size.width, size.height - borderWidth),
+                offset.dx, offset.dy + borderWidth, size.width, size.height),
           ),
       );
 

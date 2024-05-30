@@ -68,7 +68,7 @@ class OverflowingCirclesBackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final path = Path()
-      ..addOval(Rect.fromLTRB(-800, -800, size.width + 800, size.height - 10));
+      ..addOval(Rect.fromLTRB(-800, 10, size.width + 800, size.height + 800));
     for (final offset in centers) {
       path.addOval(Rect.fromCircle(center: offset, radius: childSize / 2));
     }

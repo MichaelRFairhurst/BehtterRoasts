@@ -43,7 +43,7 @@ class TimeWidget extends ConsumerWidget {
                 borderColor: RoastAppTheme.metalLight,
                 oversize: const EdgeInsets.only(left: 25, right: 7),
                 color: RoastAppTheme.cremaLight,
-                alignment: Alignment.bottomRight,
+                alignment: Alignment.topRight,
                 child: Container(
                   padding: const EdgeInsets.all(16),
                   width: 110,
@@ -58,7 +58,7 @@ class TimeWidget extends ConsumerWidget {
               borderColor: RoastAppTheme.lime,
               oversize: const EdgeInsets.symmetric(horizontal: 8),
               color: RoastAppTheme.cremaLight,
-              alignment: Alignment.bottomCenter,
+              alignment: Alignment.topCenter,
               child: Container(
                 width: 150,
                 height: 110,
@@ -75,7 +75,7 @@ class TimeWidget extends ConsumerWidget {
   Widget timeCircleContent(
       Duration? time, RoastState state, bool showRoastInfo, WidgetRef ref) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         if (state == RoastState.waiting ||
             state == RoastState.preheatDone ||

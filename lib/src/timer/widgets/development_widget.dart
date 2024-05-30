@@ -78,14 +78,14 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget>
     return OversizedCircle(
       borderWidth: 1,
       borderColor: RoastAppTheme.metal,
-      oversize: const EdgeInsets.only(left: 150, right: 100, top: 10),
+      oversize: const EdgeInsets.only(left: 150, right: 100, bottom: 10),
       color: RoastAppTheme.capuccino,
-      alignment: Alignment.bottomLeft,
-      bottomBorder: false,
+      alignment: Alignment.topLeft,
+      topBorder: false,
       child: Container(
         width: 95,
         height: 95,
-        padding: const EdgeInsets.only(left: 5, bottom: 8),
+        padding: const EdgeInsets.only(left: 5, top: 8),
         child: ProgressCircle(
           progress: progress,
           barWidth: 6.0,

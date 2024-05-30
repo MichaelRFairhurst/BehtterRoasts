@@ -10,7 +10,7 @@ class ControlsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const buttonSize = 32.0;
+    const buttonSize = 36.0;
     const spacing = -2.0;
     const paddingTop = 6.0;
     const margin = 4.0;
@@ -46,8 +46,8 @@ class ControlsWidget extends StatelessWidget {
               ],
             )),
             Positioned(
-              left: 12,
-              top: 8,
+              left: 16,
+              bottom: 14,
               child: Text(
                 'Roaster\nControls:',
                 style: RoastAppTheme.materialTheme.textTheme.labelSmall!
