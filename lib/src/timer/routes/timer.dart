@@ -152,23 +152,25 @@ class TimerPage extends ConsumerWidget {
         ),
       );
     } else {
-      body = BottomStickyScrollView(
-        children: [
-          if (showRoasterControls)
-            const SizedBox(height: roasterControlsHeight),
-          TempChart(
-            logs: logs,
-            copyLogs: copyLogs,
-            isLive: true,
-          ),
-          TempLogWidget(
-            logs: logs,
-            isLive: true,
-            isDiff: copyingRoast != null,
-          ),
-          const ProjectionsWidget(),
-          const SizedBox(height: timeWidgetHeight - timeWidgetOverlap),
-        ],
+      body = SingleChildScrollView(
+        child: Column(
+          children: [
+            if (showRoasterControls)
+              const SizedBox(height: roasterControlsHeight),
+            TempChart(
+              logs: logs,
+              copyLogs: copyLogs,
+              isLive: true,
+            ),
+            TempLogWidget(
+              logs: logs,
+              isLive: true,
+              isDiff: copyingRoast != null,
+            ),
+            const ProjectionsWidget(),
+            const SizedBox(height: timeWidgetHeight - timeWidgetOverlap),
+          ],
+        ),
       );
     }
 
