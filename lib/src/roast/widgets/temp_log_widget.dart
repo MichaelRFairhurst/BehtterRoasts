@@ -9,13 +9,13 @@ import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 class TempLogWidget extends ConsumerWidget {
   const TempLogWidget({
     required this.logs,
-    this.editable = false,
+    this.isLive = false,
     this.isDiff = false,
     super.key,
   });
 
   final bool isDiff;
-  final bool editable;
+  final bool isLive;
   final List<RoastLog> logs;
 
   @override
@@ -63,13 +63,15 @@ class TempLogWidget extends ConsumerWidget {
               ),
             ),
         ],
-        rows: getRows(logs, context, ref),
+        rows: getRows(context, ref),
       ),
     );
   }
 
   List<DataRow> getRows(
-      List<RoastLog> logs, BuildContext context, WidgetRef ref) {
+      BuildContext context, WidgetRef ref) {
+	final logs = isLive ? this.logs.reversed : this.logs;
+
     if (logs.isEmpty) {
       return const [
         DataRow(
@@ -84,7 +86,7 @@ class TempLogWidget extends ConsumerWidget {
       ];
     }
 
-    final lastTemp = logs.lastWhere((log) => log.temp != null,
+    final lastTemp = this.logs.lastWhere((log) => log.temp != null,
         orElse: () => const RoastLog(time: Duration.zero));
     return logs
         .map((log) => DataRow(
@@ -148,9 +150,9 @@ class TempLogWidget extends ConsumerWidget {
 
     return DataCell(
       Text('${log.temp}°F'),
-      showEditIcon: editable && isLast,
-      onTap: editable && isLast ? updateTemp : null,
-      onLongPress: editable ? updateTemp : null,
+      showEditIcon: isLive && isLast,
+      onTap: isLive && isLast ? updateTemp : null,
+      onLongPress: isLive ? updateTemp : null,
     );
   }
 

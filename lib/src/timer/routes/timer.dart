@@ -162,7 +162,10 @@ class TimerPage extends ConsumerWidget {
             isLive: true,
           ),
           TempLogWidget(
-              logs: logs, editable: true, isDiff: copyingRoast != null),
+            logs: logs,
+            isLive: true,
+            isDiff: copyingRoast != null,
+          ),
           const ProjectionsWidget(),
           const SizedBox(height: timeWidgetHeight - timeWidgetOverlap),
         ],
@@ -174,7 +177,7 @@ class TimerPage extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const LogoTitle('Now Roasting'),
-		  actions: const [BuzzBeepWidget()],
+          actions: const [BuzzBeepWidget()],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
