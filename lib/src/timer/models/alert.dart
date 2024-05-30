@@ -9,7 +9,8 @@ enum Severity {
 
 enum AlertKind {
   preheatMax,
-  smokeSuppressor,
+  smokeSuppressorOn,
+  smokeSuppressorOff,
   willOverheat,
   willShutOff,
   pastSecondCrack,
