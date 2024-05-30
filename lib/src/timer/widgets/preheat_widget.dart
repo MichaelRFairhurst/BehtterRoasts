@@ -7,7 +7,6 @@ import 'package:behmor_roast/src/timer/services/buzz_beep_service.dart';
 import 'package:behmor_roast/src/timer/widgets/preheat_timer.dart';
 import 'package:behmor_roast/src/timer/widgets/timestamp_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_beep/flutter_beep.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PreheatWidget extends ConsumerStatefulWidget {
@@ -19,7 +18,7 @@ class PreheatWidget extends ConsumerStatefulWidget {
 
 class PreheatWidgetState extends ConsumerState<PreheatWidget> {
   TextEditingController tempCtrl = TextEditingController(
-    text: '180',
+    text: '150',
   );
 
   final formKey = GlobalKey<FormState>();
