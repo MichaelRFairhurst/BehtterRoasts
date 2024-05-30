@@ -126,7 +126,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                         width: double.infinity,
                         child: ElevatedButton.icon(
                           label: const Icon(Icons.navigate_next),
-                          icon: const Text('Begin roast'),
+                          icon: const Text('Next'),
                           onPressed: () async {
                             final formValid =
                                 roastFormKey.currentState!.validate();
