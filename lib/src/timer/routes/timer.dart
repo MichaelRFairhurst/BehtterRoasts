@@ -153,6 +153,7 @@ class TimerPage extends ConsumerWidget {
     } else {
       body = SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (showRoasterControls)
               const SizedBox(height: roasterControlsHeight),
