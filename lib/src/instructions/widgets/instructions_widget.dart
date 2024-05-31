@@ -151,12 +151,7 @@ class InstructionsWidgetState extends ConsumerState<InstructionsWidget> {
             child: ControlButton(
               control: inst.core.control,
               disabled: !isFirst,
-              instructionTimeDiff: inst.time,
-              onPressed: () {
-                ref.read(coreInstructionsProvider.notifier).update((state) {
-                  return InstructionsService().skipInstruction(state!, inst);
-                });
-              },
+              instruction: inst,
             ),
           ),
           Text('at ${inst.core.temp}°F'),
