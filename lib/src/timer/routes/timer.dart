@@ -77,10 +77,8 @@ class TimerPage extends ConsumerWidget {
 
     final showRoasterControls = state == RoastState.roasting;
 
-    final bool showTempPopup;
-    final Widget tempPopupWidget;
+    final Widget? tempPopupWidget;
     if (state == RoastState.roasting && showTempInputTime != null) {
-      showTempPopup = true;
       tempPopupWidget = Container(
         color: RoastAppTheme.capuccino.withOpacity(0.75),
         padding: const EdgeInsets.all(8.0).copyWith(top: 105),
@@ -109,9 +107,8 @@ class TimerPage extends ConsumerWidget {
         ),
       );
     } else {
-      tempPopupWidget = const SizedBox();
-      showTempPopup = false;
-    }
+	  tempPopupWidget = null;
+	}
 
     final Widget body;
     final bool scrollable;
@@ -176,7 +173,7 @@ class TimerPage extends ConsumerWidget {
         ),
         body: body,
         scrollable: scrollable,
-        popup: showTempPopup ? tempPopupWidget : null,
+        popup: tempPopupWidget,
         topPart: AlertWidget(
           alerts: alerts,
         ),
@@ -193,7 +190,7 @@ class TimerPage extends ConsumerWidget {
               )
             : null,
         toast: RoastTipWidget(
-          hide: showTempPopup,
+          hide: tempPopupWidget != null,
           tips: tips,
         ),
         floatingActionButton: fab,

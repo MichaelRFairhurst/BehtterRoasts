@@ -43,22 +43,6 @@ class TimerScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget body;
-    if (scrollable) {
-      body = SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(height: floatingTopPart?.obscuredHeight),
-            this.body,
-            if (floatingBottomPart != null)
-              SizedBox(height: floatingBottomPart?.obscuredHeight),
-          ],
-        ),
-      );
-    } else {
-      body = this.body;
-    }
     return Scaffold(
       appBar: appBar,
       body: Column(
@@ -66,54 +50,76 @@ class TimerScaffold extends StatelessWidget {
         children: [
           topPart,
           Expanded(
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: AnimatedBlurOut(
-                    duration: const Duration(milliseconds: 250),
-                    blur: popup != null ? 1.0 : 0.0,
-                    child: body,
+            // Use a scaffold within a scaffold to get proper FAB layout.
+            child: Scaffold(
+              primary: false,
+              extendBody: true,
+              body: Stack(
+                children: [
+                  Positioned.fill(
+                    child: AnimatedBlurOut(
+                      duration: const Duration(milliseconds: 250),
+                      blur: popup != null ? 1.0 : 0.0,
+                      child: getScrollAdjustedBody(),
+                    ),
                   ),
-                ),
-                Positioned.fill(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 150),
-                    child: popup,
+                  Positioned.fill(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 150),
+                      child: popup,
+                    ),
                   ),
-                ),
-                if (floatingBottomPart != null)
+                  if (floatingBottomPart != null)
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      height: floatingBottomPart!.height,
+                      child: floatingBottomPart!.child,
+                    ),
                   Positioned(
-                    bottom: 0,
+                    top: 0,
                     left: 0,
                     right: 0,
-                    height: floatingBottomPart!.height,
-                    child: floatingBottomPart!.child,
+                    height: floatingTopPart!.height,
+                    child: floatingTopPart!.child,
                   ),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: floatingTopPart!.height,
-                  child: floatingTopPart!.child,
-                ),
-                if (toast != null)
-                  AnimatedPositioned(
-                    duration: const Duration(milliseconds: 150),
-                    left: 0,
-                    right: 0,
-                    bottom: floatingBottomPart?.obscuredHeight ?? 0,
-                    child: toast!,
-                  ),
-              ],
+                ],
+              ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
+              floatingActionButton: floatingActionButton,
+              bottomNavigationBar: AnimatedPadding(
+                duration: const Duration(milliseconds: 150),
+                padding: EdgeInsets.only(
+                    bottom: floatingBottomPart?.obscuredHeight ?? 0),
+                child: toast,
+              ),
             ),
           ),
         ],
       ),
-      floatingActionButton: floatingActionButton,
       bottomNavigationBar: BottomAppBar(
         elevation: 0.0,
         child: bottomPart,
       ),
     );
   }
+
+  Widget getScrollAdjustedBody() {
+    if (!scrollable) {
+      return getPaddedBody();
+    } else {
+      return SingleChildScrollView(
+        child: getPaddedBody(),
+      );
+    }
+  }
+
+  Widget getPaddedBody() => Padding(
+        padding: EdgeInsets.only(
+            top: floatingTopPart?.obscuredHeight ?? 0,
+            bottom: floatingBottomPart?.obscuredHeight ?? 0),
+        child: body,
+      );
 }
