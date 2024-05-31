@@ -19,8 +19,8 @@ import 'package:behmor_roast/src/timer/widgets/roast_pop_scope.dart';
 import 'package:behmor_roast/src/timer/widgets/roast_tip_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/time_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/timed_check_temp_widget.dart';
+import 'package:behmor_roast/src/timer/widgets/timer_scaffold.dart';
 import 'package:behmor_roast/src/util/logo_title.dart';
-import 'package:behmor_roast/src/util/widgets/animated_blur_out.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
@@ -75,13 +75,7 @@ class TimerPage extends ConsumerWidget {
       );
     }
 
-    const roasterControlsHeight = 65.0;
-    const timeWidgetHeight = 150.0;
-    const timeWidgetOverlap = 45.0;
-
-    final showRoasterControls = state == RoastState.roasting ||
-        state == RoastState.ready ||
-        state == RoastState.done;
+    final showRoasterControls = state == RoastState.roasting;
 
     final bool showTempPopup;
     final Widget tempPopupWidget;
@@ -120,12 +114,15 @@ class TimerPage extends ConsumerWidget {
     }
 
     final Widget body;
+    final bool scrollable;
     if (state == RoastState.waiting || state == RoastState.preheating) {
+      scrollable = false;
       body = const Padding(
         padding: EdgeInsets.all(16),
         child: PreheatWidget(),
       );
     } else if (state == RoastState.preheatDone) {
+      scrollable = false;
       body = Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -151,89 +148,62 @@ class TimerPage extends ConsumerWidget {
         ),
       );
     } else {
-      body = SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: timeWidgetHeight - timeWidgetOverlap),
-            TempChart(
-              logs: logs,
-              copyLogs: copyLogs,
-              isLive: true,
-            ),
-            TempLogWidget(
-              logs: logs,
-              isLive: true,
-              isDiff: copyingRoast != null,
-            ),
-            const ProjectionsWidget(),
-            if (showRoasterControls)
-              const SizedBox(height: roasterControlsHeight),
-          ],
-        ),
+      scrollable = true;
+      body = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TempChart(
+            logs: logs,
+            copyLogs: copyLogs,
+            isLive: true,
+          ),
+          TempLogWidget(
+            logs: logs,
+            isLive: true,
+            isDiff: copyingRoast != null,
+          ),
+          const ProjectionsWidget(),
+        ],
       );
     }
 
     return RoastPopScope(
       state: state,
-      child: Scaffold(
+      child: TimerScaffold(
         appBar: AppBar(
           title: const LogoTitle('Now Roasting'),
           actions: const [BuzzBeepWidget()],
         ),
-        body: Column(
+        body: body,
+        scrollable: scrollable,
+        popup: showTempPopup ? tempPopupWidget : null,
+        topPart: AlertWidget(
+          alerts: alerts,
+        ),
+        floatingTopPart: const FloatingPart(
+          height: 120,
+          overlap: 10,
+          child: TimeWidget(height: 120),
+        ),
+        floatingBottomPart: showRoasterControls
+            ? const FloatingPart(
+                height: 65.0,
+                overlap: 0,
+                child: ControlsWidget(),
+              )
+            : null,
+        toast: RoastTipWidget(
+          hide: showTempPopup,
+          tips: tips,
+        ),
+        floatingActionButton: fab,
+        bottomPart: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            AlertWidget(
-              alerts: alerts,
-            ),
-            Expanded(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: AnimatedBlurOut(
-                      duration: const Duration(milliseconds: 250),
-                      blur: showTempPopup ? 1.0 : 0.0,
-                      child: body,
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 150),
-                      child: tempPopupWidget,
-                    ),
-                  ),
-                  if (showRoasterControls)
-                    const Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      height: roasterControlsHeight,
-                      child: ControlsWidget(),
-                    ),
-                  const Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: TimeWidget(),
-                  ),
-                ],
-              ),
-            ),
             if (copyingRoast != null) const InstructionsWidget(),
             const PhaseControlWidget(),
           ],
-        ),
-        floatingActionButton: fab,
-        bottomNavigationBar: BottomAppBar(
-          elevation: 0.0,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (!showTempPopup) RoastTipWidget(tips: tips),
-            ],
-          ),
         ),
       ),
     );

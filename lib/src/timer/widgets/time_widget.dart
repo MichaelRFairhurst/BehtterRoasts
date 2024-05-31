@@ -10,7 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TimeWidget extends ConsumerWidget {
-  const TimeWidget({super.key});
+  const TimeWidget({
+    required this.height,
+    super.key,
+  });
+
+  final double height;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,42 +35,45 @@ class TimeWidget extends ConsumerWidget {
     final showRoastInfo =
         state == RoastState.roasting || state == RoastState.done;
 
-    return AnimatedPopUp(
-      child: SizedBox(
-        height: 115,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            const DevelopmentWidget(),
-            OversizedCircle(
-              borderWidth: 1,
-              borderColor: RoastAppTheme.metalLight,
-              oversize: const EdgeInsets.only(left: 25, right: 7),
-              color: RoastAppTheme.cremaLight,
-              alignment: Alignment.topRight,
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                width: 110,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: tempCircleParts(projections),
+    return Align(
+      alignment: Alignment.topCenter,
+      child: AnimatedPopUp(
+        child: SizedBox(
+          height: 115,
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              const DevelopmentWidget(),
+              OversizedCircle(
+                borderWidth: 1,
+                borderColor: RoastAppTheme.metalLight,
+                oversize: const EdgeInsets.only(left: 25, right: 7),
+                color: RoastAppTheme.cremaLight,
+                alignment: Alignment.topRight,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  width: 110,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: tempCircleParts(projections),
+                  ),
                 ),
               ),
-            ),
-            OversizedCircle(
-              borderWidth: 5,
-              borderColor: RoastAppTheme.lime,
-              oversize: const EdgeInsets.symmetric(horizontal: 8),
-              color: RoastAppTheme.cremaLight,
-              alignment: Alignment.topCenter,
-              child: Container(
-                width: 150,
-                height: 110,
-                padding: const EdgeInsets.only(top: 10, bottom: 15),
-                child: timeCircleContent(time, state, showRoastInfo, ref),
+              OversizedCircle(
+                borderWidth: 5,
+                borderColor: RoastAppTheme.lime,
+                oversize: const EdgeInsets.symmetric(horizontal: 8),
+                color: RoastAppTheme.cremaLight,
+                alignment: Alignment.topCenter,
+                child: Container(
+                  width: 150,
+                  height: 110,
+                  padding: const EdgeInsets.only(top: 10, bottom: 15),
+                  child: timeCircleContent(time, state, showRoastInfo, ref),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

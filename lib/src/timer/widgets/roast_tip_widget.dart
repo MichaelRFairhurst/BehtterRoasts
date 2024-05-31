@@ -1,13 +1,16 @@
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/util/widgets/animated_pop_up.dart';
+import 'package:behmor_roast/src/util/widgets/sliding_switcher.dart';
 import 'package:flutter/material.dart';
 
 class RoastTipWidget extends StatefulWidget {
   const RoastTipWidget({
     required this.tips,
+	required this.hide,
     super.key,
   });
 
+  final bool hide;
   final Set<String> tips;
 
   @override
@@ -47,40 +50,47 @@ class RoastTipWidgetState extends State<RoastTipWidget> {
     final tip = tips.isEmpty ? null : tips.first;
 
     return AnimatedPopUp(
-      child: tip == null
+      child: widget.hide || tip == null
           ? null
-          : Container(
-              key: Key(tip),
-              decoration: const BoxDecoration(
+          : SlidingSwitcher(
+              child: Card(
+			    elevation: 3,
+				margin: const EdgeInsets.symmetric(
+				  vertical: 8,
+				  horizontal: 12,
+				),
+                key: Key(tip),
                 color: RoastAppTheme.capuccino,
-              ),
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Icon(Icons.school, color: RoastAppTheme.crema),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Roasting Tip: $tip',
-                      style: const TextStyle(color: RoastAppTheme.crema),
-                    ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.school, color: RoastAppTheme.crema),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Roasting Tip: $tip',
+                          style: const TextStyle(color: RoastAppTheme.crema),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: ElevatedButton(
+                          style: RoastAppTheme.tinyButtonTheme.style,
+                          onPressed: () {
+                            setState(() {
+                              dismissed.add(tips.first);
+                              tips.removeAt(0);
+                            });
+                          },
+                          child: const Icon(Icons.cancel, size: 12),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 8),
-                  SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: ElevatedButton(
-                      style: RoastAppTheme.tinyButtonTheme.style,
-                      onPressed: () {
-                        setState(() {
-                          dismissed.add(tips.first);
-                          tips.removeAt(0);
-                        });
-                      },
-                      child: const Icon(Icons.cancel, size: 12),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
     );
