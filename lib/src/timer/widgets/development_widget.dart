@@ -24,7 +24,7 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget>
     super.initState();
     ticker = createTicker((_) {
       setState(() {
-        time = ref.read(roastTimerProvider).elapsed()!;
+        time = ref.read(roastTimerProvider).elapsed() ?? Duration.zero;
       });
     })
       ..start();
@@ -44,7 +44,12 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget>
     List<Widget> innerParts;
     double progress;
 
-    if (timeline.dryEnd == null) {
+    if (time == null || time!.inMicroseconds == 0) {
+      innerParts = [
+        const Text('Not yet roasting.', textAlign: TextAlign.center)
+      ];
+      progress = 0;
+    } else if (timeline.dryEnd == null) {
       innerParts = [
         const Text('Waiting for dry end.', textAlign: TextAlign.center)
       ];

@@ -20,8 +20,8 @@ class TimeWidget extends ConsumerWidget {
     Duration? time = ref.watch(secondsRoastProvider).value;
 
     if (state == RoastState.waiting ||
-        state == RoastState.preheatDone ||
-        time == null) {
+        state == RoastState.preheating ||
+        state == RoastState.preheatDone) {
       return const AnimatedPopUp(
         child: SizedBox(key: ValueKey('hide')),
       );
@@ -36,23 +36,22 @@ class TimeWidget extends ConsumerWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            if (showRoastInfo) const DevelopmentWidget(),
-            if (showRoastInfo)
-              OversizedCircle(
-                borderWidth: 1,
-                borderColor: RoastAppTheme.metalLight,
-                oversize: const EdgeInsets.only(left: 25, right: 7),
-                color: RoastAppTheme.cremaLight,
-                alignment: Alignment.topRight,
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  width: 110,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: tempCircleParts(projections),
-                  ),
+            const DevelopmentWidget(),
+            OversizedCircle(
+              borderWidth: 1,
+              borderColor: RoastAppTheme.metalLight,
+              oversize: const EdgeInsets.only(left: 25, right: 7),
+              color: RoastAppTheme.cremaLight,
+              alignment: Alignment.topRight,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                width: 110,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: tempCircleParts(projections),
                 ),
               ),
+            ),
             OversizedCircle(
               borderWidth: 5,
               borderColor: RoastAppTheme.lime,
@@ -77,31 +76,23 @@ class TimeWidget extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        if (state == RoastState.waiting ||
-            state == RoastState.preheatDone ||
-            time == null)
-          Text(
-            'Not roasting.',
-            style: RoastAppTheme.materialTheme.textTheme.labelMedium,
-          ),
-        if (showRoastInfo)
-          Text(
-            'Roast Time',
-            style: RoastAppTheme.materialTheme.textTheme.labelMedium,
-          ),
+        Text(
+          'Roast Time',
+          style: RoastAppTheme.materialTheme.textTheme.labelMedium,
+        ),
         TimestampWidget(time ?? Duration.zero,
             style: RoastAppTheme.materialTheme.textTheme.displaySmall
                 ?.copyWith(fontFamily: 'Roboto')),
-        const SizedBox(height: 2),
-        SizedBox(
-          height: 28,
-          child: ElevatedButton.icon(
-            icon: const Icon(Icons.check),
-            label: const Text('Done'),
-            style: RoastAppTheme.limeButtonTheme.style,
-            onPressed: donePressed(state, ref),
+        if (showRoastInfo)
+          SizedBox(
+            height: 28,
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.check),
+              label: const Text('Done'),
+              style: RoastAppTheme.limeButtonTheme.style,
+              onPressed: donePressed(state, ref),
+            ),
           ),
-        ),
       ],
     );
   }
