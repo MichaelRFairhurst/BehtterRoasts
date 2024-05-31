@@ -16,15 +16,18 @@ import 'package:flutter/material.dart';
 class AnimatedPopUp extends StatefulWidget {
   const AnimatedPopUp({
     this.child,
+	this.duration,
     this.axisAlignment = 1.0,
     super.key,
   });
 
   const AnimatedPopUp.down({
     this.child,
+	this.duration,
     super.key,
   }) : axisAlignment = -1.0;
 
+  final Duration? duration;
   final double axisAlignment;
   final Widget? child;
 
@@ -43,7 +46,7 @@ class AnimatedPopUpState extends State<AnimatedPopUp>
     super.initState();
     animation = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 150),
+      duration: widget.duration ?? const Duration(milliseconds: 150),
     );
 
     showing = widget.child;

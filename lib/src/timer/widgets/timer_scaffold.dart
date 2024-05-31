@@ -1,4 +1,5 @@
 import 'package:behmor_roast/src/util/widgets/animated_blur_out.dart';
+import 'package:behmor_roast/src/util/widgets/animated_pop_up.dart';
 import 'package:flutter/material.dart';
 
 class FloatingPart {
@@ -13,6 +14,8 @@ class FloatingPart {
   final double overlap;
 
   double get obscuredHeight => height - overlap;
+
+  Key get keyOrType => child.key ?? ValueKey(child.runtimeType);
 }
 
 class TimerScaffold extends StatelessWidget {
@@ -69,20 +72,34 @@ class TimerScaffold extends StatelessWidget {
                       child: popup,
                     ),
                   ),
-                  if (floatingBottomPart != null)
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      height: floatingBottomPart!.height,
-                      child: floatingBottomPart!.child,
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: AnimatedPopUp(
+					  axisAlignment: -1.0,
+					  duration: const Duration(milliseconds: 250),
+                      child: SizedBox(
+                        key: floatingBottomPart?.keyOrType,
+                        height: floatingBottomPart?.height,
+                        child: floatingBottomPart?.child,
+                      ),
                     ),
+                  ),
                   Positioned(
                     top: 0,
                     left: 0,
                     right: 0,
-                    height: floatingTopPart!.height,
-                    child: floatingTopPart!.child,
+                    child: AnimatedPopUp(
+                      child: Align(
+                        key: floatingTopPart?.keyOrType,
+                        alignment: Alignment.topCenter,
+                        child: SizedBox(
+                          height: floatingTopPart?.height,
+                          child: floatingTopPart?.child,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -99,10 +116,7 @@ class TimerScaffold extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 0.0,
-        child: bottomPart,
-      ),
+      bottomNavigationBar: bottomPart,
     );
   }
 

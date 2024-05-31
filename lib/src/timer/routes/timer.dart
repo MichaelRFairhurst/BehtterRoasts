@@ -107,8 +107,8 @@ class TimerPage extends ConsumerWidget {
         ),
       );
     } else {
-	  tempPopupWidget = null;
-	}
+      tempPopupWidget = null;
+    }
 
     final Widget body;
     final bool scrollable;
@@ -177,11 +177,15 @@ class TimerPage extends ConsumerWidget {
         topPart: AlertWidget(
           alerts: alerts,
         ),
-        floatingTopPart: const FloatingPart(
-          height: 120,
-          overlap: 10,
-          child: TimeWidget(height: 120),
-        ),
+        floatingTopPart: state == RoastState.ready ||
+                state == RoastState.roasting ||
+                state == RoastState.done
+            ? const FloatingPart(
+                height: 120,
+                overlap: 10,
+                child: TimeWidget(),
+              )
+            : null,
         floatingBottomPart: showRoasterControls
             ? const FloatingPart(
                 height: 65.0,

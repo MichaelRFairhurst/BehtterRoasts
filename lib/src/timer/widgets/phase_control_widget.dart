@@ -104,6 +104,7 @@ class PhaseControlWidget extends ConsumerWidget {
     final running = ref.watch(roastStateProvider) == RoastState.roasting;
 
     return AnimatedPopUp(
+      axisAlignment: -1.0,
       child: !running
           ? const SizedBox()
           : Container(
