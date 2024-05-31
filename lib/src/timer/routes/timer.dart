@@ -154,12 +154,12 @@ class TimerPage extends ConsumerWidget {
             copyLogs: copyLogs,
             isLive: true,
           ),
+          const ProjectionsWidget(),
           TempLogWidget(
             logs: logs,
             isLive: true,
             isDiff: copyingRoast != null,
           ),
-          const ProjectionsWidget(),
         ],
       );
     }

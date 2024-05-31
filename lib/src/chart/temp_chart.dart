@@ -153,7 +153,7 @@ class TempChartState extends ConsumerState<TempChart>
             logs: widget.logs,
             copyLogs: widget.copyLogs,
           ),
-          child: const SizedBox(height: 250, width: double.infinity),
+          child: const SizedBox(height: 175, width: double.infinity),
         ),
         Legend(
           items: [
