@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 import 'package:behmor_roast/src/chart/widgets/legend.dart';
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
@@ -230,8 +229,37 @@ class TempChartPainter extends CustomPainter {
 
   Duration get timeRange => elapsed.timeRangeEnd;
 
+  static const noDataLogs = [
+    RoastLog(
+      time: Duration(seconds: 0),
+      temp: 190,
+    ),
+    RoastLog(
+      time: Duration(seconds: 30),
+      temp: 198,
+    ),
+    RoastLog(
+      time: Duration(seconds: 60),
+      temp: 230,
+    ),
+    RoastLog(
+      time: Duration(seconds: 90),
+      temp: 226,
+    ),
+    RoastLog(
+      time: Duration(seconds: 120),
+      temp: 250,
+    ),
+  ];
+
+  bool get hasData => logs.any((log) => log.phase != RoastPhase.preheat);
+
   @override
   void paint(Canvas canvas, Size size) {
+    if (timeRange.inSeconds == 0) {
+      return;
+    }
+
     final graphicRegion = padding.deflateRect(const Offset(0, 0) & size);
     canvas.drawPath(
         buildYGuidesPath(graphicRegion),
@@ -249,7 +277,7 @@ class TempChartPainter extends CustomPainter {
     drawFirstCrackRange(canvas, graphicRegion, tempLinePath);
     drawRor(canvas, graphicRegion);
 
-    if (copyLogs != null) {
+    if (copyLogs != null && hasData) {
       final copyLinePath =
           buildLinePath(copyLogs!, graphicRegion, (log) => log.temp, tempRange);
       drawLineAreaGradient(
@@ -258,8 +286,12 @@ class TempChartPainter extends CustomPainter {
     }
 
     drawLineAreaGradient(
-        canvas, tempLinePath, graphicRegion, RoastAppTheme.errorColor,
-        extraOffset: projectionPoint(graphicRegion));
+      canvas,
+      tempLinePath,
+      graphicRegion,
+      RoastAppTheme.errorColor.withOpacity(hasData ? 1.0 : 0.15),
+      extraOffset: projectionPoint(graphicRegion),
+    );
 
     final projectionPath = buildProjectionPath(graphicRegion);
 
@@ -269,6 +301,36 @@ class TempChartPainter extends CustomPainter {
           ..color = RoastAppTheme.errorColor
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2);
+
+    if (!hasData) {
+      drawNoDataText(canvas, graphicRegion);
+    }
+  }
+
+  void drawNoDataText(Canvas canvas, Rect region) {
+    final textPainter = TextPainter(
+      text: TextSpan(
+          text: '[No temperature data yet]',
+          style: RoastAppTheme.materialTheme.textTheme.labelSmall?.copyWith(
+            color: RoastAppTheme.capuccino.withOpacity(0.5),
+            shadows: const [
+              Shadow(
+                color: Colors.white,
+                offset: Offset(0, 0),
+                blurRadius: 0.0,
+              ),
+              Shadow(
+                color: Colors.white,
+                offset: Offset(0, 0),
+                blurRadius: 3.0,
+              ),
+            ],
+          )),
+      textDirection: TextDirection.ltr,
+    );
+    textPainter.layout();
+    var centered = Alignment.center.inscribe(textPainter.size, region);
+    textPainter.paint(canvas, centered.topLeft);
   }
 
   Path buildYGuidesPath(Rect region) {
@@ -377,7 +439,7 @@ class TempChartPainter extends CustomPainter {
       final paint = Paint()..color = RoastAppTheme.metal;
       DrawableRoot? svg;
       switch (phase) {
-		case RoastPhase.preheat:
+        case RoastPhase.preheat:
         case RoastPhase.firstCrackStart:
         case RoastPhase.firstCrackEnd:
           return;
@@ -480,7 +542,7 @@ class TempChartPainter extends CustomPainter {
           ..strokeWidth = 2
           ..style = PaintingStyle.stroke);
 
-    final areaBasePath;
+    final Path areaBasePath;
     if (extraOffset != null) {
       areaBasePath = Path()
         ..addPath(
@@ -507,6 +569,7 @@ class TempChartPainter extends CustomPainter {
   }
 
   Path buildTempLinePath(Rect region) {
+    final logs = hasData ? this.logs : noDataLogs;
     return buildLinePath(logs, region, (log) => log.temp, tempRange);
   }
 
