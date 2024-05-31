@@ -4,6 +4,7 @@ import 'package:behmor_roast/src/roast/models/roast_log.dart';
 import 'package:behmor_roast/src/roast/services/roast_profile_service.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
+import 'package:collection/collection.dart';
 
 class ProjectionService {
   Projection createProjections({
@@ -42,9 +43,11 @@ class ProjectionService {
     }
 
     if (elapsed != null && phaseLogs.isNotEmpty) {
-      if (phaseLogs.last.phase == RoastPhase.firstCrackEnd) {
+      final firstCrackStart = phaseLogs
+          .firstWhereOrNull((log) => log.phase == RoastPhase.firstCrackStart);
+      if (firstCrackStart != null) {
         final inverseRatio = 1.0 / (1.0 - roastConfig.targetDevelopment);
-        roastTime = phaseLogs.last.time * inverseRatio;
+        roastTime = firstCrackStart.time * inverseRatio;
         timeRemaining = roastTime - elapsed;
       }
     }
