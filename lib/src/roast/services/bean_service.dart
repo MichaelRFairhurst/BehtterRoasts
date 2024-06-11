@@ -5,9 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 const _beandb = 'beans';
 
 class BeanService {
-  final User auth;
+  final User _auth;
 
-  final africaRegex = RegExp(
+  final _africaRegex = RegExp(
     <String>{
       'africa',
       'angola',
@@ -30,7 +30,7 @@ class BeanService {
     caseSensitive: false,
   );
 
-  final asiaRegex = RegExp(
+  final _asiaRegex = RegExp(
     <String>{
       'asia',
       'cambodia',
@@ -47,7 +47,7 @@ class BeanService {
     caseSensitive: false,
   );
 
-  final indonesiaRegex = RegExp(
+  final _indonesiaRegex = RegExp(
     <String>{
       'indonesia',
       'aceh',
@@ -68,7 +68,7 @@ class BeanService {
     caseSensitive: false,
   );
 
-  final southAmericaRegex = RegExp(
+  final _southAmericaRegex = RegExp(
     <String>{
       'south america',
       'bolivia',
@@ -84,7 +84,7 @@ class BeanService {
     caseSensitive: false,
   );
 
-  final centralAmericaRegex = RegExp(
+  final _centralAmericaRegex = RegExp(
     <String>{
       'central',
       'costa rica',
@@ -98,11 +98,11 @@ class BeanService {
     caseSensitive: false,
   );
 
-  BeanService(this.auth);
+  BeanService(this._auth);
 
   Stream<List<Bean>> get beans => FirebaseFirestore.instance
           .collection(_beandb)
-          .where('ownerId', isEqualTo: auth.uid)
+          .where('ownerId', isEqualTo: _auth.uid)
           .snapshots()
           .map((record) {
         return record.docs
@@ -124,15 +124,15 @@ class BeanService {
   }
 
   Continent continentOf(Bean bean) {
-    if (africaRegex.hasMatch(bean.name)) {
+    if (_africaRegex.hasMatch(bean.name)) {
       return Continent.africa;
-    } else if (asiaRegex.hasMatch(bean.name)) {
+    } else if (_asiaRegex.hasMatch(bean.name)) {
       return Continent.asia;
-    } else if (indonesiaRegex.hasMatch(bean.name)) {
+    } else if (_indonesiaRegex.hasMatch(bean.name)) {
       return Continent.indonesia;
-    } else if (southAmericaRegex.hasMatch(bean.name)) {
+    } else if (_southAmericaRegex.hasMatch(bean.name)) {
       return Continent.southAmerica;
-    } else if (centralAmericaRegex.hasMatch(bean.name)) {
+    } else if (_centralAmericaRegex.hasMatch(bean.name)) {
       return Continent.centralAmerica;
     } else {
       return Continent.other;
