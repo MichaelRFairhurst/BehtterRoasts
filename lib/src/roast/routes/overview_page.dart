@@ -79,7 +79,7 @@ class OverviewPageState extends ConsumerState<OverviewPage> {
                   },
                   style: RoastAppTheme.largeButtonTheme.style,
                   label: const Text('Begin your first roast'),
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(Icons.local_fire_department),
                 ),
                 const SizedBox(height: 24),
                 Bobble(
@@ -121,6 +121,40 @@ class OverviewPageState extends ConsumerState<OverviewPage> {
                           childCount: unarchived.length,
                         ),
                       ),
+                      if (unarchived.isEmpty)
+                        SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 16),
+                              Text(
+                                "You don't have any unarchived coffees. To"
+                                ' roast a new bean, tap the button below.',
+                                style: RoastAppTheme
+                                    .materialTheme.textTheme.bodyMedium,
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton.icon(
+                                onPressed: () {
+                                  context.push(Routes.newRoast);
+                                },
+                                style: RoastAppTheme.largeButtonTheme.style,
+                                label: const Text('Roast a new bean'),
+                                icon: const Icon(Icons.local_fire_department),
+                              ),
+                              const SizedBox(height: 24),
+                              Bobble(
+                                child: Text(
+                                  '☝️',
+                                  style: RoastAppTheme
+                                      .materialTheme.textTheme.displayMedium,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              const SizedBox(height: 48),
+                            ],
+                          ),
+                        ),
                       if (archived.isNotEmpty)
                         SliverToBoxAdapter(
                           child: Padding(
@@ -173,16 +207,16 @@ class OverviewPageState extends ConsumerState<OverviewPage> {
       floatingActionButton: beans.when(
         loading: () => null,
         error: (_, __) => null,
-        data: (data) => data.isEmpty
-            ? null
-            : ElevatedButton.icon(
+        data: (data) => data.any((bean) => !bean.archived)
+            ? ElevatedButton.icon(
                 style: RoastAppTheme.largeButtonTheme.style,
                 icon: const Icon(Icons.add),
                 label: const Text('New Roast'),
                 onPressed: () {
                   ref.read(copyOfRoastProvider.notifier).state = null;
                   context.push(Routes.newRoast);
-                }),
+                })
+            : null,
       ),
     );
   }

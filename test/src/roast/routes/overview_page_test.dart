@@ -196,9 +196,9 @@ void main() {
         ),
       );
 
-	Future.delayed(const Duration(seconds: 1)).then((_) {
-	  beanService._load(const []);
-	});
+    Future.delayed(const Duration(seconds: 1)).then((_) {
+      beanService._load(const []);
+    });
 
     await tester.pumpDeviceBuilder(
       builder,
@@ -208,5 +208,36 @@ void main() {
     );
 
     await screenMatchesGolden(tester, 'no_beans_golden');
+  });
+
+  testGoldens('all beans archived golden', (tester) async {
+    final beanService = FakeBeanService();
+
+    final builder = DeviceBuilder()
+      ..addScenario(
+        widget: ProviderScope(
+          overrides: [
+            beanServiceProvider.overrideWithValue(beanService),
+          ],
+          child: const OverviewPage(),
+        ),
+      );
+
+    Future.delayed(const Duration(seconds: 1)).then((_) {
+      beanService._load(const <Bean>[
+        Bean(id: '1', ownerId: '1', name: 'bean 1', archived: true),
+        Bean(id: '2', ownerId: '2', name: 'bean 2', archived: true),
+        Bean(id: '3', ownerId: '3', name: 'bean 3', archived: true),
+      ]);
+    });
+
+    await tester.pumpDeviceBuilder(
+      builder,
+      wrapper: materialAppWrapper(
+        theme: RoastAppTheme.materialTheme,
+      ),
+    );
+
+    await screenMatchesGolden(tester, 'all_archived_beans_golden');
   });
 }
