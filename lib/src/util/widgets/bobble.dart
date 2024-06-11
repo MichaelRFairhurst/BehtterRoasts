@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class Bobble extends StatefulWidget {
@@ -27,7 +29,11 @@ class BobbleState extends State<Bobble> with SingleTickerProviderStateMixin {
         controller.forward();
       }
     });
-    controller.forward();
+
+    // Special case, this messes up goldens tests.
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      controller.forward();
+    }
   }
 
   @override

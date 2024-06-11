@@ -178,7 +178,7 @@ class RoastAppTheme {
           return capuccinoLightest;
         }),
       ),
-      textTheme: TextTheme(
+      textTheme: GoogleFonts.notoSansTextTheme().copyWith(
         displayLarge: GoogleFonts.vollkorn(
             textStyle: ThemeData.light().textTheme.displayLarge),
         displayMedium: GoogleFonts.vollkorn(

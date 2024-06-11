@@ -53,6 +53,7 @@ dependencies:
   collection: ^1.16.0
   wakelock: ^0.6.2
   vibration: ^1.7.7
+  golden_toolkit: ^0.13.0
 
 dev_dependencies:
   flutter_test:
@@ -82,6 +83,8 @@ flutter:
   uses-material-design: true
 
   assets:
+    - fonts/Vollkorn-Regular.ttf
+    - fonts/NotoSans-Regular.ttf
     - images/logo_transparent.svg
     - images/crack.svg
     - images/2nd_crack.svg

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/models/bean.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/services/bean_service.dart';
@@ -8,10 +9,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:behmor_roast/src/roast/routes/overview_page.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 
 class FakeBeanService implements BeanService {
   final _beans = <Bean>[];
-  final _ctrl = StreamController<List<Bean>>();
+  final _ctrl = StreamController<List<Bean>>.broadcast();
 
   FakeBeanService();
 
@@ -179,5 +181,32 @@ void main() {
     expect(find.textContaining('2 archived'), findsOneWidget);
     expect(find.text('My other bean'), findsNothing);
     expect(find.text('new bean'), findsNothing);
+  });
+
+  testGoldens('no beans golden', (tester) async {
+    final beanService = FakeBeanService();
+
+    final builder = DeviceBuilder()
+      ..addScenario(
+        widget: ProviderScope(
+          overrides: [
+            beanServiceProvider.overrideWithValue(beanService),
+          ],
+          child: const OverviewPage(),
+        ),
+      );
+
+	Future.delayed(const Duration(seconds: 1)).then((_) {
+	  beanService._load(const []);
+	});
+
+    await tester.pumpDeviceBuilder(
+      builder,
+      wrapper: materialAppWrapper(
+        theme: RoastAppTheme.materialTheme,
+      ),
+    );
+
+    await screenMatchesGolden(tester, 'no_beans_golden');
   });
 }
