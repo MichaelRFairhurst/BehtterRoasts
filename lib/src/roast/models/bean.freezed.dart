@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'bean.dart';
 
@@ -20,7 +20,7 @@ Bean _$BeanFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Bean {
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   String? get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get ownerId => throw _privateConstructorUsedError;
@@ -37,7 +37,7 @@ abstract class $BeanCopyWith<$Res> {
       _$BeanCopyWithImpl<$Res, Bean>;
   @useResult
   $Res call(
-      {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
+      {@JsonKey(ignore: true) String? id,
       String name,
       String ownerId,
       bool archived});
@@ -89,7 +89,7 @@ abstract class _$$_BeanCopyWith<$Res> implements $BeanCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(includeFromJson: false, includeToJson: false) String? id,
+      {@JsonKey(ignore: true) String? id,
       String name,
       String ownerId,
       bool archived});
@@ -134,7 +134,7 @@ class __$$_BeanCopyWithImpl<$Res> extends _$BeanCopyWithImpl<$Res, _$_Bean>
 @JsonSerializable()
 class _$_Bean implements _Bean {
   const _$_Bean(
-      {@JsonKey(includeFromJson: false, includeToJson: false) this.id,
+      {@JsonKey(ignore: true) this.id,
       required this.name,
       required this.ownerId,
       this.archived = false});
@@ -142,7 +142,7 @@ class _$_Bean implements _Bean {
   factory _$_Bean.fromJson(Map<String, dynamic> json) => _$$_BeanFromJson(json);
 
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   final String? id;
   @override
   final String name;
@@ -189,7 +189,7 @@ class _$_Bean implements _Bean {
 
 abstract class _Bean implements Bean {
   const factory _Bean(
-      {@JsonKey(includeFromJson: false, includeToJson: false) final String? id,
+      {@JsonKey(ignore: true) final String? id,
       required final String name,
       required final String ownerId,
       final bool archived}) = _$_Bean;
@@ -197,7 +197,7 @@ abstract class _Bean implements Bean {
   factory _Bean.fromJson(Map<String, dynamic> json) = _$_Bean.fromJson;
 
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   String? get id;
   @override
   String get name;

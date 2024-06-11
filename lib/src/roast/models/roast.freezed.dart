@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'roast.dart';
 
@@ -21,7 +21,7 @@ Roast _$RoastFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Roast {
   String get beanId => throw _privateConstructorUsedError;
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   String? get id => throw _privateConstructorUsedError;
   String? get copyOfRoastId => throw _privateConstructorUsedError;
   RoastConfig get config => throw _privateConstructorUsedError;
@@ -47,7 +47,7 @@ abstract class $RoastCopyWith<$Res> {
   @useResult
   $Res call(
       {String beanId,
-      @JsonKey(includeFromJson: false, includeToJson: false) String? id,
+      @JsonKey(ignore: true) String? id,
       String? copyOfRoastId,
       RoastConfig config,
       String roastNumber,
@@ -176,7 +176,7 @@ abstract class _$$_RoastCopyWith<$Res> implements $RoastCopyWith<$Res> {
   @useResult
   $Res call(
       {String beanId,
-      @JsonKey(includeFromJson: false, includeToJson: false) String? id,
+      @JsonKey(ignore: true) String? id,
       String? copyOfRoastId,
       RoastConfig config,
       String roastNumber,
@@ -280,7 +280,7 @@ class __$$_RoastCopyWithImpl<$Res> extends _$RoastCopyWithImpl<$Res, _$_Roast>
 class _$_Roast extends _Roast {
   const _$_Roast(
       {required this.beanId,
-      @JsonKey(includeFromJson: false, includeToJson: false) this.id,
+      @JsonKey(ignore: true) this.id,
       this.copyOfRoastId,
       required this.config,
       required this.roastNumber,
@@ -303,7 +303,7 @@ class _$_Roast extends _Roast {
   @override
   final String beanId;
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   final String? id;
   @override
   final String? copyOfRoastId;
@@ -325,7 +325,6 @@ class _$_Roast extends _Roast {
   @override
   @JsonKey()
   List<TempLog> get tempLogs {
-    if (_tempLogs is EqualUnmodifiableListView) return _tempLogs;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_tempLogs);
   }
@@ -334,7 +333,6 @@ class _$_Roast extends _Roast {
   @override
   @JsonKey()
   List<ControlLog> get controlLogs {
-    if (_controlLogs is EqualUnmodifiableListView) return _controlLogs;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_controlLogs);
   }
@@ -343,7 +341,6 @@ class _$_Roast extends _Roast {
   @override
   @JsonKey()
   List<_PhaseLog> get phaseLogs {
-    if (_phaseLogs is EqualUnmodifiableListView) return _phaseLogs;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_phaseLogs);
   }
@@ -414,7 +411,7 @@ class _$_Roast extends _Roast {
 abstract class _Roast extends Roast {
   const factory _Roast(
       {required final String beanId,
-      @JsonKey(includeFromJson: false, includeToJson: false) final String? id,
+      @JsonKey(ignore: true) final String? id,
       final String? copyOfRoastId,
       required final RoastConfig config,
       required final String roastNumber,
@@ -433,7 +430,7 @@ abstract class _Roast extends Roast {
   @override
   String get beanId;
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   String? get id;
   @override
   String? get copyOfRoastId;

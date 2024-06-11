@@ -14,7 +14,7 @@ class Roast with _$Roast {
 
   const factory Roast({
     required String beanId,
-    @JsonKey(includeFromJson: false, includeToJson: false) String? id,
+    @JsonKey(ignore: true) String? id,
     String? copyOfRoastId,
     required RoastConfig config,
     required String roastNumber,

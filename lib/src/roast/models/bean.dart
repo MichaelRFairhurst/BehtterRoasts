@@ -15,7 +15,7 @@ enum Continent {
 @Freezed()
 class Bean with _$Bean {
   const factory Bean({
-    @JsonKey(includeFromJson: false, includeToJson: false) String? id,
+    @JsonKey(ignore: true) String? id,
     required String name,
     required String ownerId,
     @Default(false) bool archived,
