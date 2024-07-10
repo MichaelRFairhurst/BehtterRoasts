@@ -27,7 +27,7 @@ class RoastAppTheme {
     fontStyle: FontStyle.italic,
   );
 
-  static final checkTempTextStyle = materialTheme.textTheme.caption!.copyWith(
+  static final checkTempTextStyle = materialTheme.textTheme.bodySmall!.copyWith(
     fontWeight: FontWeight.bold,
   );
 

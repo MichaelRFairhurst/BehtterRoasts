@@ -181,7 +181,7 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
       ...beans.map((bean) => beanTile(bean, beanService, false)),
       Text(
         'or',
-        style: RoastAppTheme.materialTheme.textTheme.caption,
+        style: RoastAppTheme.materialTheme.textTheme.bodySmall,
       ),
       const SizedBox(height: 6),
       ListTileTheme(

@@ -46,7 +46,7 @@ class PhaseChart extends StatelessWidget {
   }
 
   Widget buildLegend(List<Map> data) {
-    final style = RoastAppTheme.materialTheme.textTheme.caption;
+    final style = RoastAppTheme.materialTheme.textTheme.bodySmall;
     return Column(
       children: [
         for (int i = 0; i < data.length; i++)

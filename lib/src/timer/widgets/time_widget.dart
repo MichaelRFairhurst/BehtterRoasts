@@ -118,7 +118,7 @@ class TimeWidget extends ConsumerWidget {
       ...base,
       Text(
         '${formatTemp(tempDiff.abs())} $diffText',
-        style: RoastAppTheme.materialTheme.textTheme.caption
+        style: RoastAppTheme.materialTheme.textTheme.bodySmall
             ?.copyWith(color: diffColor),
       ),
     ];

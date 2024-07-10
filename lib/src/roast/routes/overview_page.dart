@@ -69,7 +69,7 @@ class OverviewPageState extends ConsumerState<OverviewPage> {
                 Text(
                   "You don't have any roasts yet. Tap the button below to"
                   ' begin.',
-                  style: RoastAppTheme.materialTheme.textTheme.subtitle1,
+                  style: RoastAppTheme.materialTheme.textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),

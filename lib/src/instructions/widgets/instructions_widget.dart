@@ -42,7 +42,7 @@ class InstructionsWidgetState extends ConsumerState<InstructionsWidget> {
             padding: const EdgeInsets.only(left: 4),
             child: Text(
               'Instructions:',
-              style: RoastAppTheme.materialTheme.textTheme.subtitle2?.copyWith(
+              style: RoastAppTheme.materialTheme.textTheme.titleSmall?.copyWith(
                 color: RoastAppTheme.cremaLight,
               ),
             ),

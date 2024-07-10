@@ -74,7 +74,7 @@ class LegendItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
-      style: RoastAppTheme.materialTheme.textTheme.caption!,
+      style: RoastAppTheme.materialTheme.textTheme.bodySmall!,
       child: Column(
         children: [
           Row(

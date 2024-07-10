@@ -194,8 +194,9 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
             if (beanErr)
               Text(
                 'Select a bean:',
-                style: RoastAppTheme.materialTheme.textTheme.caption!.copyWith(
-                  color: RoastAppTheme.materialTheme.errorColor,
+                style:
+                    RoastAppTheme.materialTheme.textTheme.bodySmall!.copyWith(
+                  color: RoastAppTheme.errorColor,
                   fontSize: 12.0,
                 ),
               ),

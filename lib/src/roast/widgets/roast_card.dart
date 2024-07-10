@@ -107,7 +107,7 @@ class RoastCardState extends ConsumerState<RoastCard> {
             ),
           ),
           Text('Development',
-              style: RoastAppTheme.materialTheme.textTheme.caption),
+              style: RoastAppTheme.materialTheme.textTheme.bodySmall),
         ],
       );
 
@@ -122,7 +122,7 @@ class RoastCardState extends ConsumerState<RoastCard> {
             ),
           ),
           Text('Roast time',
-              style: RoastAppTheme.materialTheme.textTheme.caption),
+              style: RoastAppTheme.materialTheme.textTheme.bodySmall),
         ],
       );
 
@@ -135,7 +135,7 @@ class RoastCardState extends ConsumerState<RoastCard> {
             ),
           ),
           Text('Weight out',
-              style: RoastAppTheme.materialTheme.textTheme.caption),
+              style: RoastAppTheme.materialTheme.textTheme.bodySmall),
         ],
       );
 

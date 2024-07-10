@@ -48,18 +48,18 @@ class RoastReviewPage extends ConsumerWidget {
         children: [
           Text(
             'Roast #${roast.roastNumber}',
-            style: RoastAppTheme.materialTheme.textTheme.subtitle1,
+            style: RoastAppTheme.materialTheme.textTheme.titleMedium,
             textAlign: TextAlign.center,
           ),
           Text(
             'Roasted: ${dateFormat.format(roast.roasted)}',
-            style: RoastAppTheme.materialTheme.textTheme.subtitle1,
+            style: RoastAppTheme.materialTheme.textTheme.titleMedium,
             textAlign: TextAlign.center,
           ),
           if (copy != null)
             Text(
               'Copy of roast #${copy.roastNumber}',
-              style: RoastAppTheme.materialTheme.textTheme.subtitle2,
+              style: RoastAppTheme.materialTheme.textTheme.titleSmall,
               textAlign: TextAlign.center,
             ),
           Expanded(

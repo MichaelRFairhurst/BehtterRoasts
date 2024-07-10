@@ -354,7 +354,7 @@ class TempChartPainter extends CustomPainter {
       final textPainter = TextPainter(
         text: TextSpan(
           text: '$i°F',
-          style: RoastAppTheme.materialTheme.textTheme.caption,
+          style: RoastAppTheme.materialTheme.textTheme.bodySmall,
         ),
         textDirection: TextDirection.ltr,
       );
@@ -382,7 +382,7 @@ class TempChartPainter extends CustomPainter {
         text: TextSpan(
           text:
               '${d.inMinutes}:${(d.inSeconds % 60).toString().padLeft(2, "0")}',
-          style: RoastAppTheme.materialTheme.textTheme.caption,
+          style: RoastAppTheme.materialTheme.textTheme.bodySmall,
         ),
         textDirection: TextDirection.ltr,
       );
