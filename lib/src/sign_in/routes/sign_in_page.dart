@@ -53,6 +53,8 @@ class SignInPage extends StatelessWidget {
                     ..f(st);
                   developer.log(e.toString());
                   developer.log(st.toString());
+                  showDialog(
+                      context: context, builder: (context) => Text('$e\n$st'));
                   rethrow;
                 }
               },
