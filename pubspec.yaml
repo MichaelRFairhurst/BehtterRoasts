@@ -54,6 +54,7 @@ dependencies:
   wakelock: ^0.6.2
   vibration: ^1.7.7
   golden_toolkit: ^0.13.0
+  logger: ^2.3.0
 
 dev_dependencies:
   flutter_test:

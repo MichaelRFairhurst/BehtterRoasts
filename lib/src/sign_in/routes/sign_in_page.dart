@@ -4,6 +4,8 @@ import 'package:behmor_roast/src/util/widgets/bobble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:logger/logger.dart';
+import 'dart:developer' as developer;
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
@@ -40,8 +42,19 @@ class SignInPage extends StatelessWidget {
             const SizedBox(height: 32),
             SignInButton(
               Buttons.Google,
-              onPressed: () {
-                SignInService().signIn();
+              onPressed: () async {
+                try {
+                  await SignInService().signIn();
+                } catch (e, st) {
+                  print(e);
+                  print(st);
+                  Logger()
+                    ..f(e)
+                    ..f(st);
+                  developer.log(e.toString());
+                  developer.log(st.toString());
+                  rethrow;
+                }
               },
               text: 'Sign in with Google',
             ),
