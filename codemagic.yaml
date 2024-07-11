@@ -27,3 +27,26 @@ workflows:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
       - flutter_drive.log
+
+  simulator-native-ios:
+    name: Ios Test Workflow
+    max_build_duration: 20
+    instance_type: mac_mini_m1
+    environment:
+      flutter: stable
+    scripts:
+      - name: Get Flutter packages
+        script: |
+          flutter packages pub get
+      - name: Install pods
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+      - name: Flutter build .app
+        script: |
+          flutter build ios --simulator \
+            --build-name=1.0.0 \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/ios/**/*.app
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
