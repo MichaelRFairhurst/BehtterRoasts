@@ -43,7 +43,7 @@ workflows:
           find . -name "Podfile" -execdir pod install \;
       - name: Flutter build .app
         script: |
-          flutter build ios --simulator --build-name=1.0.0
+          flutter build ios --simulator --build-name=1.0.0 --release
     artifacts:
       - build/ios/**/*.app
       - /tmp/xcodebuild_logs/*.log
