@@ -1,17 +1,17 @@
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class WakelockService {
   final _clients = <String>{};
 
   void requestOn(String id) {
-	_clients.add(id);
-    Wakelock.enable();
+    _clients.add(id);
+    WakelockPlus.enable();
   }
 
   void requestOff(String id) {
-	_clients.remove(id);
+    _clients.remove(id);
     if (_clients.isEmpty) {
-      Wakelock.disable();
+      WakelockPlus.disable();
     }
   }
 }

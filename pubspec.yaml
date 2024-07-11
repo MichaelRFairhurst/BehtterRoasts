@@ -51,9 +51,9 @@ dependencies:
   flutter_svg: ^1.1.6
   graphic: ^2.2.1
   collection: ^1.16.0
-  wakelock: ^0.6.2
   vibration: ^1.7.7
   golden_toolkit: ^0.13.0
+  wakelock_plus: ^1.2.5
 
 dev_dependencies:
   flutter_test:
