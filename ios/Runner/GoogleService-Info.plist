@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>476682855230-povgmevit3agcfchqgthgqafp38igtep.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.476682855230-povgmevit3agcfchqgthgqafp38igtep</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>476682855230-m04tr3fd8mtafeg4qt01n6hg0dcb2mfo.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCbWPFzh0LjhkK7ot6GbAjPJWNdqsRS22E</string>
 	<key>GCM_SENDER_ID</key>
@@ -9,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.behmorRoast</string>
+	<string>dev.mikefairhurst.behtterRoasts</string>
 	<key>PROJECT_ID</key>
 	<string>behmor-roast-app</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:476682855230:ios:bb5717a35dcdf0df3d826f</string>
+	<string>1:476682855230:ios:d02fea038051e3e53d826f</string>
 </dict>
 </plist>
