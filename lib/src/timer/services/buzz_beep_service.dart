@@ -18,8 +18,10 @@ enum BuzzBeepKind {
 }
 
 const _twoQuickVibrations = [150, 100, 150];
-const _mediumLengthVibration = [800];
-const _longLengthVibration = [1200];
+// Hack: pass 0 length vibration in pattern for iOS
+const _mediumLengthVibration = [800, 0];
+// Hack: pass 0 length vibration in pattern for iOS
+const _longLengthVibration = [1200, 0];
 
 class BuzzBeepService {
   var _state = BuzzBeepState.buzzBeep;
