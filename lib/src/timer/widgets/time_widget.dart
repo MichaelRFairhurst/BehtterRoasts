@@ -51,8 +51,11 @@ class TimeWidget extends ConsumerWidget {
           child: Container(
             width: 150,
             height: 110,
-            padding: const EdgeInsets.only(top: 10, bottom: 15),
-            child: timeCircleContent(time, state, showRoastInfo, ref),
+            padding: const EdgeInsets.only(top: 6, bottom: 20),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: timeCircleContent(time, state, showRoastInfo, ref),
+            ),
           ),
         ),
       ],
