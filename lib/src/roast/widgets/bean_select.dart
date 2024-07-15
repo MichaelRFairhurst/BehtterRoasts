@@ -169,7 +169,6 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
       leading: leading,
       contentPadding:
           isHeading ? const EdgeInsets.all(0) : const EdgeInsets.only(left: 12),
-      horizontalTitleGap: 0.0,
       trailing: isHeading ? const Icon(Icons.expand_more) : null,
       dense: !isHeading,
       onTap: onTap,

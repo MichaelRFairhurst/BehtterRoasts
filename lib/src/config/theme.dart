@@ -127,6 +127,11 @@ class RoastAppTheme {
         surface: cremaLight,
         error: errorColor,
       ),
+      scaffoldBackgroundColor: cremaLight,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: capuccino,
+        foregroundColor: crema,
+      ),
       bottomAppBarTheme: const BottomAppBarTheme(
         color: lime,
         elevation: 4.0,
