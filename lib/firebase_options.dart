@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,18 +49,9 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBZXPqSe2Orj1qWUcBY33i7JNg0JvGjt64',
-    appId: '1:476682855230:web:323054333fdc1d383d826f',
-    messagingSenderId: '476682855230',
-    projectId: 'behmor-roast-app',
-    authDomain: 'behmor-roast-app.firebaseapp.com',
-    storageBucket: 'behmor-roast-app.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAcj96dEAyduyOMGcjXWzuntDNVfVSO4T4',
-    appId: '1:476682855230:android:3df45aa63776f71b3d826f',
+    appId: '1:476682855230:android:de9408f495d89ff53d826f',
     messagingSenderId: '476682855230',
     projectId: 'behmor-roast-app',
     storageBucket: 'behmor-roast-app.appspot.com',
@@ -62,19 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCbWPFzh0LjhkK7ot6GbAjPJWNdqsRS22E',
-    appId: '1:476682855230:ios:bb5717a35dcdf0df3d826f',
+    appId: '1:476682855230:ios:d02fea038051e3e53d826f',
     messagingSenderId: '476682855230',
     projectId: 'behmor-roast-app',
     storageBucket: 'behmor-roast-app.appspot.com',
-    iosBundleId: 'com.example.behmorRoast',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCbWPFzh0LjhkK7ot6GbAjPJWNdqsRS22E',
-    appId: '1:476682855230:ios:bb5717a35dcdf0df3d826f',
-    messagingSenderId: '476682855230',
-    projectId: 'behmor-roast-app',
-    storageBucket: 'behmor-roast-app.appspot.com',
-    iosBundleId: 'com.example.behmorRoast',
+    androidClientId: '476682855230-8sbaq7qdefavptll5i63t5c1okanjq3s.apps.googleusercontent.com',
+    iosClientId: '476682855230-povgmevit3agcfchqgthgqafp38igtep.apps.googleusercontent.com',
+    iosBundleId: 'dev.mikefairhurst.behtterRoasts',
   );
 }

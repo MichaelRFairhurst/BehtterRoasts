@@ -12,7 +12,20 @@
           "package_name": "com.example.behmor_roast"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "476682855230-m04tr3fd8mtafeg4qt01n6hg0dcb2mfo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.behmor_roast",
+            "certificate_hash": "31c2c5f1b3d4e864628da78e0b3621ad6762747f"
+          }
+        },
+        {
+          "client_id": "476682855230-og24414k637dcd0jcrc6bq8fi2165ndk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAcj96dEAyduyOMGcjXWzuntDNVfVSO4T4"
@@ -20,7 +33,63 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "476682855230-og24414k637dcd0jcrc6bq8fi2165ndk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "476682855230-hfnjuftg8a1r9gokq3b6h8u55qjlu0uc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.behmorRoast"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:476682855230:android:de9408f495d89ff53d826f",
+        "android_client_info": {
+          "package_name": "dev.mikefairhurst.behtterRoasts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "476682855230-8sbaq7qdefavptll5i63t5c1okanjq3s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.mikefairhurst.behtterRoasts",
+            "certificate_hash": "31c2c5f1b3d4e864628da78e0b3621ad6762747f"
+          }
+        },
+        {
+          "client_id": "476682855230-og24414k637dcd0jcrc6bq8fi2165ndk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcj96dEAyduyOMGcjXWzuntDNVfVSO4T4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "476682855230-og24414k637dcd0jcrc6bq8fi2165ndk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "476682855230-hfnjuftg8a1r9gokq3b6h8u55qjlu0uc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.behmorRoast"
+              }
+            }
+          ]
         }
       }
     }
