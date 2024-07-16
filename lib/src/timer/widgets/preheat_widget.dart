@@ -115,7 +115,8 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
                 TextSpan(
                   text: ' to monitor the temp of your roaster. When your'
                       ' roaster reaches your target temperature of '
-                      '${tempCtrl.text}°F, press "Stop Preheat."',
+                      '${tempCtrl.text}°F, turn the roaster off and press'
+                      ' "Done."',
                   style: RoastAppTheme.materialTheme.textTheme.bodyMedium!
                       .copyWith(fontStyle: FontStyle.italic),
                 ),
