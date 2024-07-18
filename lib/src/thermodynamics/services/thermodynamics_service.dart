@@ -2,14 +2,15 @@ import 'package:behmor_roast/src/thermodynamics/models/graph.dart';
 
 class ThermodynamicsService {
   void simulateGraph(ThermodynamicGraph graph, Duration duration,
-      {int stepSizeMs = 100}) {
+      {int stepSizeMs = 50}) {
     var time = Duration.zero;
     final stepSize = Duration(milliseconds: stepSizeMs);
-    for (; time < duration; time += stepSize) {
+	final end = duration - stepSize;
+    for (; time <= end; time += stepSize) {
       stepGraph(graph, stepSizeMs / 1000);
     }
 
-    final remainder = time - duration;
+    final remainder = duration - time;
     final ms = remainder.inMilliseconds;
     if (ms != 0) {
       stepGraph(graph, ms / 1000);
