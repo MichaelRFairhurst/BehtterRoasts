@@ -52,6 +52,7 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
         buildRow([
           buildButton(
             label: "Delete",
+            style: RoastAppTheme.keypadDeleteButtonTheme.style,
             onPressed: () {
               setState(() {
                 state = (state / 10).floor();
@@ -61,6 +62,7 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
           buildDigit(0),
           buildButton(
             label: "Done",
+            style: RoastAppTheme.keypadDoneButtonTheme.style,
             onPressed: () {
               widget.onSubmit(state);
             },
@@ -105,10 +107,12 @@ class CheckTempWidgetState extends ConsumerState<CheckTempWidget> {
   }
 
   Widget buildButton(
-      {required String label, required void Function() onPressed}) {
+      {required String label,
+      required void Function() onPressed,
+      ButtonStyle? style}) {
     return ElevatedButton(
       onPressed: onPressed,
-      style: RoastAppTheme.keypadButtonTheme.style,
+      style: style ?? RoastAppTheme.keypadButtonTheme.style,
       child: Text(label),
     );
   }

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class RoastAppTheme {
   //static const lilac = Color(0xFF9787B5);
+  static const lilacLight = Color(0xFFC7BED1);
   static const lilac = Color(0xFFA08DB5);
   static const lilacDark = Color(0xFF6E4A94);
   static const indigo = Color(0xFFACBEE3);
@@ -18,6 +19,8 @@ class RoastAppTheme {
   static const metal = Color(0xFF606466);
   static const metalDark = Color(0xFF494F52);
   static const metalLight = Color(0xFFA9A7AB);
+  static const metalLightest = Color(0xFFC6C3C9);
+  static const limeLight = Color(0xFFE4F2EA);
   static const lime = Color(0xFFC8E6D6);
   static const limeDark = Color(0xFF9BCCB0);
   static const errorColor = Color(0xFFB85544);
@@ -68,6 +71,32 @@ class RoastAppTheme {
     style: ElevatedButton.styleFrom(
       foregroundColor: capuccino,
       backgroundColor: crema,
+      shadowColor: capuccino,
+      elevation: 1.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+        side: const BorderSide(color: Colors.black, width: 1.0),
+      ),
+    ),
+  );
+
+  static final keypadDoneButtonTheme = ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      foregroundColor: capuccino,
+      backgroundColor: lilacLight,
+      shadowColor: capuccino,
+      elevation: 1.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+        side: const BorderSide(color: Colors.black, width: 1.0),
+      ),
+    ),
+  );
+
+  static final keypadDeleteButtonTheme = ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      foregroundColor: capuccino,
+      backgroundColor: metalLightest,
       shadowColor: capuccino,
       elevation: 1.0,
       shape: RoundedRectangleBorder(
