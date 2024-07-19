@@ -5,7 +5,7 @@ class ThermodynamicsService {
       {int stepSizeMs = 50}) {
     var time = Duration.zero;
     final stepSize = Duration(milliseconds: stepSizeMs);
-	final end = duration - stepSize;
+    final end = duration - stepSize;
     for (; time <= end; time += stepSize) {
       stepGraph(graph, stepSizeMs / 1000);
     }
@@ -15,6 +15,19 @@ class ThermodynamicsService {
     if (ms != 0) {
       stepGraph(graph, ms / 1000);
     }
+  }
+
+  Duration simulateUntil(
+      ThermodynamicGraph graph, bool Function(Duration) condition,
+      {int stepSizeMs = 50}) {
+    final stepSize = Duration(milliseconds: stepSizeMs);
+
+    var time = Duration.zero;
+    for (; !condition(time); time += stepSize) {
+      stepGraph(graph, stepSizeMs / 1000);
+    }
+
+    return time;
   }
 
   void stepGraph(ThermodynamicGraph graph, double seconds) {

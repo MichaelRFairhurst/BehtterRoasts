@@ -1,6 +1,9 @@
+import 'package:behmor_roast/src/behmor/constants.dart';
 import 'package:behmor_roast/src/behmor/widgets/program_button.dart';
 import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
+import 'package:behmor_roast/src/thermodynamics/models/roaster.dart';
+import 'package:behmor_roast/src/thermodynamics/services/thermodynamics_service.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/timer/services/buzz_beep_service.dart';
@@ -34,6 +37,29 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
       tempCtrl.text = copyPreheat.temp.toString();
       duration = roundToFiveSeconds(copyPreheat.end);
     }
+
+    tempCtrl.addListener(simulatePreheatTime);
+  }
+
+  void simulatePreheatTime() {
+    final temp = int.tryParse(tempCtrl.text);
+    if (temp == null) {
+      return;
+    }
+
+    final thermals = RoasterThermals.b1600(0.0);
+    final service = ThermodynamicsService();
+    final duration = service.simulateUntil(thermals.preheatingGraph, (time) {
+      if (time >= maxRecommendedPreheat * 2) {
+        return true;
+      }
+
+      return thermals.enclosure.tempF >= temp;
+    });
+
+    setState(() {
+      this.duration = roundToFiveSeconds(duration);
+    });
   }
 
   @override
@@ -213,6 +239,24 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
               ),
             ],
           ),
+          if (duration > maxRecommendedPreheat)
+            RichText(
+              text: TextSpan(
+                style: RoastAppTheme.materialTheme.textTheme.bodySmall!
+                    .copyWith(color: RoastAppTheme.errorColor),
+                children: [
+                  const TextSpan(
+                      text: 'Warning: it is not recommended to preheat your'
+                          ' roaster longer than '),
+                  WidgetSpan(
+                    child: TimestampWidget.twitter(maxRecommendedPreheat,
+                        style: RoastAppTheme.materialTheme.textTheme.bodySmall!
+                            .copyWith(color: RoastAppTheme.errorColor)),
+                  ),
+                  const TextSpan(text: '.'),
+                ],
+              ),
+            ),
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
