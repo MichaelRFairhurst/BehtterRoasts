@@ -39,6 +39,7 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
 
     if (widget.selectedBean != null && !beans.contains(widget.selectedBean)) {
       beans.add(widget.selectedBean!);
+	  addNew = true;
     }
 
     final selectedContinent = widget.selectedBean == null
