@@ -39,7 +39,7 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
 
     if (widget.selectedBean != null && !beans.contains(widget.selectedBean)) {
       beans.add(widget.selectedBean!);
-	  addNew = true;
+      addNew = true;
     }
 
     final selectedContinent = widget.selectedBean == null
@@ -68,7 +68,7 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
               },
             ),
           ),
-          if (beans.isNotEmpty)
+          if (beans.isNotEmpty && !addNew || beans.length > 1 && addNew)
             SizedBox(
               width: 32,
               height: 32,
