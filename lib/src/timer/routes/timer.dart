@@ -190,14 +190,16 @@ class TimerPage extends ConsumerWidget {
           tips: tips,
         ),
         floatingActionButton: fab,
-        bottomPart: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (copyingRoast != null) const InstructionsWidget(),
-            const PhaseControlWidget(),
-          ],
-        ),
+        bottomPart: state == RoastState.roasting
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (copyingRoast != null) const InstructionsWidget(),
+                  const PhaseControlWidget(),
+                ],
+              )
+            : null,
       ),
     );
   }

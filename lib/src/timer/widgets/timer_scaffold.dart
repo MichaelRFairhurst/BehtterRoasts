@@ -37,7 +37,7 @@ class TimerScaffold extends StatelessWidget {
   final PreferredSizeWidget appBar;
   final Widget topPart;
   final FloatingPart? floatingTopPart;
-  final Widget bottomPart;
+  final Widget? bottomPart;
   final FloatingPart? floatingBottomPart;
   final Widget? floatingActionButton;
   final Widget? popup;
@@ -46,6 +46,7 @@ class TimerScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('here ${MediaQuery.of(context).padding}');
     return Scaffold(
       appBar: appBar,
       body: SafeArea(
