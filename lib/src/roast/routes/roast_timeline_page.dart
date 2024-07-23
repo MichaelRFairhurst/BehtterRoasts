@@ -145,18 +145,18 @@ class RoastTimelinePage extends ConsumerWidget {
                   );
                 },
               ),
+              const SizedBox(height: 64),
             ],
           ),
         ),
       ),
-	  floatingActionButton: ElevatedButton.icon(
-	    style: RoastAppTheme.largeButtonTheme.style,
-		icon: const Icon(Icons.local_fire_department, size: 32),
-		label: const Text('Roast'),
-		onPressed: () {
-		  context.push(Routes.newRoast, extra: bean);
-		}
-	  ),
+      floatingActionButton: ElevatedButton.icon(
+          style: RoastAppTheme.largeButtonTheme.style,
+          icon: const Icon(Icons.local_fire_department, size: 32),
+          label: const Text('Roast'),
+          onPressed: () {
+            context.push(Routes.newRoast, extra: bean);
+          }),
     );
   }
 
