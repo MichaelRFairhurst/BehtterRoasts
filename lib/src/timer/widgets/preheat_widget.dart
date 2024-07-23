@@ -153,150 +153,153 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
       );
     }
 
-    return Form(
-      key: formKey,
-      child: Column(
-        children: [
-          if (copy == null) ...[
-            Text(
-              'Preheat this roast?',
-              style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'Simply run your roaster for a minute or two before loading your'
-              " beans, and you'll have a faster / hotter roast profile.",
-              textAlign: TextAlign.center,
-            ),
-          ] else if (suggestPreheat) ...[
-            Text(
-              'Preheat your roaster!',
-              style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'Preheat your roaster now to replicate your last roast.',
-              textAlign: TextAlign.center,
-            ),
-          ],
-          if (!suggestPreheat) ...[
-            Text(
-              'Preheat this roast?',
-              style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'Note that you did NOT preheat this roast last time.',
-              textAlign: TextAlign.center,
-            ),
-          ],
-          const Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Preheat temp: '),
-              SizedBox(
-                width: 100,
-                child: TextFormField(
-                    controller: tempCtrl,
-                    decoration: const InputDecoration(
-                      suffixText: '°F',
-                    ),
-                    validator: (str) {
-                      if (str == null || int.tryParse(str) == null) {
-                        return 'Enter a valid temperature';
-                      }
-                    }),
+    return SafeArea(
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            if (copy == null) ...[
+              Text(
+                'Preheat this roast?',
+                style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                'Simply run your roaster for a minute or two before loading your'
+                " beans, and you'll have a faster / hotter roast profile.",
+                textAlign: TextAlign.center,
+              ),
+            ] else if (suggestPreheat) ...[
+              Text(
+                'Preheat your roaster!',
+                style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                'Preheat your roaster now to replicate your last roast.',
+                textAlign: TextAlign.center,
               ),
             ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              const Expanded(
-                child: Text('Estimated time:'),
+            if (!suggestPreheat) ...[
+              Text(
+                'Preheat this roast?',
+                style: RoastAppTheme.materialTheme.textTheme.headlineMedium,
+                textAlign: TextAlign.center,
               ),
-              if (duration > const Duration(seconds: 5))
+              const SizedBox(height: 6),
+              const Text(
+                'Note that you did NOT preheat this roast last time.',
+                textAlign: TextAlign.center,
+              ),
+            ],
+            const Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Preheat temp: '),
+                SizedBox(
+                  width: 100,
+                  child: TextFormField(
+                      controller: tempCtrl,
+                      decoration: const InputDecoration(
+                        suffixText: '°F',
+                      ),
+                      validator: (str) {
+                        if (str == null || int.tryParse(str) == null) {
+                          return 'Enter a valid temperature';
+                        }
+                      }),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                const Expanded(
+                  child: Text('Estimated time:'),
+                ),
+                if (duration > const Duration(seconds: 5))
+                  IconButton(
+                    icon: const Icon(Icons.remove),
+                    onPressed: () {
+                      setState(() {
+                        duration -= const Duration(seconds: 5);
+                      });
+                    },
+                  ),
+                TimestampWidget.twitter(duration),
                 IconButton(
-                  icon: const Icon(Icons.remove),
+                  icon: const Icon(Icons.add),
                   onPressed: () {
                     setState(() {
-                      duration -= const Duration(seconds: 5);
+                      duration += const Duration(seconds: 5);
                     });
                   },
                 ),
-              TimestampWidget.twitter(duration),
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  setState(() {
-                    duration += const Duration(seconds: 5);
-                  });
-                },
-              ),
-            ],
-          ),
-          if (duration > maxRecommendedPreheat)
-            RichText(
-              text: TextSpan(
-                style: RoastAppTheme.materialTheme.textTheme.bodySmall!
-                    .copyWith(color: RoastAppTheme.errorColor),
-                children: [
-                  const TextSpan(
-                      text: 'Warning: it is not recommended to preheat your'
-                          ' roaster longer than '),
-                  WidgetSpan(
-                    child: TimestampWidget.twitter(maxRecommendedPreheat,
-                        style: RoastAppTheme.materialTheme.textTheme.bodySmall!
-                            .copyWith(color: RoastAppTheme.errorColor)),
-                  ),
-                  const TextSpan(text: '.'),
-                ],
-              ),
+              ],
             ),
-          const Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton.icon(
-                style: suggestPreheat
-                    ? RoastAppTheme.largeButtonTheme.style
-                    : RoastAppTheme.limeButtonTheme.style,
-                label: const Text('Start Preheat'),
-                icon: const Icon(Icons.local_fire_department),
-                onPressed: () {
-                  final state = formKey.currentState!;
-                  if (state.validate()) {
-                    ref
-                        .read(roastProvider.notifier)
-                        .update((roast) => roast!.copyWith(
-                              config: roast.config.copyWith(
-                                preheatTarget: int.parse(tempCtrl.text),
-                                preheatTimeEst: duration,
-                              ),
-                            ));
-                    ref.read(roastManagerProvider).startPreheat();
-                  }
-                },
+            if (duration > maxRecommendedPreheat)
+              RichText(
+                text: TextSpan(
+                  style: RoastAppTheme.materialTheme.textTheme.bodySmall!
+                      .copyWith(color: RoastAppTheme.errorColor),
+                  children: [
+                    const TextSpan(
+                        text: 'Warning: it is not recommended to preheat your'
+                            ' roaster longer than '),
+                    WidgetSpan(
+                      child: TimestampWidget.twitter(maxRecommendedPreheat,
+                          style: RoastAppTheme
+                              .materialTheme.textTheme.bodySmall!
+                              .copyWith(color: RoastAppTheme.errorColor)),
+                    ),
+                    const TextSpan(text: '.'),
+                  ],
+                ),
               ),
-              const Text('or'),
-              ElevatedButton(
-                style: suggestPreheat
-                    ? RoastAppTheme.limeButtonTheme.style
-                    : RoastAppTheme.largeButtonTheme.style,
-                child: suggestPreheat
-                    ? const Text('Skip')
-                    : const Text('Start Roasting'),
-                onPressed: () {
-                  ref.read(roastManagerProvider).skipPreheat();
-                },
-              ),
-            ],
-          ),
-        ],
+            const Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton.icon(
+                  style: suggestPreheat
+                      ? RoastAppTheme.largeButtonTheme.style
+                      : RoastAppTheme.limeButtonTheme.style,
+                  label: const Text('Start Preheat'),
+                  icon: const Icon(Icons.local_fire_department),
+                  onPressed: () {
+                    final state = formKey.currentState!;
+                    if (state.validate()) {
+                      ref
+                          .read(roastProvider.notifier)
+                          .update((roast) => roast!.copyWith(
+                                config: roast.config.copyWith(
+                                  preheatTarget: int.parse(tempCtrl.text),
+                                  preheatTimeEst: duration,
+                                ),
+                              ));
+                      ref.read(roastManagerProvider).startPreheat();
+                    }
+                  },
+                ),
+                const Text('or'),
+                ElevatedButton(
+                  style: suggestPreheat
+                      ? RoastAppTheme.limeButtonTheme.style
+                      : RoastAppTheme.largeButtonTheme.style,
+                  child: suggestPreheat
+                      ? const Text('Skip')
+                      : const Text('Start Roasting'),
+                  onPressed: () {
+                    ref.read(roastManagerProvider).skipPreheat();
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

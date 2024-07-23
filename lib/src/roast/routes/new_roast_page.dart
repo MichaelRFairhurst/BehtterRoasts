@@ -82,103 +82,107 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
       appBar: AppBar(
         title: const LogoTitle("New Roast"),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Form(
-          key: roastFormKey,
-          child: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Theme(
-                  data: Theme.of(context)
-                      .copyWith(cardTheme: RoastAppTheme.formCardTheme),
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Form(
+            key: roastFormKey,
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Theme(
+                    data: Theme.of(context)
+                        .copyWith(cardTheme: RoastAppTheme.formCardTheme),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: 16.0),
+                        Text(
+                          'Beans:',
+                          style:
+                              RoastAppTheme.materialTheme.textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 4),
+                        _beansFormCard(copy),
+                        const SizedBox(height: 40),
+                        Text(
+                          'Profile:',
+                          style:
+                              RoastAppTheme.materialTheme.textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 4),
+                        _profileFormCard(selectedBean, copy),
+                        const SizedBox(height: 40),
+                      ],
+                    ),
+                  ),
+                ),
+                SliverFillRemaining(
+                  hasScrollBody: false,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const SizedBox(height: 16.0),
-                      Text(
-                        'Beans:',
-                        style: RoastAppTheme.materialTheme.textTheme.titleLarge,
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            label: const Icon(Icons.navigate_next),
+                            icon: const Text('Next'),
+                            onPressed: () async {
+                              final formValid =
+                                  roastFormKey.currentState!.validate();
+                              if (selectedBean == null) {
+                                setState(() {
+                                  beanErr = true;
+                                });
+                              } else {
+                                setState(() {
+                                  beanErr = false;
+                                });
+                              }
+
+                              if (!beanErr && formValid) {
+                                if (selectedBean!.id == null) {
+                                  selectedBean = await ref
+                                      .read(beanServiceProvider)
+                                      .add(selectedBean!);
+                                }
+
+                                if (!mounted) {
+                                  return;
+                                }
+
+                                final roast = Roast(
+                                  beanId: selectedBean!.id!,
+                                  copyOfRoastId: copy?.id,
+                                  roasted: DateTime.now(), // Replaced later.
+                                  roastNumber: roastNumber,
+                                  weightIn: double.parse(weight.text),
+                                  weightOut: double.parse(weight.text),
+                                  config: RoastConfig(
+                                    tempInterval: tempInterval,
+                                    targetDevelopment:
+                                        double.parse(devel.text) / 100,
+                                  ),
+                                );
+                                ref.read(roastProvider.notifier).state = roast;
+                                ref.read(roastManagerProvider)
+                                  ..reset()
+                                  ..setCopyRoast(copy)
+                                  ..setRoastConfig(roast.config);
+                                context.replace(Routes.timer);
+                              }
+                            },
+                          ),
+                        ),
                       ),
-                      const SizedBox(height: 4),
-                      _beansFormCard(copy),
-                      const SizedBox(height: 40),
-                      Text(
-                        'Profile:',
-                        style: RoastAppTheme.materialTheme.textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 4),
-                      _profileFormCard(selectedBean, copy),
-                      const SizedBox(height: 40),
                     ],
                   ),
                 ),
-              ),
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          label: const Icon(Icons.navigate_next),
-                          icon: const Text('Next'),
-                          onPressed: () async {
-                            final formValid =
-                                roastFormKey.currentState!.validate();
-                            if (selectedBean == null) {
-                              setState(() {
-                                beanErr = true;
-                              });
-                            } else {
-                              setState(() {
-                                beanErr = false;
-                              });
-                            }
-
-                            if (!beanErr && formValid) {
-                              if (selectedBean!.id == null) {
-                                selectedBean = await ref
-                                    .read(beanServiceProvider)
-                                    .add(selectedBean!);
-                              }
-
-                              if (!mounted) {
-                                return;
-                              }
-
-                              final roast = Roast(
-                                beanId: selectedBean!.id!,
-                                copyOfRoastId: copy?.id,
-                                roasted: DateTime.now(), // Replaced later.
-                                roastNumber: roastNumber,
-                                weightIn: double.parse(weight.text),
-                                weightOut: double.parse(weight.text),
-                                config: RoastConfig(
-                                  tempInterval: tempInterval,
-                                  targetDevelopment:
-                                      double.parse(devel.text) / 100,
-                                ),
-                              );
-                              ref.read(roastProvider.notifier).state = roast;
-                              ref.read(roastManagerProvider)
-                                ..reset()
-                                ..setCopyRoast(copy)
-                                ..setRoastConfig(roast.config);
-                              context.replace(Routes.timer);
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

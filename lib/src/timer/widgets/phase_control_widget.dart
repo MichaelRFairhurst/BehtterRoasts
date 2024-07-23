@@ -97,9 +97,11 @@ class PhaseControlWidget extends ConsumerWidget {
           : Container(
               color: RoastAppTheme.capuccinoLight,
               padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: phaseButtons(context, ref, timeline, running),
+              child: SafeArea(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: phaseButtons(context, ref, timeline, running),
+                ),
               ),
             ),
     );

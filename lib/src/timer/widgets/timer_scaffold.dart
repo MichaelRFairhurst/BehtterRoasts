@@ -48,73 +48,75 @@ class TimerScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          topPart,
-          Expanded(
-            // Use a scaffold within a scaffold to get proper FAB layout.
-            child: Scaffold(
-              primary: false,
-              extendBody: true,
-              body: Stack(
-                children: [
-                  Positioned.fill(
-                    child: AnimatedBlurOut(
-                      duration: const Duration(milliseconds: 250),
-                      blur: popup != null ? 1.0 : 0.0,
-                      child: getScrollAdjustedBody(),
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 150),
-                      child: popup,
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: AnimatedPopUp(
-					  axisAlignment: -1.0,
-					  duration: const Duration(milliseconds: 250),
-                      child: SizedBox(
-                        key: floatingBottomPart?.keyOrType,
-                        height: floatingBottomPart?.height,
-                        child: floatingBottomPart?.child,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            topPart,
+            Expanded(
+              // Use a scaffold within a scaffold to get proper FAB layout.
+              child: Scaffold(
+                primary: false,
+                extendBody: true,
+                body: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: AnimatedBlurOut(
+                        duration: const Duration(milliseconds: 250),
+                        blur: popup != null ? 1.0 : 0.0,
+                        child: getScrollAdjustedBody(),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: AnimatedPopUp(
-                      child: Align(
-                        key: floatingTopPart?.keyOrType,
-                        alignment: Alignment.topCenter,
+                    Positioned.fill(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 150),
+                        child: popup,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: AnimatedPopUp(
+                        axisAlignment: -1.0,
+                        duration: const Duration(milliseconds: 250),
                         child: SizedBox(
-                          height: floatingTopPart?.height,
-                          child: floatingTopPart?.child,
+                          key: floatingBottomPart?.keyOrType,
+                          height: floatingBottomPart?.height,
+                          child: floatingBottomPart?.child,
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
-              floatingActionButton: floatingActionButton,
-              bottomNavigationBar: AnimatedPadding(
-                duration: const Duration(milliseconds: 150),
-                padding: EdgeInsets.only(
-                    bottom: floatingBottomPart?.obscuredHeight ?? 0),
-                child: toast,
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: AnimatedPopUp(
+                        child: Align(
+                          key: floatingTopPart?.keyOrType,
+                          alignment: Alignment.topCenter,
+                          child: SizedBox(
+                            height: floatingTopPart?.height,
+                            child: floatingTopPart?.child,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerFloat,
+                floatingActionButton: floatingActionButton,
+                bottomNavigationBar: AnimatedPadding(
+                  duration: const Duration(milliseconds: 150),
+                  padding: EdgeInsets.only(
+                      bottom: floatingBottomPart?.obscuredHeight ?? 0),
+                  child: toast,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: bottomPart,
     );
