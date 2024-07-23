@@ -65,7 +65,9 @@ class CompleteRoastPageState extends ConsumerState<CompleteRoastPage> {
                                 return 'Enter a valid weight';
                               }
                             },
-                            keyboardType: TextInputType.number,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
                             decoration: const InputDecoration(
                               label: Text('Weigh your roast output (g)'),
                               suffixText: 'g',

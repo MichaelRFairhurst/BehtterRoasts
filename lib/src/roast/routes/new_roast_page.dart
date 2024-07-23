@@ -212,7 +212,9 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
             _label('Weight (g)'),
             TextFormField(
               controller: weight,
-              keyboardType: TextInputType.number,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               decoration: const InputDecoration(
                 suffixText: 'g',
                 border: InputBorder.none,
@@ -261,7 +263,9 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
             _label('Target Development (%)'),
             TextFormField(
               controller: devel,
-              keyboardType: TextInputType.number,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               decoration: const InputDecoration(
                 suffixText: '%',
                 border: InputBorder.none,
