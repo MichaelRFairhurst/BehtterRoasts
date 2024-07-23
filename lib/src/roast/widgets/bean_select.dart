@@ -56,6 +56,7 @@ class BeanSelectState extends ConsumerState<BeanSelect> {
                 border: InputBorder.none,
                 icon: continentAddIcon(selectedContinent),
               ),
+              textCapitalization: TextCapitalization.words,
               controller: newBeanName,
               onChanged: (_) => selectNewBean(),
               autofocus: true,
