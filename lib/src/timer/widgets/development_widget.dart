@@ -39,7 +39,7 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget>
   @override
   Widget build(BuildContext context) {
     final roast = ref.watch(roastProvider);
-    final timeline = ref.watch(roastTimelineProvider);
+    final timeline = ref.watch(roastTimelineProvider).requireValue;
 
     List<Widget> innerParts;
     double progress;

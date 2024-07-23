@@ -30,7 +30,7 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
   @override
   void initState() {
     super.initState();
-    final copy = ref.read(copyOfRoastProvider);
+    final copy = ref.read(copyOfRoastProvider).valueOrNull;
     final copyPreheat = copy?.preheat;
 
     if (copyPreheat != null) {
@@ -65,7 +65,7 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(roastStateProvider);
-    final copy = ref.watch(copyOfRoastProvider);
+    final copy = ref.watch(copyOfRoastProvider).valueOrNull;
     final suggestPreheat = copy == null || copy.preheat != null;
 
     if (state == RoastState.preheating) {
@@ -278,9 +278,7 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
                                 preheatTimeEst: duration,
                               ),
                             ));
-                    ref.read(roastTimelineProvider.notifier).update((state) =>
-                        state.copyWith(preheatStart: DateTime.now()));
-                    ref.read(preheatTimerProvider).start(null);
+                    ref.read(roastManagerProvider).startPreheat();
                   }
                 },
               ),
@@ -293,11 +291,7 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
                     ? const Text('Skip')
                     : const Text('Start Roasting'),
                 onPressed: () {
-                  ref
-                      .read(roastTimelineProvider.notifier)
-                      .update((state) => state.copyWith(
-                            preheatTemp: -1,
-                          ));
+                  ref.read(roastManagerProvider).skipPreheat();
                 },
               ),
             ],

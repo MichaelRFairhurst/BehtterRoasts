@@ -1,11 +1,12 @@
 import 'dart:async';
 
+import 'package:rxdart/rxdart.dart';
 import 'package:behmor_roast/src/timer/services/wakelock_service.dart';
 
 class TimerService {
   TimerService({
-	required this.id,
-	required this.wakelockService,
+    required this.id,
+    required this.wakelockService,
   });
 
   final String id;
@@ -15,20 +16,20 @@ class TimerService {
   DateTime? _stopTime;
   int? _tempCheckInterval;
   final _checkTemp = StreamController<Duration>();
-  final _seconds = StreamController<Duration?>();
+  final _seconds = BehaviorSubject<Duration?>()..add(null);
 
   void start(int? tempCheckInterval) {
     _startTime = DateTime.now();
     _tempCheckInterval = tempCheckInterval;
     _fireSeconds();
-	wakelockService.requestOn(id);
+    wakelockService.requestOn(id);
   }
 
   void reset() {
     _startTime = null;
     _stopTime = null;
     _seconds.add(null);
-	wakelockService.requestOff(id);
+    wakelockService.requestOff(id);
   }
 
   void _fireSeconds() async {
@@ -56,7 +57,7 @@ class TimerService {
 
   void stop() {
     _stopTime = DateTime.now();
-	wakelockService.requestOff(id);
+    wakelockService.requestOff(id);
   }
 
   Duration? elapsed() {

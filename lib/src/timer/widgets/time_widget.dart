@@ -16,7 +16,7 @@ class TimeWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(roastStateProvider);
-    final projections = ref.watch(projectionProvider);
+    final projections = ref.watch(projectionProvider).requireValue;
 
     Duration? time = ref.watch(secondsRoastProvider).value;
 
@@ -130,13 +130,7 @@ class TimeWidget extends ConsumerWidget {
   void Function()? donePressed(RoastState state, WidgetRef ref) {
     if (state == RoastState.roasting) {
       return () {
-        final tService = ref.read(roastTimerProvider);
-        final now = tService.elapsed()!;
-
-        ref
-            .read(roastTimelineProvider.notifier)
-            .update((timeline) => timeline.copyWith(done: now));
-        tService.stop();
+        ref.read(roastManagerProvider).stopRoast();
       };
     }
 

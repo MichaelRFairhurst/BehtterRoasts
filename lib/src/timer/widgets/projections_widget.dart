@@ -11,7 +11,7 @@ class ProjectionsWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projection = ref.watch(projectionProvider);
+    final projection = ref.watch(projectionProvider).requireValue;
     final projectionMap = getProjections(projection);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

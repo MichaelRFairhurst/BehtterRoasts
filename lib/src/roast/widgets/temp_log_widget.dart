@@ -121,15 +121,7 @@ class TempLogWidget extends ConsumerWidget {
                     ],
                   ),
                   onSubmit: (newTemp) {
-                    if (log.phase == RoastPhase.preheat) {
-                      ref
-                          .read(roastTimelineProvider.notifier)
-                          .update((tl) => tl.copyWith(preheatTemp: newTemp));
-                    } else {
-                      ref
-                          .read(roastTimelineProvider.notifier)
-                          .update((tl) => tl.updateTemp(log.time, newTemp));
-                    }
+                    ref.read(roastManagerProvider).editTemp(log, newTemp);
                     Navigator.pop(context);
                   },
                 ),

@@ -2,7 +2,6 @@ import 'package:behmor_roast/src/config/theme.dart';
 
 import 'package:behmor_roast/src/instructions/models/instruction.dart';
 import 'package:behmor_roast/src/instructions/providers.dart';
-import 'package:behmor_roast/src/instructions/services/instructions_service.dart';
 import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/timer/widgets/control_button.dart';
@@ -24,7 +23,7 @@ class InstructionsWidgetState extends ConsumerState<InstructionsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final instructions = ref.watch(temporalInstructionsProvider);
+    final instructions = ref.watch(temporalInstructionsProvider).valueOrNull;
     final state = ref.watch(roastStateProvider);
     if (instructions == null ||
         instructions.isEmpty ||
@@ -160,9 +159,7 @@ class InstructionsWidgetState extends ConsumerState<InstructionsWidget> {
             height: 24,
             child: IconButton(
               onPressed: () {
-                ref.read(coreInstructionsProvider.notifier).update((state) {
-                  return InstructionsService().skipInstruction(state!, inst);
-                });
+                ref.read(roastManagerProvider).completeInstruction(inst);
               },
               padding: const EdgeInsets.all(0),
               icon: const Icon(Icons.cancel, color: RoastAppTheme.errorColor),

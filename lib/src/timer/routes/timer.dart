@@ -4,7 +4,6 @@ import 'package:behmor_roast/src/config/theme.dart';
 import 'package:behmor_roast/src/instructions/providers.dart';
 import 'package:behmor_roast/src/instructions/widgets/instructions_widget.dart';
 import 'package:behmor_roast/src/roast/providers.dart';
-import 'package:behmor_roast/src/roast/models/temp_log.dart';
 import 'package:behmor_roast/src/timer/services/buzz_beep_service.dart';
 import 'package:behmor_roast/src/timer/widgets/buzz_beep_widget.dart';
 import 'package:behmor_roast/src/timer/widgets/phase_control_widget.dart';
@@ -31,14 +30,13 @@ class TimerPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tService = ref.watch(roastTimerProvider);
     final state = ref.watch(roastStateProvider);
     final showTempInputTime = ref.watch(showTempInputTimeProvider);
     final alerts = ref.watch(alertsProvider);
-    final logs = ref.watch(roastLogsProvider);
-    final copyLogs = ref.watch(roastLogsCopyProvider);
+    final logs = ref.watch(roastLogsProvider).valueOrNull ?? [];
+    final copyLogs = ref.watch(roastLogsCopyProvider).valueOrNull;
     final tips = ref.watch(tipsProvider);
-    final copyingRoast = ref.watch(copyOfRoastProvider);
+    final copyingRoast = ref.watch(copyOfRoastProvider).valueOrNull;
 
     ref.listen<Duration?>(showTempInputTimeProvider, (_, next) {
       if (next != null) {
@@ -54,10 +52,7 @@ class TimerPage extends ConsumerWidget {
         label: const Text('Start'),
         onPressed: () {
           final roast = ref.read(roastProvider);
-          tService.start(roast!.config.tempInterval);
-          ref
-              .read(roastTimelineProvider.notifier)
-              .update((state) => state.copyWith(startTime: tService.startTime));
+          ref.read(roastManagerProvider).start(roast!);
         },
       );
     } else if (state == RoastState.done) {
@@ -66,7 +61,7 @@ class TimerPage extends ConsumerWidget {
         label: const Icon(Icons.navigate_next, size: 28.0),
         icon: const Text('Continue'),
         onPressed: () {
-          final timeline = ref.read(roastTimelineProvider);
+          final timeline = ref.read(roastTimelineProvider).requireValue;
           ref
               .read(roastProvider.notifier)
               .update((state) => state!.withTimeline(timeline));
@@ -99,8 +94,7 @@ class TimerPage extends ConsumerWidget {
           child: TimedCheckTempWidget(
             shownTime: showTempInputTime,
             onSubmit: (time, temp) {
-              ref.read(roastTimelineProvider.notifier).update(
-                  (state) => state.addLog(TempLog(temp: temp, time: time)));
+              ref.read(roastManagerProvider).addTemp(time, temp);
               ref.read(showTempInputTimeProvider.notifier).state = null;
             },
           ),
@@ -135,9 +129,7 @@ class TimerPage extends ConsumerWidget {
               title: Text('Enter final preheat temperature:',
                   style: RoastAppTheme.materialTheme.textTheme.titleSmall),
               onSubmit: (temp) {
-                ref
-                    .read(roastTimelineProvider.notifier)
-                    .update((state) => state.copyWith(preheatTemp: temp));
+                ref.read(roastManagerProvider).finalizePreheat(temp);
               },
             ),
             const Spacer(flex: 3),

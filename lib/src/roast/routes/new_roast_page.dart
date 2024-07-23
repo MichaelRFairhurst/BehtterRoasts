@@ -9,7 +9,6 @@ import 'package:behmor_roast/src/roast/services/roast_number_service.dart';
 import 'package:behmor_roast/src/roast/widgets/bean_select.dart';
 import 'package:behmor_roast/src/roast/widgets/roast_select.dart';
 import 'package:behmor_roast/src/roast/widgets/temp_interval_select.dart';
-import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/providers.dart';
 import 'package:behmor_roast/src/util/logo_title.dart';
 import 'package:flutter/material.dart';
@@ -38,8 +37,9 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
   void initState() {
     super.initState();
     selectedBean = widget.selectedBean;
-    final copy = ref.read(copyOfRoastProvider);
+    final copy = ref.read(copyOfRoastProvider).valueOrNull;
     copyUpdated(copy, true);
+    initRoastManagerStreamProviders(ref);
   }
 
   void copyUpdated(Roast? copy, bool firstLoad) {
@@ -68,9 +68,9 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
 
   @override
   Widget build(BuildContext context) {
-    final copy = ref.watch(copyOfRoastProvider);
-    ref.listen<Roast?>(
-        copyOfRoastProvider, (previous, next) => copyUpdated(next, false));
+    final copy = ref.watch(copyOfRoastProvider).valueOrNull;
+    ref.listen<AsyncValue<Roast?>>(copyOfRoastProvider,
+        (previous, next) => copyUpdated(next.valueOrNull, false));
     final otherRoasts = selectedBean == null || selectedBean!.id == null
         ? <Roast>[]
         : ref.watch(roastsForBeanProvider(selectedBean!.id!)).value ?? [];
@@ -165,10 +165,10 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                                 ),
                               );
                               ref.read(roastProvider.notifier).state = roast;
-                              ref.read(roastTimelineProvider.notifier).state =
-                                  const RoastTimeline(rawLogs: []);
-                              ref.read(roastTimerProvider).reset();
-                              ref.read(preheatTimerProvider).reset();
+                              ref.read(roastManagerProvider)
+                                ..reset()
+                                ..setCopyRoast(copy)
+                                ..setRoastConfig(roast.config);
                               context.replace(Routes.timer);
                             }
                           },
@@ -206,7 +206,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
                 setState(() {
                   selectedBean = bean;
                 });
-                ref.read(copyOfRoastProvider.notifier).state = null;
+                ref.read(roastManagerProvider).setCopyRoast(null);
               },
             ),
             _label('Weight (g)'),
@@ -255,7 +255,7 @@ class NewRoastPageState extends ConsumerState<NewRoastPage> {
               bean: selectedBean,
               selectedRoast: copy,
               onChanged: (roast) {
-                ref.read(copyOfRoastProvider.notifier).state = roast;
+                ref.read(roastManagerProvider).setCopyRoast(roast);
               },
             ),
             _label('Target Development (%)'),

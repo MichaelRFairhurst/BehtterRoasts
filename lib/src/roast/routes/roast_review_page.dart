@@ -104,7 +104,7 @@ class RoastReviewPage extends ConsumerWidget {
             ),
             child: ElevatedButton(
               onPressed: () {
-                ref.read(copyOfRoastProvider.notifier).state = roast;
+                ref.read(roastManagerProvider).setCopyRoast(roast);
                 context.replace(Routes.newRoast);
               },
               child: const Text('Repeat this roast'),

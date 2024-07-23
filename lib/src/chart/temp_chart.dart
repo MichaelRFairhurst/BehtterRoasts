@@ -141,8 +141,8 @@ class TempChartState extends ConsumerState<TempChart>
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<Projection>(projectionProvider, (old, newState) {
-      elapsed.projection = newState;
+    ref.listen<AsyncValue<Projection>>(projectionProvider, (old, newState) {
+      elapsed.projection = newState.requireValue;
     });
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

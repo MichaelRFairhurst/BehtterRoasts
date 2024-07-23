@@ -1,6 +1,6 @@
+import 'package:behmor_roast/src/instructions/providers.dart';
 import 'package:behmor_roast/src/roast/models/roast.dart';
 import 'package:behmor_roast/src/roast/models/roast_log.dart';
-import 'package:behmor_roast/src/roast/providers.dart';
 import 'package:behmor_roast/src/roast/services/roast_log_service.dart';
 import 'package:behmor_roast/src/timer/models/alert.dart';
 import 'package:behmor_roast/src/timer/models/projection.dart';
@@ -8,6 +8,7 @@ import 'package:behmor_roast/src/timer/models/roast_timeline.dart';
 import 'package:behmor_roast/src/timer/services/alert_service.dart';
 import 'package:behmor_roast/src/timer/services/buzz_beep_service.dart';
 import 'package:behmor_roast/src/timer/services/projection_service.dart';
+import 'package:behmor_roast/src/timer/services/roast_manager_service.dart';
 import 'package:behmor_roast/src/timer/services/tips_service.dart';
 import 'package:behmor_roast/src/timer/services/wakelock_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,7 +29,8 @@ final roastTimerProvider = Provider((ref) {
   );
 });
 
-final copyOfRoastProvider = StateProvider<Roast?>((ref) => null);
+final copyOfRoastProvider = StreamProvider<Roast?>(
+    (ref) => ref.watch(roastManagerProvider).copyOfRoast);
 
 final preheatTimerProvider = Provider((ref) {
   return TimerService(
@@ -57,55 +59,65 @@ final showTempInputTimeProvider = StateProvider<Duration?>((ref) {
   return ref.watch(checkTempStreamProvider).value;
 });
 
-final projectionServiceProvider = Provider((_) {
-  return ProjectionService();
-});
-
-final projectionProvider = Provider<Projection>((ref) {
-  final service = ref.watch(projectionServiceProvider);
-  final config = ref.watch(roastProvider)!.config;
-  final logs = ref.watch(roastLogsProvider);
-  final elapsed = ref.watch(secondsRoastProvider);
-  final copyOfRoast = ref.watch(copyOfRoastProvider);
-  return service.createProjections(
-    roastLogs: logs,
-    roastConfig: config,
-    elapsed: elapsed.value,
-    copyOfRoast: copyOfRoast?.toTimeline(),
-  );
+final projectionProvider = StreamProvider<Projection>((ref) {
+  return ref.watch(roastManagerProvider).projection;
 });
 
 final alertsProvider = Provider<List<Alert>>((ref) {
+  final timeline = ref.watch(roastTimelineProvider).value;
+  final projection = ref.watch(projectionProvider);
+  if (timeline == null || !projection.hasValue) {
+    return [];
+  }
   final elapsed = ref.watch(secondsRoastProvider).value;
   final elapsedPreheat = ref.watch(secondsPreheatProvider).value;
 
   final service = AlertService();
-  final projection = ref.watch(projectionProvider);
-  final timeline = ref.watch(roastTimelineProvider);
   return service.getAlerts(
-    projections: projection,
+    projections: projection.requireValue,
     timeline: timeline,
     elapsed: elapsed,
     elapsedPreheat: elapsedPreheat,
   );
 });
 
-final roastLogsProvider = Provider<List<RoastLog>>((ref) {
-  final timeline = ref.watch(roastTimelineProvider);
-  final copy = ref.watch(copyOfRoastProvider);
-  return RoastLogService().aggregate(timeline, copy: copy?.toTimeline());
+final roastLogsProvider = StreamProvider<List<RoastLog>>((ref) {
+  return ref.watch(roastManagerProvider).roastLogs;
 });
 
 final tipsProvider = Provider<Set<String>>((ref) {
+  final timeline = ref.watch(roastTimelineProvider).value;
+  if (timeline == null) {
+    return {};
+  }
   final service = TipsService();
-  final timeline = ref.watch(roastTimelineProvider);
   final roastLogs = ref.watch(roastLogsProvider);
-  return service.getTips(timeline, roastLogs);
+  return service.getTips(timeline, roastLogs.requireValue);
 });
 
-final roastTimelineProvider =
-    StateProvider<RoastTimeline>((ref) => const RoastTimeline(rawLogs: []));
+final roastManagerProvider = Provider<RoastManagerService>((ref) {
+  return RoastManagerService(
+    roastLogService: RoastLogService(),
+	projectionService: ProjectionService(),
+    timerService: ref.watch(roastTimerProvider),
+    preheatTimerService: ref.watch(preheatTimerProvider),
+  );
+});
+
+final roastTimelineProvider = StreamProvider<RoastTimeline>(
+    (ref) => ref.watch(roastManagerProvider).roastTimeline);
 
 final roastStateProvider = Provider<RoastState>((ref) {
-  return ref.watch(roastTimelineProvider).roastState;
+  return ref.watch(roastTimelineProvider).value?.roastState ??
+      RoastState.waiting;
 });
+
+void initRoastManagerStreamProviders(WidgetRef ref) {
+  ref.read(roastManagerProvider);
+  ref.read(roastTimelineProvider);
+  ref.read(roastLogsProvider);
+  ref.read(projectionProvider);
+  ref.read(copyOfRoastProvider);
+  ref.read(roastLogsCopyProvider);
+  ref.read(temporalInstructionsProvider);
+}

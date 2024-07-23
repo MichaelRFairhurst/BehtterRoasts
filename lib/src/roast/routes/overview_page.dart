@@ -213,7 +213,7 @@ class OverviewPageState extends ConsumerState<OverviewPage> {
                 icon: const Icon(Icons.add),
                 label: const Text('New Roast'),
                 onPressed: () {
-                  ref.read(copyOfRoastProvider.notifier).state = null;
+                  ref.read(roastManagerProvider).setCopyRoast(null);
                   context.push(Routes.newRoast);
                 })
             : null,

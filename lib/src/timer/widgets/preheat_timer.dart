@@ -79,13 +79,7 @@ class PreheatTimerState extends ConsumerState<PreheatTimer>
                 label: const Text('Done'),
                 style: RoastAppTheme.limeButtonTheme.style,
                 onPressed: () {
-                  final preheatService = ref.read(preheatTimerProvider);
-                  ref
-                      .read(roastTimelineProvider.notifier)
-                      .update((state) => state.copyWith(
-                            preheatEnd: preheatService.elapsed()!,
-                          ));
-                  preheatService.stop();
+                  ref.read(roastManagerProvider).stopPreheat();
                 },
               ),
             ),

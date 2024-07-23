@@ -15,7 +15,9 @@ class PhaseControlWidget extends ConsumerWidget {
     if (timeline.dryEnd == null) {
       results.add(phaseButton(
         ref,
-        updater: (timeline, time) => timeline.copyWith(dryEnd: time),
+        onPressed: () {
+          ref.read(roastManagerProvider).markDryEnd();
+        },
         icon: SvgPicture.asset(
           'images/dry.svg',
           height: 24,
@@ -30,10 +32,9 @@ class PhaseControlWidget extends ConsumerWidget {
       if (timeline.secondCrackStart == null) {
         results.add(phaseButton(
           ref,
-          updater: (timeline, time) => timeline.copyWith(
-            firstCrackStart: timeline.firstCrackStart ?? time,
-            firstCrackEnd: time,
-          ),
+          onPressed: () {
+            ref.read(roastManagerProvider).markFirstCrack();
+          },
           icon: SvgPicture.asset(
             'images/crack.svg',
             height: 24,
@@ -48,9 +49,9 @@ class PhaseControlWidget extends ConsumerWidget {
         if (hasFirstCrack) {
           results.add(phaseButton(
             ref,
-            updater: (timeline, time) => timeline.copyWith(
-              secondCrackStart: time,
-            ),
+            onPressed: () {
+              ref.read(roastManagerProvider).markSecondCrack();
+            },
             icon: SvgPicture.asset('images/2nd_crack.svg',
                 height: 24, color: RoastAppTheme.capuccino),
             label: 'Start second crack',
@@ -65,11 +66,10 @@ class PhaseControlWidget extends ConsumerWidget {
 
   Widget phaseButton(
     WidgetRef ref, {
-    required RoastTimeline Function(RoastTimeline, Duration) updater,
     required Widget icon,
     required String label,
     required bool running,
-    void Function()? extra,
+    required void Function() onPressed,
   }) {
     return Expanded(
       child: Container(
@@ -79,20 +79,7 @@ class PhaseControlWidget extends ConsumerWidget {
           style: RoastAppTheme.phaseButtonTheme.style,
           icon: icon,
           label: Text(label, textAlign: TextAlign.center),
-          onPressed: !running
-              ? null
-              : () {
-                  final tService = ref.read(roastTimerProvider);
-                  final now = tService.elapsed()!;
-
-                  ref
-                      .read(roastTimelineProvider.notifier)
-                      .update((state) => updater(state, now));
-
-                  if (extra != null) {
-                    extra();
-                  }
-                },
+          onPressed: !running ? null : onPressed,
         ),
       ),
     );
@@ -100,7 +87,7 @@ class PhaseControlWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timeline = ref.watch(roastTimelineProvider);
+    final timeline = ref.watch(roastTimelineProvider).requireValue;
     final running = ref.watch(roastStateProvider) == RoastState.roasting;
 
     return AnimatedPopUp(
