@@ -153,7 +153,6 @@ class PreheatWidgetState extends ConsumerState<PreheatWidget> {
       );
     }
 
-    print(MediaQuery.of(context));
     return Form(
       key: formKey,
       child: Column(

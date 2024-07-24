@@ -53,7 +53,6 @@ class RoastManagerService {
   }
 
   void setCopyRoast(Roast? roast) {
-	print('here $roast');
     _copyOfRoastCtrl.add(roast);
   }
 

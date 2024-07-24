@@ -46,7 +46,6 @@ class TimerScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('here ${MediaQuery.of(context).padding}');
     return Scaffold(
       appBar: appBar,
       body: SafeArea(
