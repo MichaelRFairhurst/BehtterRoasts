@@ -93,10 +93,14 @@ class TimeWidget extends ConsumerWidget {
       Text(
         'Est. Temp',
         style: RoastAppTheme.materialTheme.textTheme.labelSmall,
+        textScaler: const TextScaler.linear(0.9),
       ),
-      Text(formatTemp(projections.currentTemp),
-          style: RoastAppTheme.materialTheme.textTheme.headlineMedium
-              ?.copyWith(fontFamily: 'Roboto')),
+      Text(
+        formatTemp(projections.currentTemp),
+        style: RoastAppTheme.materialTheme.textTheme.headlineMedium
+            ?.copyWith(fontFamily: 'Roboto'),
+        textScaler: const TextScaler.linear(0.9),
+      ),
     ];
 
     final tempDiff = projections.copyRoastTempDiff?.round().toDouble();

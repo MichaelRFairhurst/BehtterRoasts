@@ -52,6 +52,7 @@ class ControlsWidget extends StatelessWidget {
                 'Roaster\nControls:',
                 style: RoastAppTheme.materialTheme.textTheme.labelSmall!
                     .copyWith(color: RoastAppTheme.crema),
+                textScaler: const TextScaler.linear(1.0),
               ),
             ),
           ],

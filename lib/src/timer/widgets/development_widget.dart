@@ -46,19 +46,31 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget>
 
     if (time == null || time!.inMicroseconds == 0) {
       innerParts = [
-        const Text('Not yet roasting.', textAlign: TextAlign.center)
+        const Text(
+          'Not yet roasting.',
+          textAlign: TextAlign.center,
+          textScaler: TextScaler.linear(1.0),
+        )
       ];
       progress = 0;
     } else if (timeline.dryEnd == null) {
       innerParts = [
-        const Text('Waiting for dry end.', textAlign: TextAlign.center)
+        const Text(
+          'Waiting for dry end.',
+          textAlign: TextAlign.center,
+          textScaler: TextScaler.linear(1.0),
+        )
       ];
       progress = 0;
     } else {
       final firstCrackStart = timeline.firstCrackStart;
       if (firstCrackStart == null) {
         innerParts = [
-          const Text('Waiting for first crack.', textAlign: TextAlign.center)
+          const Text(
+            'Waiting for first crack.',
+            textAlign: TextAlign.center,
+            textScaler: TextScaler.linear(1.0),
+          )
         ];
         progress = 0;
       } else {
@@ -71,10 +83,14 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget>
           Text(
             'development',
             style: RoastAppTheme.materialTheme.textTheme.labelSmall,
+            textScaler: const TextScaler.linear(0.85),
           ),
-          Text('$develFmt%',
-              style: RoastAppTheme.materialTheme.textTheme.headlineSmall
-                  ?.copyWith(fontFamily: 'Roboto')),
+          Text(
+            '$develFmt%',
+            style: RoastAppTheme.materialTheme.textTheme.headlineSmall
+                ?.copyWith(fontFamily: 'Roboto'),
+            textScaler: const TextScaler.linear(1.0),
+          ),
         ];
         progress = development / roast!.config.targetDevelopment;
       }
@@ -99,7 +115,7 @@ class DevelopmentWidgetState extends ConsumerState<DevelopmentWidget>
           emptyColor: RoastAppTheme.cremaLight,
           innerColor: RoastAppTheme.crema,
           child: Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(12),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: innerParts,
